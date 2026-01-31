@@ -81,10 +81,10 @@
     </a>
 
     {% comment %}
-      Header: logo + navigation bar. Must use section group (Shopify reserves 'header' type for groups).
-      Defined in sections/header-group.json; renders sections/header.liquid.
+      Header: logo + navigation bar. Rendered as site-header so it always shows (Shopify reserves 'header' for section groups only).
+      Customize via Theme editor → Header (in layout).
     {% endcomment %}
-    {% sections 'header-group' %}
+    {% section 'site-header' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
