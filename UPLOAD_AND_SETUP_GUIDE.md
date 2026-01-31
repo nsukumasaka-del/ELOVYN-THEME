@@ -72,7 +72,7 @@ Use **Preview** first to confirm the header, logo, navigation, and all sections 
 
 ## Part 4: Ensure Header, Logo & Navigation Are Visible
 
-The **header** (logo + navigation bar) is rendered directly in the layout (`theme.liquid`) with `{% section 'header' %}`, so it does not depend on section groups and should always appear when you use this theme.
+The **header** (logo + navigation bar) is shown on every page. The navigation bar includes: **Clothes**, **Hair Products**, **Accessories**, **Connect**, **Leasing**. Add your logo and set each link URL from **Theme settings → Header**.
 
 ### 1. Confirm you’re viewing the right theme
 

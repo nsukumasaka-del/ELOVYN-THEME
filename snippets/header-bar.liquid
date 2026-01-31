@@ -235,11 +235,11 @@
       </a>
 
       <nav class="elovyn-nav" role="navigation" aria-label="Main navigation">
-        <a href="#clothing">Clothes</a>
-        <a href="#bikes">Hair Products</a>
-        <a href="#features">Accessories</a>
-        <a href="#community">Connect</a>
-        <a href="#">Leasing</a>
+        <a href="{% if settings.header_nav_clothes_url != blank %}{{ settings.header_nav_clothes_url }}{% else %}#clothing{% endif %}">Clothes</a>
+        <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}">Hair Products</a>
+        <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}">Accessories</a>
+        <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}">Connect</a>
+        <a href="{% if settings.header_nav_leasing_url != blank %}{{ settings.header_nav_leasing_url }}{% else %}#{% endif %}">Leasing</a>
       </nav>
 
       <div class="elovyn-header-right">
@@ -261,11 +261,11 @@
 
   <div id="elovyn-mobile-menu" aria-hidden="true">
     <nav role="navigation" aria-label="Mobile menu">
-      <a href="#clothing" class="elovyn-mobile-link">Clothes</a>
-      <a href="#bikes" class="elovyn-mobile-link">Hair Products</a>
-      <a href="#features" class="elovyn-mobile-link">Accessories</a>
-      <a href="#community" class="elovyn-mobile-link">Connect</a>
-      <a href="#" class="elovyn-mobile-link">Leasing</a>
+      <a href="{% if settings.header_nav_clothes_url != blank %}{{ settings.header_nav_clothes_url }}{% else %}#clothing{% endif %}" class="elovyn-mobile-link">Clothes</a>
+      <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}" class="elovyn-mobile-link">Hair Products</a>
+      <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}" class="elovyn-mobile-link">Accessories</a>
+      <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}" class="elovyn-mobile-link">Connect</a>
+      <a href="{% if settings.header_nav_leasing_url != blank %}{{ settings.header_nav_leasing_url }}{% else %}#{% endif %}" class="elovyn-mobile-link">Leasing</a>
       <a href="{% if settings.header_cta_url != blank %}{{ settings.header_cta_url }}{% else %}#{% endif %}" class="elovyn-mobile-cta">Book a test ride</a>
     </nav>
   </div>
