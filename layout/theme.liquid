@@ -81,10 +81,10 @@
     </a>
 
     {% comment %}
-      Header: logo + navigation bar. Rendered as site-header so it always shows (Shopify reserves 'header' for section groups only).
-      Customize via Theme editor → Header (in layout).
+      Header: logo + navigation bar. Rendered via snippet (no section type) so no Liquid error.
+      Customize logo and CTA via Theme settings → Header.
     {% endcomment %}
-    {% section 'site-header' %}
+    {% render 'header-bar' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}

@@ -108,6 +108,36 @@
     ]
   },
   {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "header_logo",
+        "label": "Header logo image",
+        "info": "Leave blank to show store name as text."
+      },
+      {
+        "type": "text",
+        "id": "header_logo_alt",
+        "label": "Header logo alt text",
+        "default": "",
+        "info": "Leave blank to use store name."
+      },
+      {
+        "type": "url",
+        "id": "header_logo_link",
+        "label": "Header logo link",
+        "info": "Leave blank to link to homepage."
+      },
+      {
+        "type": "url",
+        "id": "header_cta_url",
+        "label": "Book a test ride button URL",
+        "info": "Leave blank for #."
+      }
+    ]
+  },
+  {
     "name": "Favicon",
     "settings": [
       {
