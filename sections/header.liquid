@@ -292,7 +292,7 @@
         {%- if section.settings.logo != blank -%}
           <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ section.settings.logo_alt | default: shop.name }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {%- else -%}
-          <span>{{ shop.name }}</span>
+          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {%- endif -%}
       </a>
 
@@ -311,7 +311,6 @@
           <a href="#bikes">Hair Products</a>
           <a href="#features">Accessories</a>
           <a href="#community">Connect</a>
-          <a href="#">Leasing</a>
         {%- endif -%}
       </nav>
 
@@ -349,7 +348,6 @@
         <a href="#bikes" class="elovyn-mobile-link">Hair Products</a>
         <a href="#features" class="elovyn-mobile-link">Accessories</a>
         <a href="#community" class="elovyn-mobile-link">Connect</a>
-        <a href="#" class="elovyn-mobile-link">Leasing</a>
       {%- endif -%}
       <a href="{% if section.settings.book_test_ride_link != blank %}{{ section.settings.book_test_ride_link }}{% else %}#{% endif %}" class="elovyn-mobile-cta">Book a test ride</a>
     </nav>
@@ -412,7 +410,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Add and reorder menu links below. Default links match the original: Clothes, Hair Products, Accessories, Connect, Leasing."
+      "content": "Add and reorder menu links below. Default links: Clothes, Hair Products, Accessories, Connect."
     },
     {
       "type": "header",
@@ -474,13 +472,6 @@
         "settings": {
           "label": "Connect",
           "url": "#community"
-        }
-      },
-      {
-        "type": "nav_link",
-        "settings": {
-          "label": "Leasing",
-          "url": "#"
         }
       }
     ]

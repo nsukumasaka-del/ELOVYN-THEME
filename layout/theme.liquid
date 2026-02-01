@@ -81,10 +81,12 @@
     </a>
 
     {% comment %}
-      Header: logo + navigation bar. Rendered via snippet so it always shows on storefront.
-      Customize logo and nav links via Theme settings → Header.
+      Header: logo + navigation bar. Uses section group so "Header" appears in Customize for direct editing.
     {% endcomment %}
-    {% render 'header-bar' %}
+    {% sections 'header-group' %}
+    <style>
+      #shopify-section-header, .section-header { display: block !important; visibility: visible !important; }
+    </style>
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}

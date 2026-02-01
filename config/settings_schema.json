@@ -11,6 +11,10 @@
     "name": "Header",
     "settings": [
       {
+        "type": "paragraph",
+        "content": "Edit your logo and navigation links here. You can also click the header area at the top of the page in the preview to open Header in the sidebar."
+      },
+      {
         "type": "header",
         "content": "Logo"
       },
@@ -39,7 +43,7 @@
       },
       {
         "type": "paragraph",
-        "content": "Set the URL for each link. Labels shown: Clothes, Hair Products, Accessories, Connect, Leasing."
+        "content": "Set the URL for each link. Labels shown: Clothes, Hair Products, Accessories, Connect."
       },
       {
         "type": "url",
@@ -64,12 +68,6 @@
         "id": "header_nav_connect_url",
         "label": "Connect link",
         "info": "e.g. /pages/contact or #community"
-      },
-      {
-        "type": "url",
-        "id": "header_nav_leasing_url",
-        "label": "Leasing link",
-        "info": "e.g. /pages/leasing or #"
       },
       {
         "type": "header",

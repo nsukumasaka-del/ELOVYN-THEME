@@ -33,16 +33,9 @@
             "label": "Connect",
             "url": "#community"
           }
-        },
-        "nav_leasing": {
-          "type": "nav_link",
-          "settings": {
-            "label": "Leasing",
-            "url": "#"
-          }
         }
       },
-      "block_order": ["nav_clothes", "nav_hair", "nav_accessories", "nav_connect", "nav_leasing"]
+      "block_order": ["nav_clothes", "nav_hair", "nav_accessories", "nav_connect"]
     }
   },
   "order": ["header"]
