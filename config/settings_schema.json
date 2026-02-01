@@ -71,7 +71,13 @@
       },
       {
         "type": "header",
-        "content": "CTA button"
+        "content": "Buttons"
+      },
+      {
+        "type": "url",
+        "id": "header_shop_now_url",
+        "label": "Shop now button URL",
+        "info": "e.g. /collections/all. Leave blank for #."
       },
       {
         "type": "url",
