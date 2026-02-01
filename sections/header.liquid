@@ -24,14 +24,23 @@
   #elovyn-header-wrap .elovyn-header-inner {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 4rem;
-    gap: 0.5rem;
+    min-height: 4rem;
+    gap: 0.35rem;
+    flex-wrap: wrap;
   }
   @media (min-width: 768px) {
+    #elovyn-header-wrap .elovyn-header-inner {
+      min-height: 5rem;
+      padding: 0 1rem;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+    }
+  }
+  @media (min-width: 1024px) {
     #elovyn-header-wrap .elovyn-header-inner {
       height: 5rem;
       padding: 0 1.5rem;
@@ -72,27 +81,40 @@
       max-height: 8rem;
     }
   }
-  /* Desktop nav bar - visible from 1024px */
+  /* Nav bar - visible on all screens (mobile + desktop) */
   #elovyn-header-wrap .elovyn-nav {
-    display: none;
+    display: flex !important;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+  }
+  @media (min-width: 768px) {
+    #elovyn-header-wrap .elovyn-nav { gap: 1rem; }
   }
   @media (min-width: 1024px) {
     #elovyn-header-wrap .elovyn-nav {
-      display: flex !important;
-      flex: 1;
-      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: nowrap;
       max-width: 600px;
     }
   }
   #elovyn-header-wrap .elovyn-nav a {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 0.7rem;
     font-weight: 500;
     transition: color 0.2s;
     white-space: nowrap;
+    padding: 0.25rem 0.35rem;
+  }
+  @media (min-width: 768px) {
+    #elovyn-header-wrap .elovyn-nav a { font-size: 0.8rem; padding: 0.35rem 0.5rem; }
+  }
+  @media (min-width: 1024px) {
+    #elovyn-header-wrap .elovyn-nav a { font-size: 0.875rem; padding: 0; }
   }
   #elovyn-header-wrap .elovyn-nav a:hover {
     color: #fff;
