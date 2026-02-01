@@ -1,6 +1,34 @@
 {% comment %}
-  Hero section with background image and call-to-action
+  Hero section with background image and call-to-action.
+  Shop Now button uses white modern style (replaced from nav bar).
 {% endcomment %}
+
+<style>
+  .elovyn-hero-shop-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #111;
+    background: #fff;
+    border: none;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  }
+  .elovyn-hero-shop-btn:hover {
+    background: #f8f8f8;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+  @media (min-width: 768px) {
+    .elovyn-hero-shop-btn { padding: 0.875rem 2rem; font-size: 0.9375rem; }
+  }
+</style>
 
 <section class="relative h-screen w-full overflow-hidden">
   {%- comment -%} Background Image {%- endcomment -%}
@@ -30,8 +58,8 @@
       </p>
       <div>
         <a 
-          href="{% if section.settings.button_link != blank %}{{ section.settings.button_link }}{% else %}#clothing{% endif %}" 
-          class="inline-flex items-center justify-center px-8 py-4 text-sm font-medium bg-foreground text-background rounded-full transition-all duration-300 hover:bg-sand hover:text-background hover:scale-105"
+          href="{% if section.settings.button_link != blank %}{{ section.settings.button_link }}{% else %}/collections/all{% endif %}" 
+          class="elovyn-hero-shop-btn"
         >
           {{ section.settings.button_text | default: "Shop Now" }}
         </a>

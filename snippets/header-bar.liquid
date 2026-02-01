@@ -292,7 +292,6 @@
           {% render 'icon-shopping-bag', width: 20, height: 20 %}
           {% if cart.item_count > 0 %}<span class="elovyn-cart-badge">{{ cart.item_count }}</span>{% endif %}
         </a>
-        <a href="{% if settings.header_shop_now_url != blank %}{{ settings.header_shop_now_url }}{% else %}/collections/all{% endif %}" class="elovyn-cta elovyn-cta-shop">Shop now</a>
         <a href="{% if settings.header_cta_url != blank %}{{ settings.header_cta_url }}{% else %}#{% endif %}" class="elovyn-cta">Book a test ride</a>
         <button type="button" class="elovyn-mobile-btn" aria-label="Toggle menu" aria-expanded="false">
           <span class="icon-open">{% render 'icon-menu', width: 24, height: 24 %}</span>
@@ -308,7 +307,6 @@
       <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}" class="elovyn-mobile-link">Hair Products</a>
       <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}" class="elovyn-mobile-link">Accessories</a>
       <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}" class="elovyn-mobile-link">Connect</a>
-      <a href="{% if settings.header_shop_now_url != blank %}{{ settings.header_shop_now_url }}{% else %}/collections/all{% endif %}" class="elovyn-mobile-cta elovyn-mobile-cta-shop">Shop now</a>
       <a href="{% if settings.header_cta_url != blank %}{{ settings.header_cta_url }}{% else %}#{% endif %}" class="elovyn-mobile-cta">Book a test ride</a>
     </nav>
   </div>
