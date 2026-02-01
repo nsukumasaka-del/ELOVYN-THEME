@@ -270,7 +270,7 @@
         {%- if section.settings.logo != blank -%}
           <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ section.settings.logo_alt | default: shop.name }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {%- else -%}
-          <span>{{ shop.name }}</span>
+          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {%- endif -%}
       </a>
 

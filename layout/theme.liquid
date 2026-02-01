@@ -81,10 +81,12 @@
     </a>
 
     {% comment %}
-      Header: logo + navigation bar. Rendered as snippet so it always shows (section group "header" type can fail on Shopify).
-      Customize via Theme settings (gear icon) → Header.
+      Header: logo + navigation bar. Section group uses site-header (non-reserved) so "Header" appears in theme customizer sidebar.
     {% endcomment %}
-    {% render 'header-bar' %}
+    {% sections 'header-group' %}
+    <style>
+      #shopify-section-header, .section-header { display: block !important; visibility: visible !important; }
+    </style>
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}

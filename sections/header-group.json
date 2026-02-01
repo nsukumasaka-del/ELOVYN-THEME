@@ -3,7 +3,7 @@
   "name": "Header",
   "sections": {
     "header": {
-      "type": "header",
+      "type": "site-header",
       "settings": {},
       "blocks": {
         "nav_clothes": {
