@@ -36,8 +36,20 @@ body {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -230,6 +242,12 @@ body {
 
 /* Overflow */
 .overflow-hidden { overflow: hidden; }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.min-w-0 { min-width: 0; }
 
 /* Position */
 .relative { position: relative; }
@@ -453,4 +471,174 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+/* Product grid – responsive gap for all screen sizes */
+.product-grid {
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .product-grid {
+    gap: 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-grid {
+    gap: 1rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-grid {
+    gap: 1rem;
+  }
+}
+
+/* Product card overlay – responsive padding */
+.product-card-overlay-inner {
+  padding: 0.5rem 0.75rem;
+}
+@media (min-width: 640px) {
+  .product-card-overlay-inner {
+    padding: 0.75rem 1rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card-overlay-inner {
+    padding: 1rem 1.25rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card-overlay-inner {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+/* Product card title – responsive font size */
+.product-card-title {
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+@media (min-width: 640px) {
+  .product-card-title {
+    font-size: 0.9375rem;
+    line-height: 1.3;
+    margin-bottom: 0.375rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card-title {
+    font-size: 1.125rem;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card-title {
+    font-size: 1.375rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+}
+@media (min-width: 1280px) {
+  .product-card-title {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Product card tagline – responsive */
+.product-card-tagline {
+  font-size: 0.625rem;
+  margin-bottom: 0.125rem;
+}
+@media (min-width: 640px) {
+  .product-card-tagline {
+    font-size: 0.6875rem;
+    margin-bottom: 0.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card-tagline {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Product card description – responsive */
+.product-card-desc {
+  font-size: 0.6875rem;
+  margin-bottom: 0.375rem;
+  line-height: 1.3;
+}
+@media (min-width: 640px) {
+  .product-card-desc {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card-desc {
+    font-size: 0.8125rem;
+    margin-bottom: 0.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card-desc {
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Product card price row – responsive */
+.product-card-price {
+  font-size: 0.6875rem;
+}
+@media (min-width: 640px) {
+  .product-card-price {
+    font-size: 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card-price {
+    font-size: 0.8125rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card-price {
+    font-size: 0.875rem;
+  }
+}
+
+/* Product card View button – responsive */
+.product-card .btn-hero {
+  padding: 0.375rem 0.625rem;
+  font-size: 0.625rem;
+}
+@media (min-width: 640px) {
+  .product-card .btn-hero {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.6875rem;
+  }
+}
+@media (min-width: 768px) {
+  .product-card .btn-hero {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card .btn-hero {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+@media (min-width: 1280px) {
+  .product-card .btn-hero {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
 }

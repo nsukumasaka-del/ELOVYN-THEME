@@ -16,60 +16,61 @@
     {%- if section.settings.collection != blank -%}
       {%- assign collection = collections[section.settings.collection] -%}
       {%- if collection != blank and collection.products.size > 0 -%}
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 product-grid">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
+            {%- assign view_url = product.url -%}
+            {%- if product.title contains "Men's Athletic fit tee" -%}
+              {%- assign view_url = "https://amzn.to/4q9xtab" -%}
+            {%- endif -%}
             <div class="product-card group relative bg-card rounded-3xl overflow-hidden cursor-pointer">
-              <a href="{{ product.url }}">
-                <div class="aspect-[4/5] relative overflow-hidden">
-                  {%- if product.featured_image != blank -%}
-                    <img
-                      src="{{ product.featured_image | image_url: width: 600 }}"
-                      alt="{{ product.featured_image.alt | escape }}"
-                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    >
-                  {%- else -%}
-                    {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+              <div class="aspect-[4/5] relative overflow-hidden">
+                {%- if product.featured_image != blank -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                {%- endif -%}
+                <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
+                <div class="absolute inset-0 bg-background/40 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                  {%- comment -%} Use vendor as tagline {%- endcomment -%}
+                  {%- if product.vendor != blank -%}
+                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {{ product.vendor }}
+                    </p>
+                  {%- elsif product.metafields.custom.tagline != blank -%}
+                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {{ product.metafields.custom.tagline }}
+                    </p>
                   {%- endif -%}
-                  <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
-                </div>
-                
-                <div class="absolute bottom-0 left-0 right-0 p-6">
-                  <div class="absolute inset-0 bg-background/40 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div class="relative z-10">
-                    {%- comment -%} Use vendor as tagline {%- endcomment -%}
-                    {%- if product.vendor != blank -%}
-                      <p class="text-xs font-medium text-accent uppercase tracking-wider mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {{ product.vendor }}
-                      </p>
-                    {%- elsif product.metafields.custom.tagline != blank -%}
-                      <p class="text-xs font-medium text-accent uppercase tracking-wider mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {{ product.metafields.custom.tagline }}
-                      </p>
-                    {%- endif -%}
-                    <h3 class="text-2xl md:text-3xl font-bold text-foreground mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {{ product.title }}
-                    </h3>
-                    {%- if product.description != blank -%}
-                      <p class="text-sm text-foreground/60 mb-4 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
-                        {{ product.description | strip_html | truncate: 100 }}
-                      </p>
-                    {%- endif -%}
-                    <div class="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span class="text-sm font-medium text-foreground/80">
-                        {%- if product.compare_at_price > product.price -%}
-                          {{ product.price | money }} (Original: {{ product.compare_at_price | money }}, {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% off)
-                        {%- else -%}
-                          {{ product.price | money }}
-                        {%- endif -%}
-                      </span>
-                      <a href="{{ product.url }}" class="btn-hero text-xs">
-                        View
-                      </a>
-                    </div>
+                  <h3 class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {{ product.title }}
+                  </h3>
+                  {%- if product.description != blank -%}
+                    <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
+                      {{ product.description | strip_html | truncate: 100 }}
+                    </p>
+                  {%- endif -%}
+                  <div class="flex items-center justify-between gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="product-card-price font-medium text-foreground/80 min-w-0 truncate">
+                      {%- if product.compare_at_price > product.price -%}
+                        {{ product.price | money }} (Original: {{ product.compare_at_price | money }}, {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% off)
+                      {%- else -%}
+                        {{ product.price | money }}
+                      {%- endif -%}
+                    </span>
+                    <a href="{{ view_url }}" class="btn-hero text-xs"{% if view_url contains 'amzn.to' %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                      View
+                    </a>
                   </div>
                 </div>
-              </a>
+              </div>
             </div>
           {%- endfor -%}
         </div>
