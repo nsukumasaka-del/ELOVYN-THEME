@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -17,8 +26,8 @@
         "press_1": {
           "type": "press_item",
           "settings": {
-            "press_name": "TECHCRUNCH",
-            "quote": "Best e-bike for commuters"
+            "press_name": "GADGETS",
+            "quote": "Best electric devices"
           }
         },
         "press_2": {
@@ -38,22 +47,36 @@
         "press_4": {
           "type": "press_item",
           "settings": {
-            "press_name": "GQ",
+            "press_name": "AMAZON",
             "quote": "GQ Tech Award Best e-bike"
           }
         },
         "press_5": {
           "type": "press_item",
           "settings": {
-            "press_name": "MASHABLE",
+            "press_name": "ALIEXPRESS",
             "quote": "That fork!"
+          }
+        },
+        "press_item_wmGVGp": {
+          "type": "press_item",
+          "settings": {
+            "press_name": "Accessories",
+            "quote": "Accessories at your finger tips"
+          }
+        },
+        "press_item_XAbdF7": {
+          "type": "press_item",
+          "settings": {
+            "press_name": "ACCESSORIES",
+            "quote": "Top Accessories"
           }
         },
         "press_6": {
           "type": "press_item",
           "settings": {
-            "press_name": "WALLPAPER*",
-            "quote": "A new e-bike glides into town"
+            "press_name": "FASHION*",
+            "quote": "The Elovyn Way"
           }
         }
       },
@@ -63,6 +86,8 @@
         "press_3",
         "press_4",
         "press_5",
+        "press_item_wmGVGp",
+        "press_item_XAbdF7",
         "press_6"
       ],
       "settings": {}
@@ -72,7 +97,7 @@
       "settings": {
         "heading": "Premium Clothing Collection",
         "description": "Discover our curated selection of premium clothing for every style.",
-        "collection": "",
+        "collection": "frontpage",
         "products_to_show": 4
       }
     },
