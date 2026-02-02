@@ -173,6 +173,9 @@ body {
 }
 
 @media (min-width: 1024px) {
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .lg\:grid-cols-6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
@@ -513,17 +516,19 @@ body {
   }
 }
 
-/* Product card title – responsive font size (scoped so it wins on desktop) */
+/* Product card title – fits inside card, 2-line clamp on desktop */
 .product-card .product-card-title {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   width: 100%;
   max-width: 100%;
   font-size: 0.8125rem;
-  line-height: 1.2;
+  line-height: 1.25;
   margin-bottom: 0.25rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
   box-sizing: border-box;
 }
 @media (min-width: 640px) {
@@ -535,28 +540,28 @@ body {
 }
 @media (min-width: 768px) {
   .product-card .product-card-title {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     line-height: 1.35;
     margin-bottom: 0.5rem;
   }
 }
 @media (min-width: 1024px) {
   .product-card .product-card-title {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     line-height: 1.35;
     margin-bottom: 0.5rem;
   }
 }
 @media (min-width: 1280px) {
   .product-card .product-card-title {
-    font-size: 1.625rem;
+    font-size: 1.25rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
   }
 }
 @media (min-width: 1536px) {
   .product-card .product-card-title {
-    font-size: 1.875rem;
+    font-size: 1.375rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
   }
