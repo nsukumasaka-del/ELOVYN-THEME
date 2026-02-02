@@ -18,7 +18,7 @@
       {%- if collection != blank and collection.products.size > 0 -%}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
-            <div class="group relative bg-card rounded-3xl overflow-hidden cursor-pointer">
+            <div class="product-card group relative bg-card rounded-3xl overflow-hidden cursor-pointer">
               <a href="{{ product.url }}">
                 <div class="aspect-[4/5] relative overflow-hidden">
                   {%- if product.featured_image != blank -%}
