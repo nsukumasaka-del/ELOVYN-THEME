@@ -19,8 +19,8 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
             {%- assign view_url = product.url -%}
-            {%- if product.title contains "Men's Athletic fit tee" -%}
-              {%- assign view_url = "https://amzn.to/4q9xtab" -%}
+            {%- if product.title contains "Men's Athletic Fit Tee" or product.title contains "Men's Athletic fit tee" -%}
+              {%- assign view_url = "https://amzn.to/45I1l6l" -%}
             {%- endif -%}
             <div class="product-card group relative bg-card rounded-3xl overflow-hidden cursor-pointer">
               <div class="aspect-[4/5] relative overflow-hidden">
