@@ -26,7 +26,7 @@
         "press_1": {
           "type": "press_item",
           "settings": {
-            "press_name": "TECHCRUNCH",
+            "press_name": "GADGETS",
             "quote": "Best e-bike for commuters"
           }
         },
