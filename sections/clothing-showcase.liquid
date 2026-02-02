@@ -18,8 +18,10 @@
       {%- if collection != blank and collection.products.size > 0 -%}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
+            {%- comment -%} Redirect to Amazon product page for Men's Athletic Fit Tee {%- endcomment -%}
             {%- assign view_url = product.url -%}
-            {%- if product.title contains "Men's Athletic Fit Tee" or product.title contains "Men's Athletic fit tee" -%}
+            {%- assign title_lower = product.title | downcase -%}
+            {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
               {%- assign view_url = "https://amzn.to/45I1l6l" -%}
             {%- endif -%}
             <div class="product-card group relative bg-card rounded-3xl overflow-hidden cursor-pointer">
