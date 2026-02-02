@@ -54,15 +54,15 @@
         "press_5": {
           "type": "press_item",
           "settings": {
-            "press_name": "MASHABLE",
+            "press_name": "ALIEXPRESS",
             "quote": "That fork!"
           }
         },
         "press_6": {
           "type": "press_item",
           "settings": {
-            "press_name": "WALLPAPER*",
-            "quote": "A new e-bike glides into town"
+            "press_name": "FASHION*",
+            "quote": "The Elovyn Way"
           }
         }
       },
