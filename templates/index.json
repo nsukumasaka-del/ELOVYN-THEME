@@ -58,6 +58,20 @@
             "quote": "That fork!"
           }
         },
+        "press_item_wmGVGp": {
+          "type": "press_item",
+          "settings": {
+            "press_name": "Accessories",
+            "quote": "Accessories at your finger tips"
+          }
+        },
+        "press_item_XAbdF7": {
+          "type": "press_item",
+          "settings": {
+            "press_name": "TECHCRUNCH",
+            "quote": "Best e-bike for commuters"
+          }
+        },
         "press_6": {
           "type": "press_item",
           "settings": {
@@ -72,6 +86,8 @@
         "press_3",
         "press_4",
         "press_5",
+        "press_item_wmGVGp",
+        "press_item_XAbdF7",
         "press_6"
       ],
       "settings": {}
