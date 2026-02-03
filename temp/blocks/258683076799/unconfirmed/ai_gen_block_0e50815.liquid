@@ -1,6 +1,330 @@
+{% doc %}
+  @prompt
+    Please add a search feature on my store. Place it on the top right of the store., Please change the style of the search and make it modern. Make only the search icon ro appear and vissible. The search bar to appear after clicking the icon, 
+    
+    I keep getting the error "Block generarion failed. Please fix it and Please move the search icon to the header right next to the dign up icon.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-search-icon-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+  }
+
+  .ai-search-toggle-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: {{ block.settings.icon_color }};
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-search-toggle-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-search-toggle-{{ ai_gen_id }} svg {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+  }
+
+  .ai-search-overlay-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 100px;
+  }
+
+  .ai-search-overlay-{{ ai_gen_id }}.active {
+    display: flex;
+  }
+
+  .ai-search-modal-{{ ai_gen_id }} {
+    background-color: {{ block.settings.modal_bg_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    padding: 24px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-search-form-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ai-search-input-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 16px;
+    background-color: {{ block.settings.input_bg_color }};
+    color: {{ block.settings.input_text_color }};
+  }
+
+  .ai-search-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_color }};
+  }
+
+  .ai-search-submit-{{ ai_gen_id }} {
+    padding: 12px 24px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+  }
+
+  .ai-search-submit-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-search-close-{{ ai_gen_id }} {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: {{ block.settings.input_text_color }};
+    opacity: 0.7;
+  }
+
+  .ai-search-close-{{ ai_gen_id }}:hover {
+    opacity: 1;
+  }
+{% endstyle %}
+
+<search-icon-{{ ai_gen_id }} class="ai-search-icon-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <button
+    class="ai-search-toggle-{{ ai_gen_id }}"
+    aria-label="Open search"
+    type="button"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+  </button>
+
+  <div class="ai-search-overlay-{{ ai_gen_id }}">
+    <div class="ai-search-modal-{{ ai_gen_id }}">
+      <button
+        class="ai-search-close-{{ ai_gen_id }}"
+        aria-label="Close search"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <form action="/search" method="get" class="ai-search-form-{{ ai_gen_id }}" role="search">
+        <input
+          type="search"
+          name="q"
+          class="ai-search-input-{{ ai_gen_id }}"
+          placeholder="{{ block.settings.placeholder }}"
+          aria-label="Search"
+          autocomplete="off"
+        >
+        <button type="submit" class="ai-search-submit-{{ ai_gen_id }}">
+          {{ block.settings.button_text }}
+        </button>
+      </form>
+    </div>
+  </div>
+</search-icon-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SearchIcon{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.toggleButton = this.querySelector('.ai-search-toggle-{{ ai_gen_id }}');
+        this.overlay = this.querySelector('.ai-search-overlay-{{ ai_gen_id }}');
+        this.closeButton = this.querySelector('.ai-search-close-{{ ai_gen_id }}');
+        this.searchInput = this.querySelector('.ai-search-input-{{ ai_gen_id }}');
+
+        this.toggleButton.addEventListener('click', () => this.openSearch());
+        this.closeButton.addEventListener('click', () => this.closeSearch());
+        this.overlay.addEventListener('click', (e) => {
+          if (e.target === this.overlay) {
+            this.closeSearch();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.overlay.classList.contains('active')) {
+            this.closeSearch();
+          }
+        });
+      }
+
+      openSearch() {
+        this.overlay.classList.add('active');
+        setTimeout(() => {
+          this.searchInput.focus();
+        }, 100);
+      }
+
+      closeSearch() {
+        this.overlay.classList.remove('active');
+      }
+    }
+
+    customElements.define('search-icon-{{ ai_gen_id }}', SearchIcon{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Search icon",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Search modal"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder text",
+      "default": "Search products..."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Search"
+    },
+    {
+      "type": "color",
+      "id": "modal_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_color",
+      "label": "Input focus color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Modal border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Input border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search icon"
+    }
+  ]
+}
 {% endschema %}
