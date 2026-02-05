@@ -1,6 +1,809 @@
+{% doc %}
+  @prompt
+    Create a modern search results page with a clean, contemporary design. Include a prominent search bar at the top with a search icon, display search results in a grid layout with product images, titles, and prices. Add filtering options on the side, show the number of results found, include pagination for multiple pages of results, and make it fully mobile-responsive. Use modern styling with smooth animations and a professional appearance. Fix any potential code errors and ensure proper functionality., Please use the existing products and the search bar that is already on the theme. 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-search-results-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .ai-search-header-{{ ai_gen_id }} {
+    margin-bottom: 40px;
+  }
+
+  .ai-search-results-count-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: 18px;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 32px;
+  }
+
+  .ai-search-content-{{ ai_gen_id }} {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .ai-search-filters-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 250px;
+    background-color: {{ block.settings.filter_bg_color }};
+    padding: 24px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    border: 1px solid {{ block.settings.filter_border_color }};
+  }
+
+  .ai-filter-title-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-filter-group-{{ ai_gen_id }} {
+    margin-bottom: 24px;
+  }
+
+  .ai-filter-group-title-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: {{ block.settings.text_color }};
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-filter-option-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .ai-filter-checkbox-{{ ai_gen_id }} {
+    margin-right: 8px;
+    cursor: pointer;
+    accent-color: {{ block.settings.accent_color }};
+  }
+
+  .ai-filter-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    cursor: pointer;
+  }
+
+  .ai-search-results-grid-{{ ai_gen_id }} {
+    flex-grow: 1;
+  }
+
+  .ai-products-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.products_per_row }}, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_bg_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    border: 1px solid {{ block.settings.card_border_color }};
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    display: block;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-product-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+  }
+
+  .ai-product-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-product-image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-product-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-info-{{ ai_gen_id }} {
+    padding: 16px;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.4;
+  }
+
+  .ai-product-price-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 700;
+    color: {{ block.settings.price_color }};
+  }
+
+  .ai-pagination-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }} {
+    padding: 10px 16px;
+    background-color: {{ block.settings.pagination_bg_color }};
+    color: {{ block.settings.pagination_text_color }};
+    border: 1px solid {{ block.settings.pagination_border_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }}:hover:not(:disabled) {
+    background-color: {{ block.settings.accent_color }};
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.accent_color }};
+    color: #ffffff;
+    border-color: {{ block.settings.accent_color }};
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ai-no-results-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-no-results-icon-{{ ai_gen_id }} {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    opacity: 0.3;
+  }
+
+  .ai-no-results-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+
+  .ai-no-results-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-search-content-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-search-filters-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-products-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-search-results-{{ ai_gen_id }} {
+      padding: 24px 16px;
+    }
+
+    .ai-search-header-{{ ai_gen_id }} {
+      margin-bottom: 24px;
+    }
+
+    .ai-search-results-count-{{ ai_gen_id }} {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .ai-search-content-{{ ai_gen_id }} {
+      gap: 24px;
+    }
+
+    .ai-search-filters-{{ ai_gen_id }} {
+      padding: 20px;
+    }
+
+    .ai-products-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .ai-product-info-{{ ai_gen_id }} {
+      padding: 12px;
+    }
+
+    .ai-product-title-{{ ai_gen_id }} {
+      font-size: 14px;
+    }
+
+    .ai-product-price-{{ ai_gen_id }} {
+      font-size: 16px;
+    }
+
+    .ai-pagination-{{ ai_gen_id }} {
+      gap: 6px;
+      margin-top: 32px;
+    }
+
+    .ai-pagination-button-{{ ai_gen_id }} {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+  }
+{% endstyle %}
+
+<search-results-{{ ai_gen_id }} class="ai-search-results-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-search-header-{{ ai_gen_id }}">
+    <div class="ai-search-results-count-{{ ai_gen_id }}">
+      <span class="ai-results-count-text-{{ ai_gen_id }}"></span>
+    </div>
+  </div>
+
+  <div class="ai-search-content-{{ ai_gen_id }}">
+    {% if block.settings.show_filters %}
+      <aside class="ai-search-filters-{{ ai_gen_id }}">
+        <h3 class="ai-filter-title-{{ ai_gen_id }}">{{ block.settings.filter_title }}</h3>
+        
+        <div class="ai-filter-group-{{ ai_gen_id }}">
+          <h4 class="ai-filter-group-title-{{ ai_gen_id }}">{{ block.settings.filter_category_title }}</h4>
+          <div class="ai-filter-option-{{ ai_gen_id }}">
+            <input type="checkbox" id="filter-all-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="category" value="all" checked>
+            <label for="filter-all-{{ ai_gen_id }}" class="ai-filter-label-{{ ai_gen_id }}">All Products</label>
+          </div>
+          {% for collection in collections limit: 5 %}
+            <div class="ai-filter-option-{{ ai_gen_id }}">
+              <input type="checkbox" id="filter-{{ collection.handle }}-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="category" value="{{ collection.handle }}">
+              <label for="filter-{{ collection.handle }}-{{ ai_gen_id }}" class="ai-filter-label-{{ ai_gen_id }}">{{ collection.title }}</label>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="ai-filter-group-{{ ai_gen_id }}">
+          <h4 class="ai-filter-group-title-{{ ai_gen_id }}">{{ block.settings.filter_price_title }}</h4>
+          <div class="ai-filter-option-{{ ai_gen_id }}">
+            <input type="checkbox" id="filter-price-1-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="price" value="0-5000">
+            <label for="filter-price-1-{{ ai_gen_id }}" class="ai-filter-label-{{ ai_gen_id }}">Under {{ 5000 | money }}</label>
+          </div>
+          <div class="ai-filter-option-{{ ai_gen_id }}">
+            <input type="checkbox" id="filter-price-2-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="price" value="5000-10000">
+            <label for="filter-price-2-{{ ai_gen_id }}\" class="ai-filter-label-{{ ai_gen_id }}">{{ 5000 | money }} - {{ 10000 | money }}</label>
+          </div>
+          <div class="ai-filter-option-{{ ai_gen_id }}">
+            <input type="checkbox" id="filter-price-3-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="price" value="10000-20000">
+            <label for="filter-price-3-{{ ai_gen_id }}" class="ai-filter-label-{{ ai_gen_id }}">{{ 10000 | money }} - {{ 20000 | money }}</label>
+          </div>
+          <div class="ai-filter-option-{{ ai_gen_id }}">
+            <input type="checkbox" id="filter-price-4-{{ ai_gen_id }}" class="ai-filter-checkbox-{{ ai_gen_id }}" data-filter-type="price" value="20000-999999">
+            <label for="filter-price-4-{{ ai_gen_id }}" class="ai-filter-label-{{ ai_gen_id }}">Over {{ 20000 | money }}</label>
+          </div>
+        </div>
+      </aside>
+    {% endif %}
+
+    <div class="ai-search-results-grid-{{ ai_gen_id }}">
+      <div class="ai-products-grid-{{ ai_gen_id }}">
+        {% assign products_to_show = all_products | sort: 'title' %}
+        {% if block.settings.collection != blank %}
+          {% assign products_to_show = block.settings.collection.products %}
+        {% endif %}
+
+        {% for product in products_to_show limit: block.settings.products_limit %}
+          <a 
+            href="{{ product.url }}" 
+            class="ai-product-card-{{ ai_gen_id }}"
+            data-product-title="{{ product.title | downcase }}"
+            data-product-price="{{ product.price }}"
+            data-product-collections="{% for collection in product.collections %}{{ collection.handle }}{% unless forloop.last %},{% endunless %}{% endfor %}"
+          >
+            <div class="ai-product-image-wrapper-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="ai-product-image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {% else %}
+                <div class="ai-product-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="ai-product-info-{{ ai_gen_id }}">
+              <h3 class="ai-product-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <div class="ai-product-price-{{ ai_gen_id }}">{{ product.price | money }}</div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      <div class="ai-no-results-{{ ai_gen_id }}" style="display: none;">
+        <svg class="ai-no-results-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <h3 class="ai-no-results-title-{{ ai_gen_id }}">{{ block.settings.no_results_title }}</h3>
+        <p class="ai-no-results-text-{{ ai_gen_id }}">{{ block.settings.no_results_text }}</p>
+      </div>
+
+      {% if block.settings.show_pagination %}
+        <div class="ai-pagination-{{ ai_gen_id }}">
+          <button class="ai-pagination-button-{{ ai_gen_id }}" data-page="prev" disabled>Previous</button>
+          <button class="ai-pagination-button-{{ ai_gen_id }} active" data-page="1">1</button>
+          <button class="ai-pagination-button-{{ ai_gen_id }}" data-page="next">Next</button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</search-results-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SearchResults{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentPage = 1;
+        this.productsPerPage = 12;
+        this.allProducts = [];
+        this.filteredProducts = [];
+        this.searchTerm = '';
+      }
+
+      connectedCallback() {
+        this.resultsCountText = this.querySelector('.ai-results-count-text-{{ ai_gen_id }}');
+        this.productsGrid = this.querySelector('.ai-products-grid-{{ ai_gen_id }}');
+        this.noResults = this.querySelector('.ai-no-results-{{ ai_gen_id }}');
+        this.paginationContainer = this.querySelector('.ai-pagination-{{ ai_gen_id }}');
+        this.filterCheckboxes = this.querySelectorAll('.ai-filter-checkbox-{{ ai_gen_id }}');
+
+        this.collectProducts();
+        this.setupEventListeners();
+        this.checkForSearchParams();
+        this.updateDisplay();
+      }
+
+      collectProducts() {
+        const productCards = this.querySelectorAll('.ai-product-card-{{ ai_gen_id }}');
+        this.allProducts = Array.from(productCards).map(card => {
+          const title = card.dataset.productTitle || '';
+          const price = parseFloat(card.dataset.productPrice) || 0;
+          const collections = card.dataset.productCollections ? card.dataset.productCollections.split(',') : [];
+          
+          return {
+            element: card,
+            title: title,
+            price: price,
+            collections: collections
+          };
+        });
+        this.filteredProducts = [...this.allProducts];
+      }
+
+      setupEventListeners() {
+        this.filterCheckboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', () => this.handleFilters());
+        });
+
+        window.addEventListener('shopify:search', (event) => {
+          if (event.detail && event.detail.searchTerm) {
+            this.searchTerm = event.detail.searchTerm.toLowerCase();
+            this.handleSearch();
+          }
+        });
+
+        const headerSearch = document.querySelector('input[type="search"]');
+        if (headerSearch) {
+          headerSearch.addEventListener('input', (e) => {
+            this.searchTerm = e.target.value.toLowerCase();
+            this.handleSearch();
+          });
+        }
+      }
+
+      checkForSearchParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q');
+        if (searchQuery) {
+          this.searchTerm = searchQuery.toLowerCase();
+          const headerSearch = document.querySelector('input[type="search"]');
+          if (headerSearch) {
+            headerSearch.value = searchQuery;
+          }
+        }
+      }
+
+      handleSearch() {
+        this.applyFilters();
+      }
+
+      handleFilters() {
+        this.applyFilters();
+      }
+
+      applyFilters() {
+        const categoryFilters = Array.from(this.filterCheckboxes)
+          .filter(cb => cb.dataset.filterType === 'category' && cb.checked)
+          .map(cb => cb.value);
+
+        const priceFilters = Array.from(this.filterCheckboxes)
+          .filter(cb => cb.dataset.filterType === 'price' && cb.checked)
+          .map(cb => cb.value);
+
+        this.filteredProducts = this.allProducts.filter(product => {
+          let matchesSearch = true;
+          if (this.searchTerm) {
+            matchesSearch = product.title.includes(this.searchTerm);
+          }
+
+          let matchesCategory = true;
+          if (categoryFilters.length > 0 && !categoryFilters.includes('all')) {
+            matchesCategory = product.collections.some(col => categoryFilters.includes(col));
+          }
+
+          let matchesPrice = true;
+          if (priceFilters.length > 0) {
+            matchesPrice = priceFilters.some(filter => {
+              const [min, max] = filter.split('-').map(v => parseFloat(v));
+              return product.price >= min && product.price <= max;
+            });
+          }
+
+          return matchesSearch && matchesCategory && matchesPrice;
+        });
+
+        this.currentPage = 1;
+        this.updateDisplay();
+      }
+
+      updateDisplay() {
+        this.allProducts.forEach(product => {
+          product.element.style.display = 'none';
+        });
+
+        if (this.filteredProducts.length === 0) {
+          if (this.productsGrid) this.productsGrid.style.display = 'none';
+          if (this.noResults) this.noResults.style.display = 'block';
+          if (this.paginationContainer) this.paginationContainer.style.display = 'none';
+        } else {
+          if (this.productsGrid) this.productsGrid.style.display = 'grid';
+          if (this.noResults) this.noResults.style.display = 'none';
+          if (this.paginationContainer) this.paginationContainer.style.display = 'flex';
+
+          const startIndex = (this.currentPage - 1) * this.productsPerPage;
+          const endIndex = startIndex + this.productsPerPage;
+          const productsToShow = this.filteredProducts.slice(startIndex, endIndex);
+
+          productsToShow.forEach(product => {
+            product.element.style.display = 'block';
+          });
+
+          this.updatePagination();
+        }
+
+        this.updateResultsCount();
+      }
+
+      updateResultsCount() {
+        if (this.resultsCountText) {
+          const count = this.filteredProducts.length;
+          
+          if (this.searchTerm) {
+            this.resultsCountText.textContent = `${count} result${count !== 1 ? 's' : ''} found for "${this.searchTerm}"`;
+          } else {
+            this.resultsCountText.textContent = `${count} product${count !== 1 ? 's' : ''} found`;
+          }
+        }
+      }
+
+      updatePagination() {
+        if (!this.paginationContainer) return;
+
+        const totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+        
+        this.paginationContainer.innerHTML = '';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'ai-pagination-button-{{ ai_gen_id }}';
+        prevButton.textContent = 'Previous';
+        prevButton.disabled = this.currentPage === 1;
+        prevButton.addEventListener('click', () => {
+          if (this.currentPage > 1) {
+            this.currentPage--;
+            this.updateDisplay();
+            this.scrollToTop();
+          }
+        });
+        this.paginationContainer.appendChild(prevButton);
+
+        const maxButtons = 5;
+        let startPage = Math.max(1, this.currentPage - Math.floor(maxButtons / 2));
+        let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+        if (endPage - startPage < maxButtons - 1) {
+          startPage = Math.max(1, endPage - maxButtons + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.className = 'ai-pagination-button-{{ ai_gen_id }}';
+          if (i === this.currentPage) {
+            pageButton.classList.add('active');
+          }
+          pageButton.textContent = i;
+          pageButton.addEventListener('click', () => {
+            this.currentPage = i;
+            this.updateDisplay();
+            this.scrollToTop();
+          });
+          this.paginationContainer.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'ai-pagination-button-{{ ai_gen_id }}';
+        nextButton.textContent = 'Next';
+        nextButton.disabled = this.currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+          if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.updateDisplay();
+            this.scrollToTop();
+          }
+        });
+        this.paginationContainer.appendChild(nextButton);
+      }
+
+      scrollToTop() {
+        this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    customElements.define('search-results-{{ ai_gen_id }}', SearchResults{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Search results",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Filters"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show filters",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "filter_title",
+      "label": "Filter title",
+      "default": "Filters"
+    },
+    {
+      "type": "text",
+      "id": "filter_category_title",
+      "label": "Category filter title",
+      "default": "Category"
+    },
+    {
+      "type": "text",
+      "id": "filter_price_title",
+      "label": "Price filter title",
+      "default": "Price Range"
+    },
+    {
+      "type": "color",
+      "id": "filter_bg_color",
+      "label": "Filter background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "filter_border_color",
+      "label": "Filter border",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Products to show",
+      "min": 4,
+      "max": 50,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Pagination"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "pagination_bg_color",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pagination_text_color",
+      "label": "Button text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "pagination_border_color",
+      "label": "Button border",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "No results"
+    },
+    {
+      "type": "text",
+      "id": "no_results_title",
+      "label": "No results title",
+      "default": "No products found"
+    },
+    {
+      "type": "text",
+      "id": "no_results_text",
+      "label": "No results text",
+      "default": "Try adjusting your search or filters"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search results"
+    }
+  ]
+}
 {% endschema %}
