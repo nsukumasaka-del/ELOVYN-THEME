@@ -92,33 +92,6 @@
       ],
       "settings": {}
     },
-    "clothing_showcase": {
-      "type": "clothing-showcase",
-      "settings": {
-        "heading": "Premium Clothing Collection",
-        "description": "Discover our curated selection of premium clothing for every style.",
-        "collection": "frontpage",
-        "products_to_show": 4
-      }
-    },
-    "hair_products_showcase": {
-      "type": "hair-products-showcase",
-      "settings": {
-        "heading": "ENHANCE YOUR LOOK",
-        "description": "Unmatched Hair. Unstoppable Confidence.",
-        "collection": "",
-        "products_to_show": 4
-      }
-    },
-    "accessories_showcase": {
-      "type": "accessories-showcase",
-      "settings": {
-        "heading": "Packed full of tech.",
-        "description": "Premium accessories to enhance your ride and experience.",
-        "collection": "",
-        "products_to_show": 4
-      }
-    },
     "1770313730dbd9d19c": {
       "type": "_blocks",
       "blocks": {
@@ -152,14 +125,46 @@
         "ai_gen_block_cd936c6_D3GCrD"
       ],
       "settings": {}
+    },
+    "clothing_showcase": {
+      "type": "clothing-showcase",
+      "settings": {
+        "heading": "Premium Clothing Collection",
+        "description": "Discover our curated selection of premium clothing for every style.",
+        "collection": "frontpage",
+        "products_to_show": 4
+      }
+    },
+    "hair_products_showcase": {
+      "type": "hair-products-showcase",
+      "settings": {
+        "heading": "ENHANCE YOUR LOOK",
+        "description": "Unmatched Hair. Unstoppable Confidence.",
+        "collection": "",
+        "products_to_show": 4
+      }
+    },
+    "accessories_showcase": {
+      "type": "accessories-showcase",
+      "settings": {
+        "heading": "Packed full of tech.",
+        "description": "Premium accessories to enhance your ride and experience.",
+        "collection": "",
+        "products_to_show": 4
+      }
+    },
+    "17703141361e9820f5": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "press_marquee",
+    "1770313730dbd9d19c",
     "clothing_showcase",
     "hair_products_showcase",
     "accessories_showcase",
-    "1770313730dbd9d19c"
+    "17703141361e9820f5"
   ]
 }
