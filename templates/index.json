@@ -156,6 +156,10 @@
     "17703141361e9820f5": {
       "type": "_blocks",
       "settings": {}
+    },
+    "1770315463357762b7": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
@@ -165,6 +169,7 @@
     "clothing_showcase",
     "hair_products_showcase",
     "accessories_showcase",
-    "17703141361e9820f5"
+    "17703141361e9820f5",
+    "1770315463357762b7"
   ]
 }
