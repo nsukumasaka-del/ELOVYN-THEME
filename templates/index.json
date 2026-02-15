@@ -118,6 +118,14 @@
         "collection": "",
         "products_to_show": 4
       }
+    },
+    "17703141361e9820f5": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "1770315463357762b7": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
@@ -125,6 +133,8 @@
     "press_marquee",
     "clothing_showcase",
     "hair_products_showcase",
-    "accessories_showcase"
+    "accessories_showcase",
+    "17703141361e9820f5",
+    "1770315463357762b7"
   ]
 }
