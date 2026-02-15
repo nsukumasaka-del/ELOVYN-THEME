@@ -24,6 +24,13 @@
       "previous": "Previous",
       "next": "Next",
       "current_page": "Page {{ current }} of {{ total }}"
+    },
+    "amazon": {
+      "sponsored": "Sponsored",
+      "view_on_amazon": "View on Amazon",
+      "view_product": "View product",
+      "check_price": "Price and availability at Amazon.",
+      "disclosure": "As an Amazon Associate I earn from qualifying purchases."
     }
   },
   "accessibility": {

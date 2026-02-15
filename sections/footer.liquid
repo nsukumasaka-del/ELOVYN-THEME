@@ -92,6 +92,10 @@
       {%- endif -%}
     </div>
 
+    {%- comment -%} Amazon Associates site-wide disclosure (required by program) {%- endcomment -%}
+    <div class="border-t border-border/30 pt-6">
+      <p class="text-xs text-foreground/50 mb-4">{{ 'general.amazon.disclosure' | t | default: 'As an Amazon Associate I earn from qualifying purchases.' }}</p>
+    </div>
     {%- comment -%} Bottom - matches React: © Cowboy. All rights reserved. | Privacy | Terms | Cookies {%- endcomment -%}
     <div class="border-t border-border/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-xs text-foreground/40">

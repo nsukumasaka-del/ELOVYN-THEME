@@ -29,49 +29,30 @@
       </div>
 
       <div class="product-detail">
-        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-2">{{ product.title }}</h1>
+        {%- assign view_url = product.url -%}
+        {%- assign title_lower = product.title | downcase -%}
+        {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
+          {%- assign view_url = "https://amzn.to/45I1l6l" -%}
+        {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
+          {%- assign view_url = "https://amzn.to/4komatB" -%}
+        {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
+          {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
+        {%- endif -%}
+
+        <span class="text-xs font-semibold uppercase tracking-wider text-foreground/60">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-2 mt-1">{{ product.title }}</h1>
         {% if product.vendor != blank %}
           <p class="text-foreground/60 mb-4">{{ product.vendor }}</p>
         {% endif %}
-        <div class="text-2xl font-semibold text-foreground mb-6">
-          {{ product.price | money }}
-          {% if product.compare_at_price > product.price %}
-            <span class="text-lg text-foreground/60 line-through ml-2">{{ product.compare_at_price | money }}</span>
-            <span class="text-accent text-base ml-2">{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% off</span>
-          {% endif %}
+
+        {% render 'amazon-disclosure' %}
+
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+          <a href="{{ view_url }}" class="px-8 py-3 rounded-lg bg-accent text-background font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">
+            {% if view_url contains 'amzn.to' %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}
+          </a>
+          {% if view_url contains 'amzn.to' %}<p class="text-sm text-foreground/60">{{ 'general.amazon.check_price' | t | default: 'Price and availability at Amazon.' }}</p>{% endif %}
         </div>
-
-        {% form 'product', product, id: 'product-form', class: 'product-form' %}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
-          {% unless product.has_only_default_variant %}
-            <div class="mb-6">
-              {% for option in product.options_with_values %}
-                <label class="block text-sm font-medium text-foreground mb-2">{{ option.name }}</label>
-                <div class="flex flex-wrap gap-2">
-                  {% for value in option.values %}
-                    <label class="inline-flex items-center">
-                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} class="mr-2">
-                      <span class="text-foreground">{{ value }}</span>
-                    </label>
-                  {% endfor %}
-                </div>
-              {% endfor %}
-            </div>
-          {% endunless %}
-
-          <div class="flex flex-wrap items-center gap-4 mb-6">
-            <label for="Quantity" class="text-sm font-medium text-foreground">{{ 'products.product.quantity' | t | default: 'Quantity' }}</label>
-            <input type="number" id="Quantity" name="quantity" value="1" min="1" max="99" class="w-20 px-3 py-2 rounded-lg border border-border bg-card text-foreground">
-            <button type="submit" name="add" class="px-8 py-3 rounded-lg bg-accent text-background font-semibold hover:opacity-90 transition-opacity disabled:opacity-50" {% unless product.available %}disabled{% endunless %}>
-              {% if product.available %}
-                {{ 'products.product.add_to_cart' | t | default: 'Add to cart' }}
-              {% else %}
-                {{ 'products.product.sold_out' | t | default: 'Sold out' }}
-              {% endif %}
-            </button>
-          </div>
-        {% endform %}
 
         {% if product.description != blank %}
           <div class="prose prose-invert max-w-none text-foreground/80 mt-8 border-t border-border/30 pt-8">
