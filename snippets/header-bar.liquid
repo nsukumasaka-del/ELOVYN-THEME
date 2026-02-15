@@ -264,6 +264,88 @@
     justify-content: center;
     padding: 0 0.25rem;
   }
+  /* Search modal */
+  #elovyn-search-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5rem 1rem 2rem;
+    overflow-y: auto;
+  }
+  #elovyn-search-modal.open {
+    display: flex;
+  }
+  #elovyn-search-modal .elovyn-search-inner {
+    width: 100%;
+    max-width: 560px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  #elovyn-search-modal .elovyn-search-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  #elovyn-search-modal .elovyn-search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    outline: none;
+  }
+  #elovyn-search-modal .elovyn-search-form input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  #elovyn-search-modal .elovyn-search-form button[type="submit"] {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #elovyn-search-modal .elovyn-search-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  #elovyn-search-results-dropdown {
+    margin-top: 0.75rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  #elovyn-search-results-dropdown a {
+    display: block;
+    padding: 0.6rem 0;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+  }
+  #elovyn-search-results-dropdown a:hover {
+    color: #fff;
+  }
 </style>
 
 <div id="elovyn-header-wrap">
@@ -285,6 +367,9 @@
       </nav>
 
       <div class="elovyn-header-right">
+        <button type="button" id="elovyn-search-open" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}">
+          {% render 'icon-search', width: 20, height: 20 %}
+        </button>
         <a href="{{ routes.account_login_url }}" aria-label="Account">
           {% render 'icon-user', width: 20, height: 20 %}
         </a>
@@ -302,11 +387,25 @@
 
   <div id="elovyn-mobile-menu" aria-hidden="true">
     <nav role="navigation" aria-label="Mobile menu">
+      <a href="{{ routes.search_url }}" class="elovyn-mobile-link" id="elovyn-mobile-search">{{ 'general.search.title' | t | default: 'Search' }}</a>
       <a href="{% if settings.header_nav_clothes_url != blank %}{{ settings.header_nav_clothes_url }}{% else %}#clothing{% endif %}" class="elovyn-mobile-link">Clothes</a>
       <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}" class="elovyn-mobile-link">Hair Products</a>
       <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}" class="elovyn-mobile-link">Accessories</a>
       <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}" class="elovyn-mobile-link">Connect</a>
     </nav>
+  </div>
+
+  {%- comment -%} Search modal {%- endcomment -%}
+  <div id="elovyn-search-modal" aria-hidden="true" role="dialog" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}">
+    <div class="elovyn-search-inner" style="position: relative;">
+      <button type="button" class="elovyn-search-close" id="elovyn-search-close" aria-label="{{ 'general.search.close' | t | default: 'Close search' }}">{% render 'icon-x', width: 24, height: 24 %}</button>
+      <form action="{{ routes.search_url }}" method="get" class="elovyn-search-form" role="search">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t | default: 'Search our store' }}" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}" autocomplete="off" id="elovyn-search-input">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit">{{ 'general.search.submit' | t | default: 'Search' }}</button>
+      </form>
+      <div id="elovyn-search-results-dropdown" class="elovyn-search-results-dropdown" style="display: none;"></div>
+    </div>
   </div>
 </div>
 
@@ -329,5 +428,33 @@
     window.addEventListener('scroll', function() {
       wrap.classList.toggle('scrolled', window.pageYOffset > 50);
     });
+
+    var searchOpen = document.getElementById('elovyn-search-open');
+    var searchModal = document.getElementById('elovyn-search-modal');
+    var searchClose = document.getElementById('elovyn-search-close');
+    var searchInput = document.getElementById('elovyn-search-input');
+    if (searchOpen && searchModal && searchClose) {
+      searchOpen.addEventListener('click', function() {
+        searchModal.classList.add('open');
+        searchModal.setAttribute('aria-hidden', 'false');
+        if (searchInput) { searchInput.focus(); searchInput.value = ''; }
+      });
+      searchClose.addEventListener('click', function() {
+        searchModal.classList.remove('open');
+        searchModal.setAttribute('aria-hidden', 'true');
+      });
+      searchModal.addEventListener('click', function(e) {
+        if (e.target === searchModal) {
+          searchModal.classList.remove('open');
+          searchModal.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && searchModal.classList.contains('open')) {
+          searchModal.classList.remove('open');
+          searchModal.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
   })();
 </script>
