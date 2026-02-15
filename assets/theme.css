@@ -732,3 +732,34 @@ body {
 .product-card--ad.group:hover .btn-hero {
   opacity: 1;
 }
+
+/* Search page – modern layout */
+.search-page__header h1 {
+  letter-spacing: -0.02em;
+}
+.search-page__form .search-page__input,
+.search-page__form .search-page__type {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+.search-page__form .search-page__input::placeholder {
+  color: hsl(var(--foreground) / 0.5);
+}
+.search-page__form .search-page__input:focus,
+.search-page__form .search-page__type:focus {
+  border-color: hsl(var(--accent));
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--accent) / 0.2);
+}
+.search-page__results .search-card--article,
+.search-page__results .search-card--page {
+  min-height: 0;
+}
+.search-page__empty .btn-hero {
+  margin-top: 0;
+}
+.search-page__pagination a:hover {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--accent) / 0.5);
+}

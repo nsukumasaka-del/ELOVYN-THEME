@@ -3,6 +3,27 @@
     "meta": {
       "tags": "Tagged \"{{ tags }}\"",
       "page": "Page {{ page }}"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search our store",
+      "submit": "Search",
+      "results_with_count": "{{ count }} results for \"{{ terms }}\"",
+      "results_for": "Results for",
+      "no_results": "No results found for \"{{ terms }}\".",
+      "no_results_hint": "Try different keywords or browse our collections.",
+      "shop_all": "Shop all",
+      "filter_by_type": "Filter by type",
+      "all_types": "All",
+      "products": "Products",
+      "articles": "Articles",
+      "pages": "Pages"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "current_page": "Page {{ current }} of {{ total }}"
     }
   },
   "accessibility": {
@@ -19,6 +40,13 @@
     },
     "footer": {
       "all_rights_reserved": "All rights reserved."
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Collections",
+      "products": "products",
+      "no_matches": "No products in this collection."
     }
   },
   "products": {
