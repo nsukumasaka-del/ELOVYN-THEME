@@ -711,13 +711,18 @@ body {
 .product-card--ad .product-card-overlay-inner {
   background: linear-gradient(to top, hsl(var(--background) / 0.95), hsl(var(--background) / 0.6) 60%, transparent);
 }
-.product-card--ad .product-card-title,
+.product-card--ad .product-card-title {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.product-card--ad.group:hover .product-card-title {
+  opacity: 1;
+}
 .product-card--ad .product-card-tagline,
 .product-card--ad .product-card-desc,
 .product-card--ad .product-card-price {
   opacity: 1;
 }
-.product-card--ad.group:hover .product-card-title,
 .product-card--ad.group:hover .product-card-tagline,
 .product-card--ad.group:hover .product-card-desc,
 .product-card--ad.group:hover .product-card-price {
