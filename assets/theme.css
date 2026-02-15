@@ -710,7 +710,6 @@ body {
 
 .product-card--ad .product-card-overlay-inner {
   background: linear-gradient(to top, hsl(var(--background) / 0.95), hsl(var(--background) / 0.6) 60%, transparent);
-  border-top: 1px solid hsl(var(--border) / 0.5);
 }
 .product-card--ad .product-card-title,
 .product-card--ad .product-card-tagline,
