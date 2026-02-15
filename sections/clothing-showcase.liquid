@@ -165,15 +165,21 @@
       "name": "Amazon link",
       "settings": [
         {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
+          "type": "header",
+          "content": "Product and link"
         },
         {
-          "type": "url",
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Click to select the product. This block's link will be used for its button."
+        },
+        {
+          "type": "text",
           "id": "url",
-          "label": "Amazon or external URL",
-          "info": "Paste your Amazon affiliate link (e.g. amzn.to/...) or any external URL."
+          "label": "Amazon link",
+          "placeholder": "https://amzn.to/xxxxx",
+          "info": "Paste the full URL here. You can see and edit it in the sidebar when this block is selected."
         }
       ]
     }
