@@ -62,6 +62,8 @@
                       {%- assign view_url = "https://amzn.to/4komatB" -%}
                     {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
                       {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
+                    {%- elsif title_lower contains "jbl tune flex" -%}
+                      {%- assign view_url = "https://amzn.to/4rRscFy" -%}
                     {%- endif -%}
                     <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10 transition-all duration-300">
                       <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
@@ -81,7 +83,7 @@
                           {% if item.vendor != blank %}
                             <p class="product-card-tagline font-medium text-accent uppercase tracking-wider">{{ item.vendor }}</p>
                           {% endif %}
-                          <h2 class="product-card-title font-bold text-foreground">
+                          <h2 class="product-card-title font-bold text-foreground" title="{{ item.title | escape }}">
                             <a href="{{ view_url }}" class="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{{ item.title }}</a>
                           </h2>
                           {% if item.description != blank %}
