@@ -520,7 +520,7 @@ body {
 .product-card .product-card-title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow: hidden;
   width: 100%;
   max-width: 100%;
