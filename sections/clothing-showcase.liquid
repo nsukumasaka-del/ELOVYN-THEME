@@ -13,87 +13,38 @@
       </p>
     </div>
 
-    {%- assign has_blocks = false -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'amazon_link' and block.settings.product != blank -%}
-        {%- assign has_blocks = true -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
-
-    {%- if has_blocks -%}
-      {%- comment -%} Block-driven: one product card per Amazon link block. Clicking a card in the editor selects that block so the sidebar shows its Product + Amazon link. {%- endcomment -%}
-      {% render 'amazon-disclosure' %}
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'amazon_link' and block.settings.product != blank -%}
-            {%- assign product = block.settings.product -%}
-            {%- assign view_url = block.settings.url | default: product.url -%}
-            {%- if view_url == blank -%}
-              {%- assign view_url = product.url -%}
-            {%- endif -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10" {{ block.shopify_attributes }}>
-              <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-              <div class="aspect-[4/5] relative overflow-hidden">
-                {%- if product.featured_image != blank -%}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 600 }}"
-                    alt="{{ product.featured_image.alt | escape }}"
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  >
-                {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-                {%- endif -%}
-                <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
-              </div>
-              <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-                <div class="absolute inset-0 bg-background/40 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="relative z-10">
-                  {%- if product.vendor != blank -%}
-                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {{ product.vendor }}
-                    </p>
-                  {%- elsif product.metafields.custom.tagline != blank -%}
-                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {{ product.metafields.custom.tagline }}
-                    </p>
-                  {%- endif -%}
-                  <h3 class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="{{ product.title | escape }}">
-                    {{ product.title }}
-                  </h3>
-                  {%- if product.description != blank -%}
-                    <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
-                      {{ product.description | strip_html | truncate: 100 }}
-                    </p>
-                  {%- endif -%}
-                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{% if section.settings.button_text_amazon != blank %}{{ section.settings.button_text_amazon }}{% else %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% endif %}{% else %}{% if section.settings.button_text_product != blank %}{{ section.settings.button_text_product }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}{% endif %}</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    {%- elsif section.settings.collection != blank -%}
+    {%- if section.settings.collection != blank -%}
       {%- assign collection = collections[section.settings.collection] -%}
       {%- if collection != blank and collection.products.size > 0 -%}
         {% render 'amazon-disclosure' %}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
             {%- assign view_url = product.url -%}
-            {%- assign title_lower = product.title | downcase -%}
-            {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
-              {%- assign view_url = "https://amzn.to/45I1l6l" -%}
-            {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
-              {%- assign view_url = "https://amzn.to/4komatB" -%}
-            {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
-              {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
-            {%- elsif title_lower contains "jbl tune flex" -%}
-              {%- assign view_url = "https://amzn.to/4rRscFy" -%}
+            {%- assign matched_block = nil -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'amazon_link' and block.settings.product != blank -%}
+                {%- if block.settings.product.id == product.id -%}
+                  {%- if block.settings.url != blank -%}
+                    {%- assign view_url = block.settings.url -%}
+                  {%- endif -%}
+                  {%- assign matched_block = block -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if matched_block == nil -%}
+              {%- assign title_lower = product.title | downcase -%}
+              {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
+                {%- assign view_url = "https://amzn.to/45I1l6l" -%}
+              {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
+                {%- assign view_url = "https://amzn.to/4komatB" -%}
+              {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
+                {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
+              {%- elsif title_lower contains "jbl tune flex" -%}
+                {%- assign view_url = "https://amzn.to/4rRscFy" -%}
+              {%- endif -%}
             {%- endif -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10">
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10"{% if matched_block %} {{ matched_block.shopify_attributes }}{% endif %}>
               <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <div class="aspect-[4/5] relative overflow-hidden">
                 {%- if product.featured_image != blank -%}
@@ -116,7 +67,7 @@
                     <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{{ product.description | strip_html | truncate: 100 }}</p>
                   {%- endif -%}
                   <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}</a>
+                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{% if section.settings.button_text_amazon != blank %}{{ section.settings.button_text_amazon }}{% else %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% endif %}{% else %}{% if section.settings.button_text_product != blank %}{{ section.settings.button_text_product }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}{% endif %}</a>
                   </div>
                 </div>
               </div>
@@ -127,7 +78,7 @@
         <p class="text-center text-foreground/60">No products found in this collection.</p>
       {%- endif -%}
     {%- else -%}
-      <p class="text-center text-foreground/60">Add Amazon link blocks below, or select a collection, to show products.</p>
+      <p class="text-center text-foreground/60">Select a collection above to show products.</p>
     {%- endif -%}
   </div>
 </section>
@@ -195,7 +146,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Add blocks below: pick a product and paste its Amazon URL. When you have at least one block, the grid shows those products. In the theme editor, click a product card in the preview and the sidebar will select that block so you can see and edit the Amazon link."
+      "content": "To add a link to a product (e.g. Men's Waffle Knit): 1) Click 'Add block' and choose 'Amazon link'. 2) In the block, select the product and paste the URL. 3) Click that product's card in the preview — the sidebar will show this block so you can edit the link."
     }
   ],
   "blocks": [
