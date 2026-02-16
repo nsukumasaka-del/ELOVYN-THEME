@@ -24,20 +24,22 @@
         {% render 'amazon-disclosure' %}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
-            {%- assign view_url = product.url -%}
-            {%- assign matched_block = nil -%}
+            {%- assign product_index = forloop.index0 -%}
+            {%- assign link_block = nil -%}
+            {%- assign amazon_count = 0 -%}
             {%- for block in section.blocks -%}
-              {%- if block.type == 'amazon_link' and block.settings.product != blank -%}
-                {%- if block.settings.product.id == product.id -%}
-                  {%- if block.settings.url != blank -%}
-                    {%- assign view_url = block.settings.url -%}
-                  {%- endif -%}
-                  {%- assign matched_block = block -%}
+              {%- if block.type == 'amazon_link' -%}
+                {%- if amazon_count == product_index -%}
+                  {%- assign link_block = block -%}
                   {%- break -%}
                 {%- endif -%}
+                {%- assign amazon_count = amazon_count | plus: 1 -%}
               {%- endif -%}
             {%- endfor -%}
-            {%- if matched_block == nil -%}
+            {%- assign view_url = product.url -%}
+            {%- if link_block != nil and link_block.settings.url != blank -%}
+              {%- assign view_url = link_block.settings.url -%}
+            {%- else -%}
               {%- assign title_lower = product.title | downcase -%}
               {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
                 {%- assign view_url = "https://amzn.to/45I1l6l" -%}
@@ -49,8 +51,8 @@
                 {%- assign view_url = "https://amzn.to/4rRscFy" -%}
               {%- endif -%}
             {%- endif -%}
-            {%- comment -%} Only attach the block that belongs to this product, so clicking the card opens that product's link settings. {%- endcomment -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if matched_block %} {{ matched_block.shopify_attributes }}{% endif %}>
+            {%- comment -%} Each product slot uses the block at the same position; clicking the card opens that block's link settings. {%- endcomment -%}
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if link_block %} {{ link_block.shopify_attributes }}{% endif %}>
               <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <div class="aspect-[4/5] relative overflow-hidden">
                 {%- if product.featured_image != blank -%}
@@ -190,10 +192,18 @@
     {
       "name": "Clothing Showcase",
       "blocks": [
-        {
-          "type": "amazon_link",
-          "settings": {}
-        }
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} },
+        { "type": "amazon_link", "settings": {} }
       ]
     }
   ]
