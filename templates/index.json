@@ -144,8 +144,8 @@
         "amazon_link_1": {
           "type": "amazon_link",
           "settings": {
-            "product": "",
-            "url": ""
+            "product": "4k-portable-smart-projector-wifi-bluetooth",
+            "url": "https://amzn.to/4tXeeUL"
           }
         }
       },
@@ -154,7 +154,7 @@
       ],
       "settings": {
         "collection": "tech",
-        "products_to_show": 4,
+        "products_to_show": 9,
         "heading": "Packed full of tech.",
         "description": "Premium accessories to enhance your ride and experience.",
         "button_text_amazon": "View on Amazon",
