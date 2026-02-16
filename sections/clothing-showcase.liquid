@@ -153,13 +153,18 @@
     },
     {
       "type": "header",
-      "content": "Product links (add blocks below)"
+      "content": "Product links"
+    },
+    {
+      "type": "paragraph",
+      "content": "Below: click 'Add block' or 'Add product link' to add a product and its button URL. Each block = one product + one link."
     }
   ],
   "blocks": [
     {
       "type": "amazon_link",
-      "name": "Amazon link",
+      "name": "Product link",
+      "limit": 50,
       "settings": [
         {
           "type": "header",
@@ -169,14 +174,14 @@
           "type": "product",
           "id": "product",
           "label": "Product",
-          "info": "Click to select the product. This block's link will be used for its button."
+          "info": "Select the product. This block's link will be used for its button."
         },
         {
           "type": "text",
           "id": "url",
-          "label": "Amazon link",
-          "placeholder": "https://amzn.to/xxxxx",
-          "info": "Paste the full URL here. You can see and edit it in the sidebar when this block is selected."
+          "label": "Link URL",
+          "placeholder": "https://amzn.to/xxxxx or any URL",
+          "info": "Paste the full URL for the View product button."
         }
       ]
     }
