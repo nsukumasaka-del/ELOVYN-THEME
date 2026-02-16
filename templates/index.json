@@ -95,22 +95,104 @@
     "clothing_showcase": {
       "type": "clothing-showcase",
       "blocks": {
-        "amazon_link_1": { "type": "amazon_link", "settings": {} },
-        "amazon_link_2": { "type": "amazon_link", "settings": {} },
-        "amazon_link_3": { "type": "amazon_link", "settings": {} },
-        "amazon_link_4": { "type": "amazon_link", "settings": {} },
-        "amazon_link_5": { "type": "amazon_link", "settings": {} },
-        "amazon_link_6": { "type": "amazon_link", "settings": {} },
-        "amazon_link_7": { "type": "amazon_link", "settings": {} },
-        "amazon_link_8": { "type": "amazon_link", "settings": {} },
-        "amazon_link_9": { "type": "amazon_link", "settings": {} },
-        "amazon_link_10": { "type": "amazon_link", "settings": {} },
-        "amazon_link_11": { "type": "amazon_link", "settings": {} },
-        "amazon_link_12": { "type": "amazon_link", "settings": {} }
+        "amazon_link_1": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_2": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "men-s-waffle-knit-2-piece-summer-set",
+            "url": "https://amzn.to/4aSEJ5U"
+          }
+        },
+        "amazon_link_3": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_4": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_5": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_6": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_7": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_8": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_9": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_10": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_11": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_12": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        }
       },
       "block_order": [
-        "amazon_link_1", "amazon_link_2", "amazon_link_3", "amazon_link_4", "amazon_link_5", "amazon_link_6",
-        "amazon_link_7", "amazon_link_8", "amazon_link_9", "amazon_link_10", "amazon_link_11", "amazon_link_12"
+        "amazon_link_1",
+        "amazon_link_2",
+        "amazon_link_3",
+        "amazon_link_4",
+        "amazon_link_5",
+        "amazon_link_6",
+        "amazon_link_7",
+        "amazon_link_8",
+        "amazon_link_9",
+        "amazon_link_10",
+        "amazon_link_11",
+        "amazon_link_12"
       ],
       "settings": {
         "collection": "frontpage",
@@ -124,22 +206,104 @@
     "hair_products_showcase": {
       "type": "hair-products-showcase",
       "blocks": {
-        "amazon_link_1": { "type": "amazon_link", "settings": {} },
-        "amazon_link_2": { "type": "amazon_link", "settings": {} },
-        "amazon_link_3": { "type": "amazon_link", "settings": {} },
-        "amazon_link_4": { "type": "amazon_link", "settings": {} },
-        "amazon_link_5": { "type": "amazon_link", "settings": {} },
-        "amazon_link_6": { "type": "amazon_link", "settings": {} },
-        "amazon_link_7": { "type": "amazon_link", "settings": {} },
-        "amazon_link_8": { "type": "amazon_link", "settings": {} },
-        "amazon_link_9": { "type": "amazon_link", "settings": {} },
-        "amazon_link_10": { "type": "amazon_link", "settings": {} },
-        "amazon_link_11": { "type": "amazon_link", "settings": {} },
-        "amazon_link_12": { "type": "amazon_link", "settings": {} }
+        "amazon_link_1": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_2": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_3": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_4": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_5": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_6": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_7": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_8": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_9": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_10": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_11": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_12": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        }
       },
       "block_order": [
-        "amazon_link_1", "amazon_link_2", "amazon_link_3", "amazon_link_4", "amazon_link_5", "amazon_link_6",
-        "amazon_link_7", "amazon_link_8", "amazon_link_9", "amazon_link_10", "amazon_link_11", "amazon_link_12"
+        "amazon_link_1",
+        "amazon_link_2",
+        "amazon_link_3",
+        "amazon_link_4",
+        "amazon_link_5",
+        "amazon_link_6",
+        "amazon_link_7",
+        "amazon_link_8",
+        "amazon_link_9",
+        "amazon_link_10",
+        "amazon_link_11",
+        "amazon_link_12"
       ],
       "settings": {
         "collection": "women",
@@ -153,22 +317,104 @@
     "accessories_showcase": {
       "type": "accessories-showcase",
       "blocks": {
-        "amazon_link_1": { "type": "amazon_link", "settings": {} },
-        "amazon_link_2": { "type": "amazon_link", "settings": {} },
-        "amazon_link_3": { "type": "amazon_link", "settings": {} },
-        "amazon_link_4": { "type": "amazon_link", "settings": {} },
-        "amazon_link_5": { "type": "amazon_link", "settings": {} },
-        "amazon_link_6": { "type": "amazon_link", "settings": {} },
-        "amazon_link_7": { "type": "amazon_link", "settings": {} },
-        "amazon_link_8": { "type": "amazon_link", "settings": {} },
-        "amazon_link_9": { "type": "amazon_link", "settings": {} },
-        "amazon_link_10": { "type": "amazon_link", "settings": {} },
-        "amazon_link_11": { "type": "amazon_link", "settings": {} },
-        "amazon_link_12": { "type": "amazon_link", "settings": {} }
+        "amazon_link_1": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_2": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_3": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_4": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_5": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_6": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_7": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_8": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_9": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_10": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_11": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        },
+        "amazon_link_12": {
+          "type": "amazon_link",
+          "settings": {
+            "product": "",
+            "url": ""
+          }
+        }
       },
       "block_order": [
-        "amazon_link_1", "amazon_link_2", "amazon_link_3", "amazon_link_4", "amazon_link_5", "amazon_link_6",
-        "amazon_link_7", "amazon_link_8", "amazon_link_9", "amazon_link_10", "amazon_link_11", "amazon_link_12"
+        "amazon_link_1",
+        "amazon_link_2",
+        "amazon_link_3",
+        "amazon_link_4",
+        "amazon_link_5",
+        "amazon_link_6",
+        "amazon_link_7",
+        "amazon_link_8",
+        "amazon_link_9",
+        "amazon_link_10",
+        "amazon_link_11",
+        "amazon_link_12"
       ],
       "settings": {
         "collection": "tech",
