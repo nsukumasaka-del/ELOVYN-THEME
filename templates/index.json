@@ -196,7 +196,7 @@
       ],
       "settings": {
         "collection": "frontpage",
-        "products_to_show": 4,
+        "products_to_show": 10,
         "heading": "Premium Clothing Collection",
         "description": "Discover our curated selection of premium clothing for every style.",
         "button_text_amazon": "View on Amazon",
@@ -209,8 +209,8 @@
         "amazon_link_1": {
           "type": "amazon_link",
           "settings": {
-            "product": "",
-            "url": ""
+            "product": "30-hd-lace-front-wig-13x6-glueless-human-hair-180-density",
+            "url": "https://amzn.to/3Otgy5j"
           }
         },
         "amazon_link_2": {
