@@ -59,7 +59,7 @@
                 {%- endif -%}
               {%- endfor -%}
             {%- endif -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10"{% if block_to_select %} {{ block_to_select.shopify_attributes }}{% endif %}>
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10"{% if block_to_select %} {{ block_to_select.shopify_attributes }}{% endif %}>
               <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <div class="aspect-[4/5] relative overflow-hidden">
                 {%- if product.featured_image != blank -%}

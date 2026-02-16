@@ -65,7 +65,7 @@
                     {%- elsif title_lower contains "jbl tune flex" -%}
                       {%- assign view_url = "https://amzn.to/4rRscFy" -%}
                     {%- endif -%}
-                    <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
                       <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
                       <div class="aspect-[4/5] relative overflow-hidden">
                         <a href="{{ view_url }}" class="block w-full h-full" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">
@@ -96,7 +96,7 @@
                       </div>
                     </div>
                   {% when 'article' %}
-                    <article class="search-card search-card--article group relative bg-card rounded-2xl overflow-hidden border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <article class="search-card search-card--article group relative bg-card rounded-2xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
                       <a href="{{ item.url }}" class="block">
                         <div class="aspect-[4/3] relative overflow-hidden">
                           {% if item.image != blank %}
@@ -115,7 +115,7 @@
                       </a>
                     </article>
                   {% when 'page' %}
-                    <article class="search-card search-card--page group bg-card rounded-2xl p-5 border-2 border-border/50 hover:border-accent/40 shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <article class="search-card search-card--page group bg-card rounded-2xl p-5 border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
                       <span class="text-[10px] font-semibold uppercase tracking-wider text-foreground/60">Page</span>
                       <a href="{{ item.url }}" class="block mt-2">
                         <h3 class="font-bold text-foreground group-hover:text-accent transition-colors line-clamp-2">{{ item.title }}</h3>
