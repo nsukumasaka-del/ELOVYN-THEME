@@ -65,7 +65,7 @@
                     {%- elsif title_lower contains "jbl tune flex" -%}
                       {%- assign view_url = "https://amzn.to/4rRscFy" -%}
                     {%- endif -%}
-                    <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 transition-all duration-300">
                       <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
                       <div class="aspect-[4/5] relative overflow-hidden">
                         <a href="{{ view_url }}" class="block w-full h-full" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">
@@ -75,10 +75,9 @@
                             {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
                           {% endif %}
                         </a>
-                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
                       </div>
                       <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-                        <div class="absolute inset-0 bg-background/40 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="relative z-10">
                           {% if item.vendor != blank %}
                             <p class="product-card-tagline font-medium text-accent uppercase tracking-wider">{{ item.vendor }}</p>
@@ -96,7 +95,7 @@
                       </div>
                     </div>
                   {% when 'article' %}
-                    <article class="search-card search-card--article group relative bg-card rounded-2xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <article class="search-card search-card--article group relative bg-card rounded-2xl overflow-hidden border-2 border-border/50 hover:border-accent/40 transition-all duration-300">
                       <a href="{{ item.url }}" class="block">
                         <div class="aspect-[4/3] relative overflow-hidden">
                           {% if item.image != blank %}
@@ -104,8 +103,7 @@
                           {% else %}
                             {{ 'article' | placeholder_svg_tag: 'w-full h-full object-cover opacity-50' }}
                           {% endif %}
-                          <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-                          <span class="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-foreground/80 bg-background/70 backdrop-blur px-2 py-1 rounded">Article</span>
+                          <span class="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-foreground/80 bg-background/70 px-2 py-1 rounded">Article</span>
                         </div>
                         <div class="p-4 md:p-5">
                           <h3 class="font-bold text-foreground group-hover:text-accent transition-colors line-clamp-2">{{ item.title }}</h3>
@@ -115,7 +113,7 @@
                       </a>
                     </article>
                   {% when 'page' %}
-                    <article class="search-card search-card--page group bg-card rounded-2xl p-5 border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                    <article class="search-card search-card--page group bg-card rounded-2xl p-5 border-2 border-border/50 hover:border-accent/40 transition-all duration-300">
                       <span class="text-[10px] font-semibold uppercase tracking-wider text-foreground/60">Page</span>
                       <a href="{{ item.url }}" class="block mt-2">
                         <h3 class="font-bold text-foreground group-hover:text-accent transition-colors line-clamp-2">{{ item.title }}</h3>

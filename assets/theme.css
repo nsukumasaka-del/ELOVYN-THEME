@@ -697,7 +697,6 @@ body {
   color: hsl(var(--background));
   background: hsl(var(--foreground) / 0.75);
   border-radius: 0.25rem;
-  backdrop-filter: blur(4px);
 }
 @media (min-width: 640px) {
   .product-card__ad-badge {
@@ -709,7 +708,7 @@ body {
 }
 
 .product-card--ad .product-card-overlay-inner {
-  background: linear-gradient(to top, hsl(var(--background) / 0.95), hsl(var(--background) / 0.6) 60%, transparent);
+  background: linear-gradient(to top, hsl(var(--background) / 0.75), hsl(var(--background) / 0.4) 50%, transparent);
 }
 .product-card--ad .product-card-title,
 .product-card--ad .product-card-tagline,

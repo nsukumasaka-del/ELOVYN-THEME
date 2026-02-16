@@ -30,7 +30,7 @@
           {%- elsif title_lower contains "jbl tune flex" -%}
             {%- assign view_url = "https://amzn.to/4rRscFy" -%}
           {%- endif -%}
-          <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10">
+          <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40">
             <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <div class="aspect-[4/5] relative overflow-hidden">
               {% if product.featured_image != blank %}
@@ -38,10 +38,9 @@
               {% else %}
                 {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
               {% endif %}
-              <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
             </div>
             <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-              <div class="absolute inset-0 bg-background/40 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div class="relative z-10">
                 {% if product.vendor != blank %}
                   <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.vendor }}</p>
