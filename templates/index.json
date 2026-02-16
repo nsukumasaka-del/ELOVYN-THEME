@@ -94,6 +94,13 @@
     },
     "clothing_showcase": {
       "type": "clothing-showcase",
+      "blocks": {
+        "amazon_link_1": {
+          "type": "amazon_link",
+          "settings": {}
+        }
+      },
+      "block_order": ["amazon_link_1"],
       "settings": {
         "heading": "Premium Clothing Collection",
         "description": "Discover our curated selection of premium clothing for every style.",
