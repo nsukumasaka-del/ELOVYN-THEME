@@ -49,17 +49,8 @@
                 {%- assign view_url = "https://amzn.to/4rRscFy" -%}
               {%- endif -%}
             {%- endif -%}
-            {%- comment -%} Use matched block for click-to-edit; if no block for this product, use first Product link block so clicking the card still opens a block to set the link. {%- endcomment -%}
-            {%- assign block_to_select = matched_block -%}
-            {%- if block_to_select == nil -%}
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'amazon_link' -%}
-                  {%- assign block_to_select = block -%}
-                  {%- break -%}
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endif -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if block_to_select %} {{ block_to_select.shopify_attributes }}{% endif %}>
+            {%- comment -%} Only attach the block that belongs to this product, so clicking the card opens that product's link settings. {%- endcomment -%}
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if matched_block %} {{ matched_block.shopify_attributes }}{% endif %}>
               <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <div class="aspect-[4/5] relative overflow-hidden">
                 {%- if product.featured_image != blank -%}
@@ -113,7 +104,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Use the blocks below to set a custom link for each product's button. Click 'Add block' to add a Product link, then select the product and enter the Link URL. You can also click a product card in the preview to edit its link."
+      "content": "Each product can have its own link. Add one 'Product link' block per product: choose the product and enter the Link URL. Click a product card in the preview to open that product's link settings (add a block for it first if needed)."
     },
     {
       "type": "header",
