@@ -13,24 +13,53 @@
       </p>
     </div>
 
+    {%- assign collection = nil -%}
     {%- if section.settings.collection != blank -%}
       {%- assign collection = collections[section.settings.collection] -%}
-      {%- if collection != blank and collection.products.size > 0 -%}
+    {%- endif -%}
+    {%- if collection == nil and collections['frontpage'] != blank -%}
+      {%- assign collection = collections['frontpage'] -%}
+    {%- endif -%}
+    {%- if collection != blank and collection.products.size > 0 -%}
         {% render 'amazon-disclosure' %}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
           {%- for product in collection.products limit: section.settings.products_to_show -%}
             {%- assign view_url = product.url -%}
-            {%- assign title_lower = product.title | downcase -%}
-            {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
-              {%- assign view_url = "https://amzn.to/45I1l6l" -%}
-            {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
-              {%- assign view_url = "https://amzn.to/4komatB" -%}
-            {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
-              {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
-            {%- elsif title_lower contains "jbl tune flex" -%}
-              {%- assign view_url = "https://amzn.to/4rRscFy" -%}
+            {%- assign matched_block = nil -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'amazon_link' and block.settings.product != blank -%}
+                {%- if block.settings.product.id == product.id -%}
+                  {%- if block.settings.url != blank -%}
+                    {%- assign view_url = block.settings.url -%}
+                  {%- endif -%}
+                  {%- assign matched_block = block -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if matched_block == nil -%}
+              {%- assign title_lower = product.title | downcase -%}
+              {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
+                {%- assign view_url = "https://amzn.to/45I1l6l" -%}
+              {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
+                {%- assign view_url = "https://amzn.to/4komatB" -%}
+              {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
+                {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
+              {%- elsif title_lower contains "jbl tune flex" -%}
+                {%- assign view_url = "https://amzn.to/4rRscFy" -%}
+              {%- endif -%}
             {%- endif -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40">
+            {%- comment -%} Use matched block for click-to-edit; if no block for this product, use first Product link block so clicking the card still opens a block to set the link. {%- endcomment -%}
+            {%- assign block_to_select = matched_block -%}
+            {%- if block_to_select == nil -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'amazon_link' -%}
+                  {%- assign block_to_select = block -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if block_to_select %} {{ block_to_select.shopify_attributes }}{% endif %}>
               <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <div class="aspect-[4/5] relative overflow-hidden">
                 {%- if product.featured_image != blank -%}
@@ -66,18 +95,15 @@
                     </p>
                   {%- endif -%}
                   <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}</a>
+                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{% if section.settings.button_text_amazon != blank %}{{ section.settings.button_text_amazon }}{% else %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% endif %}{% else %}{% if section.settings.button_text_product != blank %}{{ section.settings.button_text_product }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}{% endif %}</a>
                   </div>
                 </div>
               </div>
             </div>
           {%- endfor -%}
         </div>
-      {%- else -%}
-        <p class="text-center text-foreground/60">No products found in this collection.</p>
-      {%- endif -%}
     {%- else -%}
-      <p class="text-center text-foreground/60">Please select a collection in the theme editor.</p>
+      <p class="text-center text-foreground/60">No products to show. In the sidebar under "Products in grid", select a Collection that has products.</p>
     {%- endif -%}
   </div>
 </section>
@@ -86,6 +112,29 @@
 {
   "name": "Accessories Showcase",
   "settings": [
+    {
+      "type": "header",
+      "content": "Products in grid"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Choose the collection. Products from this collection appear in the grid above. Defaults to Homepage collection if empty."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -99,23 +148,67 @@
       "default": "Premium accessories to enhance your ride and experience."
     },
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
+      "type": "header",
+      "content": "Button labels"
     },
     {
-      "type": "range",
-      "id": "products_to_show",
-      "label": "Products to show",
-      "min": 4,
-      "max": 12,
-      "step": 1,
-      "default": 4
+      "type": "text",
+      "id": "button_text_amazon",
+      "label": "View on Amazon button text",
+      "default": "View on Amazon",
+      "info": "Shown when the product link goes to Amazon."
+    },
+    {
+      "type": "text",
+      "id": "button_text_product",
+      "label": "View product button text",
+      "default": "View product",
+      "info": "Shown when the product uses a non-Amazon link."
+    },
+    {
+      "type": "header",
+      "content": "Product links"
+    },
+    {
+      "type": "paragraph",
+      "content": "Below: click 'Add block' or 'Add product link' to add a product and its button URL. Each block = one product + one link."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "amazon_link",
+      "name": "Product link",
+      "limit": 50,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Product and link"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Select the product. This block's link will be used for its button."
+        },
+        {
+          "type": "text",
+          "id": "url",
+          "label": "Link URL",
+          "placeholder": "https://amzn.to/xxxxx or any URL",
+          "info": "Paste the full URL for the View product button."
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Accessories Showcase"
+      "name": "Accessories Showcase",
+      "blocks": [
+        {
+          "type": "amazon_link",
+          "settings": {}
+        }
+      ]
     }
   ]
 }
