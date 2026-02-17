@@ -355,15 +355,15 @@
         {% if settings.header_logo != blank %}
           <img src="{{ settings.header_logo | image_url: width: 400 }}" alt="{{ settings.header_logo_alt | default: shop.name }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {% else %}
-          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ settings.header_logo_alt | default: 'ELOVYN' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
+          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ settings.header_logo_alt | default: 'Elovyn' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
         {% endif %}
       </a>
 
       <nav class="elovyn-nav" role="navigation" aria-label="Main navigation">
-        <a href="{% if settings.header_nav_clothes_url != blank %}{{ settings.header_nav_clothes_url }}{% else %}#clothing{% endif %}">Clothes</a>
-        <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}">Hair Products</a>
-        <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}">Accessories</a>
-        <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}">Connect</a>
+        <a href="{% if settings.header_nav_hoodies_url != blank %}{{ settings.header_nav_hoodies_url }}{% else %}/collections/hoodies{% endif %}">Hoodies</a>
+        <a href="{% if settings.header_nav_sweatshirts_url != blank %}{{ settings.header_nav_sweatshirts_url }}{% else %}/collections/sweatshirts{% endif %}">Sweatshirts</a>
+        <a href="{% if settings.header_nav_tees_url != blank %}{{ settings.header_nav_tees_url }}{% else %}/collections/graphic-tees{% endif %}">Graphic Tees</a>
+        <a href="{% if settings.header_nav_shop_all_url != blank %}{{ settings.header_nav_shop_all_url }}{% else %}/collections/all{% endif %}">Shop All</a>
       </nav>
 
       <div class="elovyn-header-right">
@@ -388,10 +388,10 @@
   <div id="elovyn-mobile-menu" aria-hidden="true">
     <nav role="navigation" aria-label="Mobile menu">
       <a href="{{ routes.search_url }}" class="elovyn-mobile-link" id="elovyn-mobile-search">{{ 'general.search.title' | t | default: 'Search' }}</a>
-      <a href="{% if settings.header_nav_clothes_url != blank %}{{ settings.header_nav_clothes_url }}{% else %}#clothing{% endif %}" class="elovyn-mobile-link">Clothes</a>
-      <a href="{% if settings.header_nav_hair_url != blank %}{{ settings.header_nav_hair_url }}{% else %}#bikes{% endif %}" class="elovyn-mobile-link">Hair Products</a>
-      <a href="{% if settings.header_nav_accessories_url != blank %}{{ settings.header_nav_accessories_url }}{% else %}#features{% endif %}" class="elovyn-mobile-link">Accessories</a>
-      <a href="{% if settings.header_nav_connect_url != blank %}{{ settings.header_nav_connect_url }}{% else %}#community{% endif %}" class="elovyn-mobile-link">Connect</a>
+      <a href="{% if settings.header_nav_hoodies_url != blank %}{{ settings.header_nav_hoodies_url }}{% else %}/collections/hoodies{% endif %}" class="elovyn-mobile-link">Hoodies</a>
+      <a href="{% if settings.header_nav_sweatshirts_url != blank %}{{ settings.header_nav_sweatshirts_url }}{% else %}/collections/sweatshirts{% endif %}" class="elovyn-mobile-link">Sweatshirts</a>
+      <a href="{% if settings.header_nav_tees_url != blank %}{{ settings.header_nav_tees_url }}{% else %}/collections/graphic-tees{% endif %}" class="elovyn-mobile-link">Graphic Tees</a>
+      <a href="{% if settings.header_nav_shop_all_url != blank %}{{ settings.header_nav_shop_all_url }}{% else %}/collections/all{% endif %}" class="elovyn-mobile-link">Shop All</a>
     </nav>
   </div>
 

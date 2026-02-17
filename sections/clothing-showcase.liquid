@@ -2,7 +2,7 @@
   Clothing Showcase Section - Displays products from a collection
 {% endcomment %}
 
-<section id="clothing" class="py-24 md:py-32 bg-background">
+<section id="{{ section.settings.section_id | default: 'apparel' }}" class="py-24 md:py-32 bg-background">
   <div class="container mx-auto px-6">
     <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
@@ -98,8 +98,15 @@
 
 {% schema %}
 {
-  "name": "Clothing Showcase",
+  "name": "Collection grid",
   "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID (for anchor links)",
+      "default": "",
+      "info": "Optional. e.g. featured, hoodies, graphic-tees. Leave blank for default."
+    },
     {
       "type": "header",
       "content": "Product links"

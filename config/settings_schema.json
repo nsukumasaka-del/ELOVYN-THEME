@@ -43,47 +43,31 @@
       },
       {
         "type": "paragraph",
-        "content": "Set the URL for each link. Labels shown: Clothes, Hair Products, Accessories, Connect."
+        "content": "Set the URL for each link. Labels: Hoodies, Sweatshirts, Graphic Tees, Shop All."
       },
       {
         "type": "url",
-        "id": "header_nav_clothes_url",
-        "label": "Clothes link",
-        "info": "e.g. /collections/clothing"
+        "id": "header_nav_hoodies_url",
+        "label": "Hoodies link",
+        "info": "e.g. /collections/hoodies"
       },
       {
         "type": "url",
-        "id": "header_nav_hair_url",
-        "label": "Hair Products link",
-        "info": "e.g. /collections/hair-products"
+        "id": "header_nav_sweatshirts_url",
+        "label": "Sweatshirts link",
+        "info": "e.g. /collections/sweatshirts"
       },
       {
         "type": "url",
-        "id": "header_nav_accessories_url",
-        "label": "Accessories link",
-        "info": "e.g. /collections/accessories"
+        "id": "header_nav_tees_url",
+        "label": "Graphic Tees link",
+        "info": "e.g. /collections/graphic-tees"
       },
       {
         "type": "url",
-        "id": "header_nav_connect_url",
-        "label": "Connect link",
-        "info": "e.g. /pages/contact or #community"
-      },
-      {
-        "type": "header",
-        "content": "Buttons"
-      },
-      {
-        "type": "url",
-        "id": "header_shop_now_url",
-        "label": "Shop now button URL",
-        "info": "e.g. /collections/all. Leave blank for #."
-      },
-      {
-        "type": "url",
-        "id": "header_cta_url",
-        "label": "Book a test ride button URL",
-        "info": "Leave blank for #."
+        "id": "header_nav_shop_all_url",
+        "label": "Shop All link",
+        "info": "e.g. /collections/all"
       }
     ]
   },

@@ -16,7 +16,7 @@
           {%- endif -%}
         </a>
         <p class="text-sm text-foreground/50 mt-4 mb-6 max-w-xs">
-          {{ section.settings.description | default: "The ultimate connected e-bikes designed in Belgium, assembled in Europe." }}
+          {{ section.settings.description | default: "Hoodies, sweatshirts & graphic tees. Premium comfort and style, curated for you." }}
         </p>
         {%- if section.settings.show_social_icons -%}
           <div class="flex gap-4">
@@ -53,22 +53,12 @@
       {%- else -%}
         {%- comment -%} Static default replica of React footer {%- endcomment -%}
         <div>
-          <h4 class="text-sm font-semibold text-foreground mb-4">Hair Products</h4>
+          <h4 class="text-sm font-semibold text-foreground mb-4">Shop</h4>
           <ul class="space-y-3">
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Cruiser</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Cruiser ST</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Cross</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Cross ST</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Compare bikes</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-sm font-semibold text-foreground mb-4">Accessories</h4>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">All accessories</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Bags</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Locks</a></li>
-            <li><a href="#" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Lights</a></li>
+            <li><a href="/collections/hoodies" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Hoodies</a></li>
+            <li><a href="/collections/sweatshirts" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Sweatshirts</a></li>
+            <li><a href="/collections/graphic-tees" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Graphic Tees</a></li>
+            <li><a href="/collections/all" class="text-sm text-foreground/50 hover:text-foreground transition-colors">Shop All</a></li>
           </ul>
         </div>
         <div>
@@ -99,7 +89,7 @@
     {%- comment -%} Bottom - matches React: © Cowboy. All rights reserved. | Privacy | Terms | Cookies {%- endcomment -%}
     <div class="border-t border-border/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-xs text-foreground/40">
-        © {{ 'now' | date: '%Y' }} {{ section.settings.copyright_name | default: "Cowboy" }}. All rights reserved.
+        © {{ 'now' | date: '%Y' }} {{ section.settings.copyright_name | default: shop.name }}. All rights reserved.
       </p>
       <div class="flex gap-6">
         <a href="#" class="text-xs text-foreground/40 hover:text-foreground/60 transition-colors">Privacy Policy</a>
@@ -127,7 +117,7 @@
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "The ultimate connected e-bikes designed in Belgium, assembled in Europe."
+      "default": "Hoodies, sweatshirts & graphic tees. Premium comfort and style, curated for you."
     },
     {
       "type": "checkbox",
@@ -139,7 +129,7 @@
       "type": "text",
       "id": "copyright_name",
       "label": "Copyright name",
-      "default": "Cowboy"
+      "default": ""
     }
   ],
   "blocks": [
@@ -163,8 +153,7 @@
   ],
   "default": {
     "blocks": [
-      { "type": "link_list", "settings": { "heading": "Hair Products" } },
-      { "type": "link_list", "settings": { "heading": "Accessories" } },
+      { "type": "link_list", "settings": { "heading": "Shop" } },
       { "type": "link_list", "settings": { "heading": "Company" } },
       { "type": "link_list", "settings": { "heading": "Support" } }
     ]
