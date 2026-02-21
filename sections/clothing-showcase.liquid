@@ -3,7 +3,7 @@
   No product link blocks; all products use standard Add to cart.
 {% endcomment %}
 
-<section id="{{ section.settings.section_id | default: 'apparel' }}" class="py-24 md:py-32 bg-background">
+<section id="{{ section.settings.section_id | default: 'apparel' }}" class="clothing-showcase-section py-24 md:py-32 bg-background">
   <div class="container mx-auto px-6">
     <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
@@ -28,8 +28,8 @@
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
           {%- assign current_variant = product.selected_or_first_available_variant -%}
-          <div class="product-card-shop group bg-card rounded-2xl overflow-hidden border border-border/40 hover:border-border hover:shadow-xl hover:shadow-black/20 transition-all duration-300">
-            <a href="{{ product.url }}" class="block aspect-[4/5] relative overflow-hidden">
+          <div class="product-card-shop clothing-showcase-card group bg-card rounded-2xl overflow-hidden border border-border/40 hover:border-border hover:shadow-xl hover:shadow-black/20 transition-all duration-300">
+            <a href="{{ product.url }}" class="block aspect-[4/5] relative overflow-hidden flex-shrink-0">
               {% if product.featured_image != blank %}
                 <img
                   src="{{ product.featured_image | image_url: width: 600 }}"
@@ -48,7 +48,7 @@
                 </span>
               {% endif %}
             </a>
-            <div class="p-4 md:p-5" style="padding: 1rem; background-color: hsl(var(--card));">
+            <div class="clothing-showcase-card-content" style="padding: 1rem; background-color: hsl(var(--card)); color: hsl(var(--foreground)); display: block !important; visibility: visible !important; opacity: 1 !important;">
               <a href="{{ product.url }}" class="font-semibold text-foreground hover:text-accent transition-colors line-clamp-2 block mb-2">
                 {{ product.title }}
               </a>
@@ -66,10 +66,10 @@
               </div>
               {% if product.has_only_default_variant %}
                 {% if current_variant.available %}
-                  <form action="{{ routes.cart_add_url }}" method="post" class="cart-add-form">
+                  <form action="{{ routes.cart_add_url }}" method="post" class="cart-add-form" style="display: block !important;">
                     <input type="hidden" name="id" value="{{ current_variant.id }}">
                     <input type="hidden" name="quantity" value="1">
-                    <button type="submit" name="add" class="w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
+                    <button type="submit" name="add" class="clothing-showcase-add-to-cart w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity" style="display: block !important; visibility: visible !important; opacity: 1 !important; cursor: pointer;">
                       {{ 'products.product.add_to_cart' | t }}
                     </button>
                   </form>
@@ -79,8 +79,8 @@
                   </button>
                 {% endif %}
               {% else %}
-                <a href="{{ product.url }}" class="block w-full py-2.5 px-4 rounded-xl border border-border text-foreground font-semibold text-sm text-center hover:bg-card transition-colors">
-                  {{ 'products.product.view_options' | t | default: 'View options' }}
+                <a href="{{ product.url }}" class="clothing-showcase-add-to-cart block w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm text-center hover:opacity-90 transition-opacity" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
+                  {{ 'products.product.add_to_cart' | t }}
                 </a>
               {% endif %}
             </div>
@@ -101,7 +101,35 @@
 </section>
 
 <style>
-  .product-card-shop .line-clamp-2 {
+  /* Clothing Showcase: force card content and Add to cart button to always show */
+  .clothing-showcase-section .product-card-shop {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .clothing-showcase-section .clothing-showcase-card .clothing-showcase-card-content {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex-shrink: 0;
+  }
+  .clothing-showcase-section .clothing-showcase-card .cart-add-form,
+  .clothing-showcase-section .clothing-showcase-add-to-cart {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .clothing-showcase-section .clothing-showcase-card .cart-add-form button {
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    font-weight: 600;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+  }
+  .clothing-showcase-section .product-card-shop .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
