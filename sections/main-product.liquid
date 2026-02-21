@@ -1,5 +1,5 @@
 {% comment %}
-  Product page section - product detail with add to cart
+  Product page – price, variant selector, Add to cart (ready for sales).
 {% endcomment %}
 
 <section class="py-16 md:py-24 bg-background">
@@ -29,32 +29,56 @@
       </div>
 
       <div class="product-detail">
-        {%- assign view_url = product.url -%}
-        {%- assign title_lower = product.title | downcase -%}
-        {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
-          {%- assign view_url = "https://amzn.to/45I1l6l" -%}
-        {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
-          {%- assign view_url = "https://amzn.to/4komatB" -%}
-        {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
-          {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
-        {%- elsif title_lower contains "jbl tune flex" -%}
-          {%- assign view_url = "https://amzn.to/4rRscFy" -%}
-        {%- endif -%}
-
-        <span class="text-xs font-semibold uppercase tracking-wider text-foreground/60">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-2 mt-1">{{ product.title }}</h1>
         {% if product.vendor != blank %}
-          <p class="text-foreground/60 mb-4">{{ product.vendor }}</p>
+          <p class="text-sm font-medium text-accent uppercase tracking-wider mb-2">{{ product.vendor }}</p>
         {% endif %}
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4">{{ product.title }}</h1>
 
-        {% render 'amazon-disclosure' %}
-
-        <div class="flex flex-wrap items-center gap-4 mb-6">
-          <a href="{{ view_url }}" class="px-8 py-3 rounded-lg bg-accent text-background font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">
-            {% if view_url contains 'amzn.to' %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}
-          </a>
-          {% if view_url contains 'amzn.to' %}<p class="text-sm text-foreground/60">{{ 'general.amazon.check_price' | t | default: 'Price and availability at Amazon.' }}</p>{% endif %}
+        <div class="flex items-center gap-3 mb-6 flex-wrap">
+          <span class="text-2xl font-bold text-foreground" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+          {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+            <span class="text-lg text-foreground/50 line-through">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+            <span class="text-sm font-medium text-accent bg-accent/20 px-2 py-1 rounded">Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}</span>
+          {% endif %}
         </div>
+
+        <form action="{{ routes.cart_add_url }}" method="post" id="product-form" class="product-form" data-option-names='{{ product.options_with_values | map: "name" | json }}'>
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+          {% unless product.has_only_default_variant %}
+            <div class="space-y-4 mb-6">
+              {% for option in product.options_with_values %}
+                <div>
+                  <label for="Option-{{ section.id }}-{{ forloop.index0 }}" class="block text-sm font-semibold text-foreground mb-2">{{ option.name }}</label>
+                  <div class="flex flex-wrap gap-2 option-values" data-option-index="{{ forloop.index0 }}">
+                    {% for value in option.values %}
+                      <label class="relative cursor-pointer option-value-label">
+                        <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" class="sr-only option-radio" data-option-index="{{ forloop.parentloop.index0 }}" {% if option.selected_value == value %}checked{% endif %}>
+                        <span class="block px-4 py-2 rounded-xl border-2 border-border bg-card text-foreground hover:border-foreground/30 transition-colors option-value-span">{{ value }}</span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endunless %}
+
+          <div class="flex flex-wrap items-center gap-4 mb-6">
+            <div class="flex items-center border border-border rounded-xl overflow-hidden bg-card">
+              <label for="Quantity-{{ section.id }}" class="visually-hidden">{{ 'products.product.quantity' | t | default: 'Quantity' }}</label>
+              <button type="button" class="quantity-btn px-4 py-3 text-foreground hover:bg-secondary transition-colors" aria-label="Decrease quantity" data-quantity-minus>-</button>
+              <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" max="99" class="w-14 text-center py-3 bg-transparent text-foreground border-x border-border focus:outline-none focus:ring-0" data-quantity-input>
+              <button type="button" class="quantity-btn px-4 py-3 text-foreground hover:bg-secondary transition-colors" aria-label="Increase quantity" data-quantity-plus>+</button>
+            </div>
+            <button type="submit" name="add" class="flex-1 min-w-[200px] py-3 px-6 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
+              {% if product.selected_or_first_available_variant.available %}
+                {{ 'products.product.add_to_cart' | t }}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+        </form>
 
         {% if product.description != blank %}
           <div class="prose prose-invert max-w-none text-foreground/80 mt-8 border-t border-border/30 pt-8">
@@ -67,24 +91,80 @@
 </section>
 
 <script>
-  (function() {
-    var thumbs = document.querySelectorAll('.product-gallery button[data-index]');
-    var mainImg = document.getElementById('ProductPhotoImg');
-    if (mainImg && thumbs.length) {
-      var imgs = document.querySelectorAll('.product-gallery .product-gallery img, .product-gallery button[data-index] img');
-      thumbs.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var idx = parseInt(btn.getAttribute('data-index'), 10);
-          var imgEl = btn.querySelector('img');
-          if (imgEl && imgEl.src) {
-            mainImg.src = imgEl.src.replace(/_\d+x\d+/, '_800x');
-          }
-          thumbs.forEach(function(t) { t.classList.remove('ring-2', 'ring-accent'); });
-          btn.classList.add('ring-2', 'ring-accent');
-        });
-      });
+(function() {
+  var form = document.getElementById('product-form');
+  if (!form) return;
+  var variantIdInput = form.querySelector('[data-variant-id]');
+  var addToCartBtn = form.querySelector('[data-add-to-cart]');
+  var priceEl = document.querySelector('[data-product-price]');
+  var variantData = {{ product.variants | json }};
+  var variantPrices = {};
+  {% for v in product.variants %}
+  variantPrices[{{ v.id }}] = {{ v.price | money | json }};
+  {% endfor %}
+  var optionNames = [];
+  try { optionNames = JSON.parse(form.getAttribute('data-option-names') || '[]'); } catch (e) {}
+  var optionRadios = form.querySelectorAll('.option-radio');
+
+  function getSelectedOptionsArray() {
+    var arr = [];
+    for (var i = 0; i < optionNames.length; i++) {
+      var name = 'options[' + optionNames[i] + ']';
+      var radio = form.querySelector('.option-radio[name="' + name + '"]:checked');
+      arr.push(radio ? radio.value : null);
     }
-  })();
+    return arr;
+  }
+  function findVariant() {
+    var selected = getSelectedOptionsArray();
+    for (var i = 0; i < variantData.length; i++) {
+      var v = variantData[i];
+      var match = true;
+      if (v.options) {
+        for (var j = 0; j < v.options.length; j++) {
+          if (selected[j] !== undefined && selected[j] !== v.options[j]) { match = false; break; }
+        }
+      }
+      if (match) return v;
+    }
+    return variantData[0];
+  }
+  function setActiveOptionStyles() {
+    form.querySelectorAll('.option-value-span').forEach(function(span) {
+      span.classList.remove('!border-accent', 'ring-2', 'ring-accent/30');
+    });
+    form.querySelectorAll('.option-radio:checked').forEach(function(radio) {
+      var span = radio.closest('.option-value-label').querySelector('.option-value-span');
+      if (span) span.classList.add('!border-accent', 'ring-2', 'ring-accent/30');
+    });
+  }
+  function updateForm(variant) {
+    if (!variant) return;
+    if (variantIdInput) variantIdInput.value = variant.id;
+    if (priceEl && variantPrices[variant.id]) priceEl.textContent = variantPrices[variant.id];
+    if (addToCartBtn) {
+      addToCartBtn.disabled = !variant.available;
+      addToCartBtn.textContent = variant.available ? (window.variantStrings && window.variantStrings.addToCart ? window.variantStrings.addToCart : 'Add to cart') : (window.variantStrings && window.variantStrings.soldOut ? window.variantStrings.soldOut : 'Sold out');
+    }
+    setActiveOptionStyles();
+  }
+  setActiveOptionStyles();
+  optionRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() { updateForm(findVariant()); });
+  });
+  form.querySelectorAll('[data-quantity-minus]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var inp = form.querySelector('[data-quantity-input]');
+      if (inp) { var n = parseInt(inp.value, 10) || 1; inp.value = Math.max(1, n - 1); }
+    });
+  });
+  form.querySelectorAll('[data-quantity-plus]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var inp = form.querySelector('[data-quantity-input]');
+      if (inp) { var n = parseInt(inp.value, 10) || 1; inp.value = Math.min(99, n + 1); }
+    });
+  });
+})();
 </script>
 
 {% schema %}

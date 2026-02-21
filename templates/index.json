@@ -115,34 +115,16 @@
       ]
     },
     "graphic_tees": {
-      "type": "clothing-showcase",
+      "type": "collection-grid-shop",
       "settings": {
         "section_id": "graphic-tees",
         "collection": "graphic-tees",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
         "description": "Stand out with bold designs and custom prints. Your style, your statement.",
-        "button_text_amazon": "View on Amazon",
-        "button_text_product": "View product"
-      },
-      "blocks": {
-        "amazon_link_1": { "type": "amazon_link", "settings": {} },
-        "amazon_link_2": { "type": "amazon_link", "settings": {} },
-        "amazon_link_3": { "type": "amazon_link", "settings": {} },
-        "amazon_link_4": { "type": "amazon_link", "settings": {} },
-        "amazon_link_5": { "type": "amazon_link", "settings": {} },
-        "amazon_link_6": { "type": "amazon_link", "settings": {} },
-        "amazon_link_7": { "type": "amazon_link", "settings": {} },
-        "amazon_link_8": { "type": "amazon_link", "settings": {} },
-        "amazon_link_9": { "type": "amazon_link", "settings": {} },
-        "amazon_link_10": { "type": "amazon_link", "settings": {} },
-        "amazon_link_11": { "type": "amazon_link", "settings": {} },
-        "amazon_link_12": { "type": "amazon_link", "settings": {} }
-      },
-      "block_order": [
-        "amazon_link_1", "amazon_link_2", "amazon_link_3", "amazon_link_4", "amazon_link_5", "amazon_link_6",
-        "amazon_link_7", "amazon_link_8", "amazon_link_9", "amazon_link_10", "amazon_link_11", "amazon_link_12"
-      ]
+        "show_view_all": true,
+        "view_all_text": "View all"
+      }
     }
   },
   "order": [
