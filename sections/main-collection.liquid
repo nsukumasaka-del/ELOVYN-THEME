@@ -3,7 +3,7 @@
   Dropshipping collections (graphic-tees, custom-tees, jfuncy-...) show price + Add to cart.
 {% endcomment %}
 
-{%- assign dropshipping_handles = "graphic-tees,custom-tees,jfuncy-s-6xl-oversize-men-cotton-tee-tops" | split: "," -%}
+{%- assign dropshipping_handles = "graphic-tees,custom-tees,jfuncy-s-6xl-oversize-men-cotton-tee-tops,shirts" | split: "," -%}
 {%- assign is_dropshipping = false -%}
 {%- for handle in dropshipping_handles -%}
   {%- if collection.handle == handle -%}
