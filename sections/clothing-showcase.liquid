@@ -1,5 +1,6 @@
 {% comment %}
-  Clothing Showcase Section - Displays products from a collection
+  Clothing Showcase Section - Displays products from a collection with price and Add to cart.
+  No product link blocks; all products use standard Add to cart.
 {% endcomment %}
 
 <section id="{{ section.settings.section_id | default: 'apparel' }}" class="py-24 md:py-32 bg-background">
@@ -8,9 +9,11 @@
       <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
         {{ section.settings.heading | default: "Premium Clothing Collection" }}
       </h2>
-      <p class="text-lg text-foreground/60 max-w-xl mx-auto">
-        {{ section.settings.description | default: "Discover our curated selection of premium clothing for every style." }}
-      </p>
+      {% if section.settings.description != blank %}
+        <p class="text-lg text-foreground/60 max-w-xl mx-auto">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
     </div>
 
     {%- assign collection = nil -%}
@@ -20,75 +23,82 @@
     {%- if collection == nil and collections['frontpage'] != blank -%}
       {%- assign collection = collections['frontpage'] -%}
     {%- endif -%}
-    {%- if collection != blank and collection.products.size > 0 -%}
-        {% render 'amazon-disclosure' %}
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
-          {%- for product in collection.products limit: section.settings.products_to_show -%}
-            {%- assign product_index = forloop.index0 -%}
-            {%- assign link_block = nil -%}
-            {%- assign amazon_count = 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'amazon_link' -%}
-                {%- if amazon_count == product_index -%}
-                  {%- assign link_block = block -%}
-                  {%- break -%}
-                {%- endif -%}
-                {%- assign amazon_count = amazon_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- assign view_url = product.url -%}
-            {%- if link_block != nil and link_block.settings.url != blank -%}
-              {%- assign view_url = link_block.settings.url -%}
-            {%- else -%}
-              {%- assign title_lower = product.title | downcase -%}
-              {%- if title_lower contains "athletic fit tee" or title_lower contains "athletic fit tees" -%}
-                {%- assign view_url = "https://amzn.to/45I1l6l" -%}
-              {%- elsif title_lower contains "coofandy" and title_lower contains "short" and title_lower contains "button" -%}
-                {%- assign view_url = "https://amzn.to/4komatB" -%}
-              {%- elsif title_lower contains "soly hux" and title_lower contains "textured" -%}
-                {%- assign view_url = "https://amzn.to/3NUPlbB" -%}
-              {%- elsif title_lower contains "jbl tune flex" -%}
-                {%- assign view_url = "https://amzn.to/4rRscFy" -%}
-              {%- endif -%}
-            {%- endif -%}
-            {%- comment -%} Each product slot uses the block at the same position; clicking the card opens that block's link settings. {%- endcomment -%}
-            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40"{% if link_block %} {{ link_block.shopify_attributes }}{% endif %}>
-              <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-              <div class="aspect-[4/5] relative overflow-hidden">
-                {%- if product.featured_image != blank -%}
-                  <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
-                {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-                {%- endif -%}
+
+    {% if collection != blank and collection.products.size > 0 %}
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
+        {% for product in collection.products limit: section.settings.products_to_show %}
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
+          <div class="product-card-shop group bg-card rounded-2xl overflow-hidden border border-border/40 hover:border-border hover:shadow-xl hover:shadow-black/20 transition-all duration-300">
+            <a href="{{ product.url }}" class="block aspect-[4/5] relative overflow-hidden">
+              {% if product.featured_image != blank %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  width="300"
+                  height="375"
+                >
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-secondary' }}
+              {% endif %}
+              {% if current_variant.available == false %}
+                <span class="absolute inset-0 flex items-center justify-center bg-background/70 text-foreground font-semibold text-sm uppercase tracking-wider">
+                  {{ 'products.product.sold_out' | t }}
+                </span>
+              {% endif %}
+            </a>
+            <div class="p-4 md:p-5">
+              <a href="{{ product.url }}" class="font-semibold text-foreground hover:text-accent transition-colors line-clamp-2 block mb-2">
+                {{ product.title }}
+              </a>
+              <div class="flex items-center gap-2 mb-3 flex-wrap">
+                <span class="text-lg font-bold text-foreground">{{ current_variant.price | money }}</span>
+                {% if current_variant.compare_at_price > current_variant.price %}
+                  <span class="text-sm text-foreground/50 line-through">{{ current_variant.compare_at_price | money }}</span>
+                  <span class="text-xs font-medium text-accent bg-accent/20 px-1.5 py-0.5 rounded">
+                    {{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}% off
+                  </span>
+                {% endif %}
               </div>
-              <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-                <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="relative z-10">
-                  {%- if product.vendor != blank -%}
-                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.vendor }}</p>
-                  {%- elsif product.metafields.custom.tagline != blank -%}
-                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.metafields.custom.tagline }}</p>
-                  {%- endif -%}
-                  <h3 class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="{{ product.title | escape }}">{{ product.title }}</h3>
-                  {%- if product.description != blank -%}
-                    <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{{ product.description | strip_html | truncate: 100 }}</p>
-                  {%- endif -%}
-                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <a href="{{ view_url }}" class="btn-hero text-xs" target="_blank" rel="noopener noreferrer{% if view_url contains 'amzn.to' %} sponsored{% endif %}">{% if view_url contains 'amzn.to' %}{% if section.settings.button_text_amazon != blank %}{{ section.settings.button_text_amazon }}{% else %}{{ 'general.amazon.view_on_amazon' | t | default: 'View on Amazon' }}{% endif %}{% else %}{% if section.settings.button_text_product != blank %}{{ section.settings.button_text_product }}{% else %}{{ 'general.amazon.view_product' | t | default: 'View product' }}{% endif %}{% endif %}</a>
-                  </div>
-                </div>
-              </div>
+              {% if product.has_only_default_variant %}
+                {% if current_variant.available %}
+                  <form action="{{ routes.cart_add_url }}" method="post" class="cart-add-form">
+                    <input type="hidden" name="id" value="{{ current_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" name="add" class="w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
+                      {{ 'products.product.add_to_cart' | t }}
+                    </button>
+                  </form>
+                {% else %}
+                  <button type="button" disabled class="w-full py-2.5 px-4 rounded-xl bg-muted text-muted-foreground font-semibold text-sm cursor-not-allowed">
+                    {{ 'products.product.sold_out' | t }}
+                  </button>
+                {% endif %}
+              {% else %}
+                <a href="{{ product.url }}" class="block w-full py-2.5 px-4 rounded-xl border border-border text-foreground font-semibold text-sm text-center hover:bg-card transition-colors">
+                  {{ 'products.product.view_options' | t | default: 'View options' }}
+                </a>
+              {% endif %}
             </div>
-          {%- endfor -%}
+          </div>
+        {% endfor %}
+      </div>
+      {% if section.settings.show_view_all and collection.url != blank %}
+        <div class="text-center mt-10">
+          <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
+            {{ section.settings.view_all_text | default: 'View all' }}
+          </a>
         </div>
-    {%- else -%}
-      <p class="text-center text-foreground/60">No products to show. In the sidebar under "Products in grid", select a Collection that has products.</p>
-    {%- endif -%}
+      {% endif %}
+    {% else %}
+      <p class="text-center text-foreground/60">No products to show. In the sidebar under "Collection", select a collection that has products.</p>
+    {% endif %}
   </div>
 </section>
 
 <style>
-  .line-clamp-2 {
+  .product-card-shop .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -98,45 +108,29 @@
 
 {% schema %}
 {
-  "name": "Collection grid",
+  "name": "Clothing Showcase",
   "settings": [
     {
       "type": "text",
       "id": "section_id",
       "label": "Section ID (for anchor links)",
-      "default": "",
-      "info": "Optional. e.g. featured, hoodies, graphic-tees. Leave blank for default."
-    },
-    {
-      "type": "header",
-      "content": "Product links"
-    },
-    {
-      "type": "paragraph",
-      "content": "Each product can have its own link. Add one 'Product link' block per product: choose the product and enter the Link URL. Click a product card in the preview to open that product's link settings (add a block for it first if needed)."
-    },
-    {
-      "type": "header",
-      "content": "Products in grid"
+      "default": "apparel",
+      "info": "Optional. e.g. featured, hoodies. Leave as 'apparel' if not using anchor links."
     },
     {
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Choose the collection. Products from this collection appear in the grid above. Defaults to Homepage collection if empty."
+      "info": "Products from this collection appear with price and Add to cart. Defaults to Homepage collection if empty."
     },
     {
       "type": "range",
       "id": "products_to_show",
       "label": "Products to show",
       "min": 2,
-      "max": 12,
+      "max": 24,
       "step": 1,
-      "default": 6
-    },
-    {
-      "type": "header",
-      "content": "Section heading"
+      "default": 8
     },
     {
       "type": "text",
@@ -151,67 +145,21 @@
       "default": "Discover our curated selection of premium clothing for every style."
     },
     {
-      "type": "header",
-      "content": "Button labels"
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View all link",
+      "default": true
     },
     {
       "type": "text",
-      "id": "button_text_amazon",
-      "label": "View on Amazon button text",
-      "default": "View on Amazon",
-      "info": "Shown when the product link goes to Amazon."
-    },
-    {
-      "type": "text",
-      "id": "button_text_product",
-      "label": "View product button text",
-      "default": "View product",
-      "info": "Shown when the product uses a non-Amazon link."
-    },
-  ],
-  "blocks": [
-    {
-      "type": "amazon_link",
-      "name": "Product link",
-      "limit": 50,
-      "settings": [
-        {
-          "type": "header",
-          "content": "Product and link"
-        },
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product",
-          "info": "Select the product. This block's link will be used for its button."
-        },
-        {
-          "type": "text",
-          "id": "url",
-          "label": "Link URL",
-          "placeholder": "https://amzn.to/xxxxx or any URL",
-          "info": "Paste the full URL for the View product button."
-        }
-      ]
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View all"
     }
   ],
   "presets": [
     {
-      "name": "Clothing Showcase",
-      "blocks": [
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} },
-        { "type": "amazon_link", "settings": {} }
-      ]
+      "name": "Clothing Showcase"
     }
   ]
 }
