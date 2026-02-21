@@ -94,45 +94,52 @@
   var section = document.querySelector('.clothing-showcase-section');
   if (!section) return;
 
-  // Add to cart: submit via fetch then go to cart
   section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      var formData = new FormData(form);
-      var addUrl = form.getAttribute('action') || (window.routes && window.routes.cart_add_url) || '/cart/add';
+      var idInput = form.querySelector('input[name="id"]');
+      var qtyInput = form.querySelector('input[name="quantity"]');
+      var variantId = idInput ? idInput.value : '';
+      var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
+      if (!variantId) return;
       var btn = form.querySelector('button[type="submit"]');
-      var originalText = btn ? btn.textContent : '';
+      var originalText = btn ? btn.textContent : 'Add to cart';
       if (btn) {
         btn.disabled = true;
+        btn.classList.add('clothing-showcase-btn--loading');
         btn.textContent = 'Adding…';
       }
+      var formAction = form.getAttribute('action') || '';
+      var addUrl = formAction ? (formAction.replace(/\/cart\/add\/?$/, '') + '/cart/add.js') : (window.routes && window.routes.cart_add_url ? (window.routes.cart_add_url.replace(/\/cart\/add\/?$/, '') + '/cart/add.js') : '/cart/add.js');
       fetch(addUrl, {
         method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [{ id: parseInt(variantId, 10), quantity: quantity }] })
       })
-      .then(function(res) {
-        var contentType = res.headers.get('Content-Type') || '';
-        if (contentType.indexOf('application/json') !== -1) return res.json();
-        return {};
-      })
+      .then(function(res) { return res.json(); })
       .then(function(data) {
-        if (data.status === 422 || (data.description && data.description.toLowerCase().indexOf('unable') !== -1)) {
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
-          alert(window.cartStrings && window.cartStrings.error ? window.cartStrings.error : 'Unable to add this item. It may be sold out.');
+        if (data.status && data.status !== 200) {
+          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+          var msg = (data.description || (window.cartStrings && window.cartStrings.error)) || 'Unable to add. It may be sold out.';
+          alert(msg);
           return;
         }
-        window.location.href = (window.routes && window.routes.cart_url) || '/cart';
+        if (btn) {
+          btn.textContent = 'Added!';
+          btn.classList.add('clothing-showcase-btn--added');
+        }
+        setTimeout(function() {
+          window.location.href = (window.routes && window.routes.cart_url) || '/cart';
+        }, 600);
       })
-      .catch(function() {
-        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+      .catch(function(err) {
+        if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
         form.submit();
       });
     });
   });
 
-  // Click on card (image, title, description, price) → go to product page. Don’t trigger when clicking Add to cart.
   section.addEventListener('click', function(e) {
     var card = e.target.closest('.clothing-showcase-card');
     if (!card) return;
@@ -300,6 +307,14 @@
   }
   .clothing-showcase-btn-add:active {
     transform: translateY(0);
+  }
+  .clothing-showcase-btn--loading {
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .clothing-showcase-btn--added {
+    background: hsl(142 76% 36%);
+    color: #fff;
   }
   .clothing-showcase-btn-soldout {
     background: hsl(var(--muted));
