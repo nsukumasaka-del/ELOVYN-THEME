@@ -1,9 +1,9 @@
 {
   "sections": {
-    "main": {
+    "main_register": {
       "type": "main-register",
       "settings": {}
     }
   },
-  "order": ["main"]
+  "order": ["main_register"]
 }

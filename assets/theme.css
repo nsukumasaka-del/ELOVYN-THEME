@@ -220,9 +220,11 @@ body {
 .bg-card { background-color: hsl(var(--card)); }
 .bg-charcoal { background-color: hsl(var(--charcoal)); }
 .bg-secondary { background-color: hsl(var(--secondary)); }
+.bg-muted { background-color: hsl(var(--muted)); }
 .bg-accent\/20 { background-color: hsl(var(--accent) / 0.2); }
 
 .text-foreground { color: hsl(var(--foreground)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
 .text-accent { color: hsl(var(--accent)); }
 .text-foreground\/50 { color: rgba(255, 255, 255, 0.5); }
 .text-foreground\/60 { color: rgba(255, 255, 255, 0.6); }
