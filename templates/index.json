@@ -180,8 +180,8 @@
       "settings": {
         "collection": "frontpage",
         "products_to_show": 8,
-        "heading": "Sponsored picks",
-        "description": "Handpicked favorites. Click through for the best deals on hoodies, sweatshirts, and graphic tees.",
+        "heading": "Graphic & custom tees",
+        "description": "Stand out with bold designs and custom prints. Your style, your statement.",
         "button_text_amazon": "View on Amazon",
         "button_text_product": "View product"
       }
@@ -409,124 +409,13 @@
       }
     },
     "graphic_tees": {
-      "type": "clothing-showcase",
-      "blocks": {
-        "amazon_link_1": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_2": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_3": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_4": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_5": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_6": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_7": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_8": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_9": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_10": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_11": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_12": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "amazon_link_1",
-        "amazon_link_2",
-        "amazon_link_3",
-        "amazon_link_4",
-        "amazon_link_5",
-        "amazon_link_6",
-        "amazon_link_7",
-        "amazon_link_8",
-        "amazon_link_9",
-        "amazon_link_10",
-        "amazon_link_11",
-        "amazon_link_12"
-      ],
+      "type": "collection-grid-shop",
       "settings": {
+        "section_id": "graphic-tees",
         "collection": "tech",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
         "description": "Stand out with bold designs and custom prints. Your style, your statement.",
-        "button_text_amazon": "View on Amazon",
-        "button_text_product": "View product"
-      }
-    },
-    "jfuncy_oversize_tees": {
-      "type": "collection-grid-shop",
-      "settings": {
-        "section_id": "jfuncy-oversize-tees",
-        "collection": "jfuncy-s-6xl-oversize-men-cotton-tee-tops",
-        "products_to_show": 12,
-        "heading": "JFUNCY S-6XL Oversize Men Cotton Tee Tops",
-        "description": "Dropshipping from our suppliers. Add to cart and checkout directly.",
         "show_view_all": true,
         "view_all_text": "View all"
       }
@@ -538,7 +427,6 @@
     "sponsored_picks",
     "hoodies",
     "sweatshirts",
-    "graphic_tees",
-    "jfuncy_oversize_tees"
+    "graphic_tees"
   ]
 }
