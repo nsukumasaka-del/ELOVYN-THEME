@@ -54,17 +54,13 @@
                   <span class="clothing-showcase-badge">{{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}% off</span>
                 {% endif %}
               </div>
-              {% if product.has_only_default_variant %}
-                <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
-                  <input type="hidden" name="id" value="{{ current_variant.id }}">
-                  <input type="hidden" name="quantity" value="1">
-                  <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add">
-                    {{ 'products.product.add_to_cart' | t }}
-                  </button>
-                </form>
-              {% else %}
-                <a href="{{ product.url }}" class="clothing-showcase-btn clothing-showcase-btn-add">{{ 'products.product.add_to_cart' | t }}</a>
-              {% endif %}
+              <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add" data-add-to-cart-btn>
+                  {{ 'products.product.add_to_cart' | t }}
+                </button>
+              </form>
             </div>
           </div>
         {% endfor %}
@@ -103,6 +99,9 @@
   }
 
   section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
+    form.addEventListener('click', function(e) {
+      e.stopPropagation();
+    }, true);
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -165,11 +164,11 @@
   });
 
   section.addEventListener('click', function(e) {
+    if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('[data-add-to-cart-btn]')) return;
     var card = e.target.closest('.clothing-showcase-card');
     if (!card) return;
     var url = card.getAttribute('data-product-url');
     if (!url) return;
-    if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('button[type="submit"]') || e.target.closest('.clothing-showcase-btn-add')) return;
     if (e.target.tagName === 'A' && e.target.getAttribute('href')) return;
     e.preventDefault();
     window.location.href = url;
