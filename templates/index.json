@@ -411,11 +411,11 @@
     "graphic_tees": {
       "type": "collection-grid-shop",
       "settings": {
-        "section_id": "graphic-tees",
+        "section_id": "Sponsored picks",
         "collection": "tech",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
-        "description": "Stand out with bold designs and custom prints. Your style, your statement.",
+        "description": "Handpicked favorites. Click through for the best deals on hoodies, sweatshirts, and graphic tees.",
         "show_view_all": true,
         "view_all_text": "View all"
       }
