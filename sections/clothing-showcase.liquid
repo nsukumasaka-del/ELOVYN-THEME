@@ -59,7 +59,7 @@
               </div>
               {% if product.has_only_default_variant %}
                 {% if current_variant.available %}
-                  <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form">
+                  <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
                     <input type="hidden" name="id" value="{{ current_variant.id }}">
                     <input type="hidden" name="quantity" value="1">
                     <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add">
@@ -88,6 +88,46 @@
     {% endif %}
   </div>
 </section>
+
+<script>
+(function() {
+  document.querySelectorAll('.clothing-showcase-section form[data-clothing-add-to-cart]').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var formData = new FormData(form);
+      var addUrl = form.getAttribute('action') || (window.routes && window.routes.cart_add_url) || '/cart/add';
+      var btn = form.querySelector('button[type="submit"]');
+      var originalText = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Adding…';
+      }
+      fetch(addUrl, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(function(res) {
+        var contentType = res.headers.get('Content-Type') || '';
+        if (contentType.indexOf('application/json') !== -1) return res.json();
+        return {};
+      })
+      .then(function(data) {
+        if (data.status === 422 || (data.description && data.description.toLowerCase().indexOf('unable') !== -1)) {
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
+          alert(window.cartStrings && window.cartStrings.error ? window.cartStrings.error : 'Unable to add this item. It may be sold out.');
+          return;
+        }
+        window.location.href = (window.routes && window.routes.cart_url) || '/cart';
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+        form.submit();
+      });
+    });
+  });
+})();
+</script>
 
 <style>
   /* Clothing Showcase – modern product cards & Add to cart */
