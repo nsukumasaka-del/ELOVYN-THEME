@@ -42,8 +42,11 @@
                   <span class="absolute inset-0 flex items-center justify-center bg-background/70 text-foreground font-semibold text-sm uppercase tracking-wider">{{ 'products.product.sold_out' | t }}</span>
                 {% endif %}
               </a>
-              <div class="p-4 md:p-5">
+              <div class="p-4 md:p-5" style="padding: 1rem; background-color: hsl(var(--card));">
                 <a href="{{ product.url }}" class="font-semibold text-foreground hover:text-accent transition-colors line-clamp-2 block mb-2">{{ product.title }}</a>
+                {% if product.description != blank %}
+                  <p class="text-sm text-foreground/70 line-clamp-2 mb-2">{{ product.description | strip_html | truncate: 80 }}</p>
+                {% endif %}
                 <div class="flex items-center gap-2 mb-3 flex-wrap">
                   <span class="text-lg font-bold text-foreground">{{ current_variant.price | money }}</span>
                   {% if current_variant.compare_at_price > current_variant.price %}
