@@ -41,9 +41,6 @@
               {% else %}
                 {{ 'product-1' | placeholder_svg_tag: 'clothing-showcase-placeholder' }}
               {% endif %}
-              {% if current_variant.available == false %}
-                <span class="clothing-showcase-soldout">{{ 'products.product.sold_out' | t }}</span>
-              {% endif %}
             </a>
             <div class="clothing-showcase-card-content">
               <a href="{{ product.url }}" class="clothing-showcase-title">{{ product.title }}</a>
@@ -58,17 +55,13 @@
                 {% endif %}
               </div>
               {% if product.has_only_default_variant %}
-                {% if current_variant.available %}
-                  <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
-                    <input type="hidden" name="id" value="{{ current_variant.id }}">
-                    <input type="hidden" name="quantity" value="1">
-                    <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add">
-                      {{ 'products.product.add_to_cart' | t }}
-                    </button>
-                  </form>
-                {% else %}
-                  <button type="button" disabled class="clothing-showcase-btn clothing-showcase-btn-soldout">{{ 'products.product.sold_out' | t }}</button>
-                {% endif %}
+                <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
+                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add">
+                    {{ 'products.product.add_to_cart' | t }}
+                  </button>
+                </form>
               {% else %}
                 <a href="{{ product.url }}" class="clothing-showcase-btn clothing-showcase-btn-add">{{ 'products.product.add_to_cart' | t }}</a>
               {% endif %}
@@ -94,15 +87,30 @@
   var section = document.querySelector('.clothing-showcase-section');
   if (!section) return;
 
+  function showAddedToast() {
+    var cartUrl = (window.routes && window.routes.cart_url) || '/cart';
+    var existing = document.getElementById('clothing-showcase-toast');
+    if (existing) existing.remove();
+    var toast = document.createElement('div');
+    toast.id = 'clothing-showcase-toast';
+    toast.innerHTML = '<span>Added to cart</span> <a href="' + cartUrl + '">View cart</a>';
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.classList.add('clothing-showcase-toast--show'); }, 10);
+    setTimeout(function() {
+      toast.classList.remove('clothing-showcase-toast--show');
+      setTimeout(function() { toast.remove(); }, 300);
+    }, 3000);
+  }
+
   section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       e.stopPropagation();
       var idInput = form.querySelector('input[name="id"]');
       var qtyInput = form.querySelector('input[name="quantity"]');
-      var variantId = idInput ? idInput.value : '';
+      var variantId = idInput ? idInput.value.trim() : '';
       var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
-      if (!variantId) return;
+      if (!variantId) { form.submit(); return; }
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn ? btn.textContent : 'Add to cart';
       if (btn) {
@@ -111,30 +119,46 @@
         btn.textContent = 'Adding…';
       }
       var formAction = form.getAttribute('action') || '';
-      var addUrl = formAction ? (formAction.replace(/\/cart\/add\/?$/, '') + '/cart/add.js') : (window.routes && window.routes.cart_add_url ? (window.routes.cart_add_url.replace(/\/cart\/add\/?$/, '') + '/cart/add.js') : '/cart/add.js');
+      var base = formAction ? formAction.replace(/\/cart\/add\/?(\?.*)?$/i, '') : '';
+      if (!base && window.routes && window.routes.cart_add_url) base = window.routes.cart_add_url.replace(/\/cart\/add\/?(\?.*)?$/i, '');
+      if (!base) base = '';
+      var addUrl = base + '/cart/add.js';
+      var payload = { items: [{ id: parseInt(variantId, 10), quantity: quantity }] };
       fetch(addUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ items: [{ id: parseInt(variantId, 10), quantity: quantity }] })
+        body: JSON.stringify(payload)
       })
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.status && data.status !== 200) {
+      .then(function(res) {
+        return res.json().then(function(data) { return { ok: res.ok, data: data }; });
+      })
+      .then(function(result) {
+        var data = result.data;
+        var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
+        if (isError) {
           if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          var msg = (data.description || (window.cartStrings && window.cartStrings.error)) || 'Unable to add. It may be sold out.';
+          var msg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
           alert(msg);
           return;
         }
         if (btn) {
           btn.textContent = 'Added!';
+          btn.classList.remove('clothing-showcase-btn--loading');
           btn.classList.add('clothing-showcase-btn--added');
         }
+        showAddedToast();
         setTimeout(function() {
-          window.location.href = (window.routes && window.routes.cart_url) || '/cart';
-        }, 600);
+          if (btn) { btn.disabled = false; btn.textContent = originalText; btn.classList.remove('clothing-showcase-btn--added'); }
+        }, 2000);
       })
-      .catch(function(err) {
+      .catch(function() {
         if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+        form.setAttribute('action', (form.getAttribute('action') || '').split('?')[0]);
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'return_to';
+        input.value = (window.routes && window.routes.cart_url) || '/cart';
+        form.appendChild(input);
         form.submit();
       });
     });
@@ -203,19 +227,6 @@
     height: 100%;
     object-fit: cover;
     background: hsl(var(--secondary));
-  }
-  .clothing-showcase-soldout {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: hsl(var(--background) / 0.75);
-    color: hsl(var(--foreground));
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   .clothing-showcase-card-content {
@@ -320,6 +331,40 @@
     background: hsl(var(--muted));
     color: hsl(var(--muted-foreground));
     cursor: not-allowed;
+  }
+
+  /* Toast: "Added to cart" + View cart (Takealot-style) */
+  #clothing-showcase-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.25rem;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    color: hsl(var(--foreground));
+    font-size: 0.9375rem;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  #clothing-showcase-toast.clothing-showcase-toast--show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  #clothing-showcase-toast a {
+    color: hsl(var(--accent));
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  #clothing-showcase-toast a:hover {
+    text-decoration: underline;
   }
 </style>
 
