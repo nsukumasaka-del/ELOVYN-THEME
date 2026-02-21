@@ -28,7 +28,7 @@
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
           {%- assign current_variant = product.selected_or_first_available_variant -%}
-          <div class="product-card-shop clothing-showcase-card">
+          <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
                 <img
@@ -91,9 +91,14 @@
 
 <script>
 (function() {
-  document.querySelectorAll('.clothing-showcase-section form[data-clothing-add-to-cart]').forEach(function(form) {
+  var section = document.querySelector('.clothing-showcase-section');
+  if (!section) return;
+
+  // Add to cart: submit via fetch then go to cart
+  section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      e.stopPropagation();
       var formData = new FormData(form);
       var addUrl = form.getAttribute('action') || (window.routes && window.routes.cart_add_url) || '/cart/add';
       var btn = form.querySelector('button[type="submit"]');
@@ -126,6 +131,18 @@
       });
     });
   });
+
+  // Click on card (image, title, description, price) → go to product page. Don’t trigger when clicking Add to cart.
+  section.addEventListener('click', function(e) {
+    var card = e.target.closest('.clothing-showcase-card');
+    if (!card) return;
+    var url = card.getAttribute('data-product-url');
+    if (!url) return;
+    if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('button[type="submit"]') || e.target.closest('.clothing-showcase-btn-add')) return;
+    if (e.target.tagName === 'A' && e.target.getAttribute('href')) return;
+    e.preventDefault();
+    window.location.href = url;
+  });
 })();
 </script>
 
@@ -139,10 +156,21 @@
     overflow: hidden;
     border: 1px solid hsl(var(--border) / 0.5);
     transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    cursor: pointer;
   }
   .clothing-showcase-section .product-card-shop:hover {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
     border-color: hsl(var(--border));
+  }
+  .clothing-showcase-section .clothing-showcase-form,
+  .clothing-showcase-section .clothing-showcase-btn {
+    cursor: pointer;
+  }
+  .clothing-showcase-section .clothing-showcase-btn {
+    cursor: pointer;
+  }
+  .clothing-showcase-section .clothing-showcase-btn-soldout {
+    cursor: not-allowed;
   }
 
   .clothing-showcase-card-image {
