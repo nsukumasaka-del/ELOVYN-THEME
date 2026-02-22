@@ -82,8 +82,8 @@
 
 <script>
 (function() {
-  var section = document.querySelector('.clothing-showcase-section');
-  if (!section) return;
+  var sections = document.querySelectorAll('.clothing-showcase-section');
+  if (!sections.length) return;
 
   function showAddedToast() {
     var cartUrl = (window.routes && window.routes.cart_url) || '/cart';
@@ -116,79 +116,81 @@
     }, 3500);
   }
 
-  /* Apply add-to-cart (Ajax, no redirect, error toast) to every product in the selected collection */
-  section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
-    form.addEventListener('click', function(e) {
-      e.stopPropagation();
-    }, true);
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var btn = form.querySelector('button[type="submit"]');
-      var originalText = btn ? btn.textContent : 'Add to cart';
-      var idInput = form.querySelector('input[name="id"]');
-      var qtyInput = form.querySelector('input[name="quantity"]');
-      var variantId = idInput ? idInput.value.trim() : '';
-      var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
-      var variantIdNum = parseInt(variantId, 10);
-      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
-        if (btn) btn.disabled = false;
-        showErrorToast('Unable to add. Try again.');
-        return;
-      }
-      if (btn) {
-        btn.disabled = true;
-        btn.classList.add('clothing-showcase-btn--loading');
-        btn.textContent = 'Adding…';
-      }
-      var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
-      var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
-      var formData = new FormData(form);
-      fetch(addUrl, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        credentials: 'same-origin',
-        body: formData
-      })
-      .then(function(res) {
-        return res.json().then(function(data) { return { ok: res.ok, data: data }; });
-      })
-      .then(function(result) {
-        var data = result.data;
-        var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
-        if (isError) {
-          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
-          showErrorToast(typeof rawMsg === 'string' ? rawMsg : 'Unable to add. Try again.');
+  /* Apply add-to-cart (Ajax, no redirect) to every product in every Clothing Showcase section */
+  sections.forEach(function(section) {
+    section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
+      form.addEventListener('click', function(e) {
+        e.stopPropagation();
+      }, true);
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var btn = form.querySelector('button[type="submit"]');
+        var originalText = btn ? btn.textContent : 'Add to cart';
+        var idInput = form.querySelector('input[name="id"]');
+        var qtyInput = form.querySelector('input[name="quantity"]');
+        var variantId = idInput ? idInput.value.trim() : '';
+        var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
+        var variantIdNum = parseInt(variantId, 10);
+        if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
+          if (btn) btn.disabled = false;
+          showErrorToast('Unable to add. Try again.');
           return;
         }
         if (btn) {
-          btn.textContent = 'Added!';
-          btn.classList.remove('clothing-showcase-btn--loading');
-          btn.classList.add('clothing-showcase-btn--added');
+          btn.disabled = true;
+          btn.classList.add('clothing-showcase-btn--loading');
+          btn.textContent = 'Adding…';
         }
-        showAddedToast();
-        if (typeof window.updateCartCount === 'function') window.updateCartCount();
-        setTimeout(function() {
-          if (btn) { btn.disabled = false; btn.textContent = originalText; btn.classList.remove('clothing-showcase-btn--added'); }
-        }, 2000);
-      })
-      .catch(function() {
-        if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-        showErrorToast('Unable to add. Try again.');
+        var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
+        var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
+        var formData = new FormData(form);
+        fetch(addUrl, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          credentials: 'same-origin',
+          body: formData
+        })
+        .then(function(res) {
+          return res.json().then(function(data) { return { ok: res.ok, data: data }; });
+        })
+        .then(function(result) {
+          var data = result.data;
+          var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
+          if (isError) {
+            if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+            var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
+            showErrorToast(typeof rawMsg === 'string' ? rawMsg : 'Unable to add. Try again.');
+            return;
+          }
+          if (btn) {
+            btn.textContent = 'Added!';
+            btn.classList.remove('clothing-showcase-btn--loading');
+            btn.classList.add('clothing-showcase-btn--added');
+          }
+          showAddedToast();
+          if (typeof window.updateCartCount === 'function') window.updateCartCount();
+          setTimeout(function() {
+            if (btn) { btn.disabled = false; btn.textContent = originalText; btn.classList.remove('clothing-showcase-btn--added'); }
+          }, 2000);
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+          showErrorToast('Unable to add. Try again.');
+        });
       });
     });
-  });
 
-  section.addEventListener('click', function(e) {
-    if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('[data-add-to-cart-btn]')) return;
-    var card = e.target.closest('.clothing-showcase-card');
-    if (!card) return;
-    var url = card.getAttribute('data-product-url');
-    if (!url) return;
-    if (e.target.tagName === 'A' && e.target.getAttribute('href')) return;
-    e.preventDefault();
-    window.location.href = url;
+    section.addEventListener('click', function(e) {
+      if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('[data-add-to-cart-btn]')) return;
+      var card = e.target.closest('.clothing-showcase-card');
+      if (!card) return;
+      var url = card.getAttribute('data-product-url');
+      if (!url) return;
+      if (e.target.tagName === 'A' && e.target.getAttribute('href')) return;
+      e.preventDefault();
+      window.location.href = url;
+    });
   });
 })();
 </script>
