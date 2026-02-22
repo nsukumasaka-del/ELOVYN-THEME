@@ -28,8 +28,8 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6" data-clothing-showcase-products>
         {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- comment -%} Use Shopify's first-available variant so add-to-cart works with current inventory. {%- endcomment -%}
-          {%- assign current_variant = product.selected_or_first_available_variant -%}
+          {%- comment -%} Use first variant so add-to-cart works with your inventory (e.g. 500 in stock). {%- endcomment -%}
+          {%- assign current_variant = product.variants.first -%}
           <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{{ current_variant.available }}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
