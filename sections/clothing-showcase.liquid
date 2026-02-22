@@ -27,8 +27,15 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
+          {%- comment -%} Use first available variant so we never add a sold-out option when another size is in stock. {%- endcomment -%}
           {%- assign current_variant = product.selected_or_first_available_variant -%}
-          <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}">
+          {%- for v in product.variants -%}
+            {%- if v.available -%}
+              {%- assign current_variant = v -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{{ current_variant.available }}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
                 <img
@@ -135,7 +142,11 @@
         var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
         if (isError) {
           if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          var msg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
+          var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
+          var isSoldOut = (typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1);
+          var msg = isSoldOut
+            ? 'This item is currently out of stock. To allow customers to order it anyway, in Shopify Admin go to Products → open this product → Inventory, and enable "Allow customers to purchase this product when it\'s out of stock".'
+            : rawMsg;
           alert(msg);
           return;
         }
@@ -381,7 +392,7 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Products from this collection appear with price and Add to cart. Defaults to Homepage collection if empty."
+      "info": "Products from this collection appear with price and Add to cart. If a product shows \"sold out\" when adding to cart, in Shopify Admin go to the product → Inventory and enable \"Allow customers to purchase this product when it's out of stock\" so it can still be ordered."
     },
     {
       "type": "range",
