@@ -27,7 +27,7 @@
 
     {% if collection.products.size > 0 %}
       {% if is_dropshipping %}
-        {%- comment -%} Dropshipping: price + Add to cart (no Sponsored/View product) {%- endcomment -%}
+        {%- comment -%} Dropshipping (custom-tees, graphic-tees, etc.): all products show price + Add to cart, no sold-out UI. {%- endcomment -%}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
           {% for product in collection.products %}
             {%- assign current_variant = product.selected_or_first_available_variant -%}
@@ -37,9 +37,6 @@
                   <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
                 {% else %}
                   {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-secondary' }}
-                {% endif %}
-                {% if current_variant.available == false %}
-                  <span class="absolute inset-0 flex items-center justify-center bg-background/70 text-foreground font-semibold text-sm uppercase tracking-wider">{{ 'products.product.sold_out' | t }}</span>
                 {% endif %}
               </a>
               <div class="p-4 md:p-5" style="padding: 1rem; background-color: hsl(var(--card));">
@@ -54,19 +51,11 @@
                     <span class="text-xs font-medium text-accent bg-accent/20 px-1.5 py-0.5 rounded">{{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}% off</span>
                   {% endif %}
                 </div>
-                {% if product.has_only_default_variant %}
-                  {% if current_variant.available %}
-                    <form action="{{ routes.cart_add_url }}" method="post" class="cart-add-form">
-                      <input type="hidden" name="id" value="{{ current_variant.id }}">
-                      <input type="hidden" name="quantity" value="1">
-                      <button type="submit" name="add" class="w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">{{ 'products.product.add_to_cart' | t }}</button>
-                    </form>
-                  {% else %}
-                    <button type="button" disabled class="w-full py-2.5 px-4 rounded-xl bg-muted text-muted-foreground font-semibold text-sm cursor-not-allowed">{{ 'products.product.sold_out' | t }}</button>
-                  {% endif %}
-                {% else %}
-                  <a href="{{ product.url }}" class="block w-full py-2.5 px-4 rounded-xl border border-border text-foreground font-semibold text-sm text-center hover:bg-card transition-colors">{{ 'products.product.add_to_cart' | t }}</a>
-                {% endif %}
+                <form action="{{ routes.cart_add_url }}" method="post" class="cart-add-form" data-collection-add-to-cart>
+                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" name="add" class="w-full py-2.5 px-4 rounded-xl bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">{{ 'products.product.add_to_cart' | t }}</button>
+                </form>
               </div>
             </div>
           {% endfor %}
@@ -142,4 +131,55 @@
     overflow: hidden;
   }
 </style>
+<script>
+(function() {
+  var forms = document.querySelectorAll('form[data-collection-add-to-cart]');
+  if (!forms.length) return;
+  var cartUrl = (window.routes && window.routes.cart_url) || '/cart';
+  var cartAddUrl = (window.routes && window.routes.cart_add_url) || '';
+  var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
+  function showToast(msg, isError) {
+    var id = 'collection-add-toast';
+    var existing = document.getElementById(id);
+    if (existing) existing.remove();
+    var toast = document.createElement('div');
+    toast.id = id;
+    toast.setAttribute('style', 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(100px);z-index:9999;padding:0.875rem 1.25rem;background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:0.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.4);color:hsl(var(--foreground));font-size:0.9375rem;opacity:0;transition:transform 0.3s ease, opacity 0.3s ease;');
+    toast.innerHTML = isError ? ('<span>' + (msg || 'Unable to add. Try again.') + '</span>') : ('<span>Added to cart</span> <a href="' + cartUrl + '" style="color:hsl(var(--accent));font-weight:600;margin-left:0.5rem;">View cart</a>');
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(0)'; toast.style.opacity = '1'; }, 10);
+    setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(100px)'; toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 3000);
+  }
+  forms.forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var btn = form.querySelector('button[type="submit"]');
+      var originalText = btn ? btn.textContent : 'Add to cart';
+      if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
+      var formData = new FormData(form);
+      fetch(addUrl, { method: 'POST', headers: { 'Accept': 'application/json' }, credentials: 'same-origin', body: formData })
+        .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+        .then(function(result) {
+          var data = result.data;
+          var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
+          if (isError) {
+            var msg = (data && (data.description || data.message)) || 'Unable to add. Try again.';
+            showToast(typeof msg === 'string' ? msg : 'Unable to add. Try again.', true);
+            return;
+          }
+          if (btn) btn.textContent = 'Added!';
+          showToast('Added to cart', false);
+          if (typeof window.updateCartCount === 'function') window.updateCartCount();
+          setTimeout(function() { if (btn) btn.textContent = originalText; }, 2000);
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
+          showToast('Unable to add. Try again.', true);
+        });
+    });
+  });
+})();
+</script>
 {% endif %}
