@@ -109,7 +109,8 @@
       var qtyInput = form.querySelector('input[name="quantity"]');
       var variantId = idInput ? idInput.value.trim() : '';
       var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
-      if (!variantId) { form.submit(); return; }
+      var variantIdNum = parseInt(variantId, 10);
+      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) { form.submit(); return; }
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn ? btn.textContent : 'Add to cart';
       if (btn) {
@@ -117,15 +118,13 @@
         btn.classList.add('clothing-showcase-btn--loading');
         btn.textContent = 'Adding…';
       }
-      var formAction = form.getAttribute('action') || '';
-      var base = formAction ? formAction.replace(/\/cart\/add\/?(\?.*)?$/i, '') : '';
-      if (!base && window.routes && window.routes.cart_add_url) base = window.routes.cart_add_url.replace(/\/cart\/add\/?(\?.*)?$/i, '');
-      if (!base) base = '';
-      var addUrl = base + '/cart/add.js';
-      var payload = { items: [{ id: parseInt(variantId, 10), quantity: quantity }] };
+      var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
+      var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
+      var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
       fetch(addUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       })
       .then(function(res) {
