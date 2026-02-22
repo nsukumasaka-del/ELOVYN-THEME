@@ -1,7 +1,6 @@
 {% comment %}
   Clothing Showcase Section - Displays products from the selected collection with price and Add to cart.
-  Applies to all collections: whichever collection you choose in the section settings, every product
-  gets Ajax add-to-cart (no redirect), error toast on failure, cart icon count update on success.
+  Standard Shopify add-to-cart: form POST to cart/add with return_to=cart. Clicking Add to cart adds the item and goes to the cart page.
 {% endcomment %}
 
 <section id="{{ section.settings.section_id | default: 'apparel' }}" class="clothing-showcase-section py-24 md:py-32 bg-background">
@@ -59,6 +58,7 @@
               <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
                 <input type="hidden" name="id" value="{{ current_variant.id }}">
                 <input type="hidden" name="quantity" value="1">
+                <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
                 <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add" data-add-to-cart-btn>
                   {{ 'products.product.add_to_cart' | t }}
                 </button>
@@ -84,127 +84,7 @@
 (function() {
   var sections = document.querySelectorAll('.clothing-showcase-section');
   if (!sections.length) return;
-
-  function showAddedToast() {
-    var cartUrl = (window.routes && window.routes.cart_url) || '/cart';
-    var existing = document.getElementById('clothing-showcase-toast');
-    if (existing) existing.remove();
-    var toast = document.createElement('div');
-    toast.id = 'clothing-showcase-toast';
-    toast.className = 'clothing-showcase-toast--success';
-    toast.innerHTML = '<span>Added to cart</span> <a href="' + cartUrl + '">View cart</a>';
-    document.body.appendChild(toast);
-    setTimeout(function() { toast.classList.add('clothing-showcase-toast--show'); }, 10);
-    setTimeout(function() {
-      toast.classList.remove('clothing-showcase-toast--show');
-      setTimeout(function() { toast.remove(); }, 300);
-    }, 3000);
-  }
-
-  function showErrorToast(message) {
-    var existing = document.getElementById('clothing-showcase-toast');
-    if (existing) existing.remove();
-    var toast = document.createElement('div');
-    toast.id = 'clothing-showcase-toast';
-    toast.className = 'clothing-showcase-toast--error';
-    toast.innerHTML = '<span>' + (message || 'Unable to add. Try again.') + '</span>';
-    document.body.appendChild(toast);
-    setTimeout(function() { toast.classList.add('clothing-showcase-toast--show'); }, 10);
-    setTimeout(function() {
-      toast.classList.remove('clothing-showcase-toast--show');
-      setTimeout(function() { toast.remove(); }, 300);
-    }, 3500);
-  }
-
-  /* Apply add-to-cart (Ajax, no redirect) to every product in every Clothing Showcase section */
   sections.forEach(function(section) {
-    section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
-      form.addEventListener('click', function(e) {
-        e.stopPropagation();
-      }, true);
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var btn = form.querySelector('button[type="submit"]');
-        var originalText = btn ? btn.textContent : 'Add to cart';
-        var idInput = form.querySelector('input[name="id"]');
-        var qtyInput = form.querySelector('input[name="quantity"]');
-        var variantId = idInput ? idInput.value.trim() : '';
-        var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
-        var variantIdNum = parseInt(variantId, 10);
-        if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
-          if (btn) btn.disabled = false;
-          showErrorToast('Unable to add. Try again.');
-          return;
-        }
-        if (btn) {
-          btn.disabled = true;
-          btn.classList.add('clothing-showcase-btn--loading');
-          btn.textContent = 'Adding…';
-        }
-        var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
-        var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
-        var formData = new FormData(form);
-        fetch(addUrl, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          credentials: 'same-origin',
-          body: formData
-        })
-        .then(function(res) {
-          return res.json().then(function(data) { return { ok: res.ok, data: data }; });
-        })
-        .then(function(result) {
-          var data = result.data;
-          var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
-          if (isError) {
-            var rawMsg = (data && (data.description || data.message)) || '';
-            var isSoldOut = typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1;
-            if (isSoldOut) {
-              if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-              var action = (form.getAttribute('action') || '').split('?')[0];
-              form.setAttribute('action', action);
-              if (!form.querySelector('input[name="return_to"]')) {
-                var inp = document.createElement('input');
-                inp.type = 'hidden';
-                inp.name = 'return_to';
-                inp.value = (window.routes && window.routes.cart_url) || '/cart';
-                form.appendChild(inp);
-              }
-              form.submit();
-              return;
-            }
-            if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-            showErrorToast(typeof rawMsg === 'string' ? rawMsg : 'Unable to add. Try again.');
-            return;
-          }
-          if (btn) {
-            btn.textContent = 'Added!';
-            btn.classList.remove('clothing-showcase-btn--loading');
-            btn.classList.add('clothing-showcase-btn--added');
-          }
-          showAddedToast();
-          if (typeof window.updateCartCount === 'function') window.updateCartCount();
-          setTimeout(function() {
-            if (btn) { btn.disabled = false; btn.textContent = originalText; btn.classList.remove('clothing-showcase-btn--added'); }
-          }, 2000);
-        })
-        .catch(function() {
-          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          var action = (form.getAttribute('action') || '').split('?')[0];
-          form.setAttribute('action', action);
-          if (!form.querySelector('input[name="return_to"]')) {
-            var inp = document.createElement('input');
-            inp.type = 'hidden';
-            inp.name = 'return_to';
-            inp.value = (window.routes && window.routes.cart_url) || '/cart';
-            form.appendChild(inp);
-          }
-          form.submit();
-        });
-      });
-    });
-
     section.addEventListener('click', function(e) {
       if (e.target.closest('form[data-clothing-add-to-cart]') || e.target.closest('[data-add-to-cart-btn]')) return;
       var card = e.target.closest('.clothing-showcase-card');
