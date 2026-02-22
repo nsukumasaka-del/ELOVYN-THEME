@@ -1,48 +1,48 @@
 {% comment %}
-  Cart page – modern layout, ready for sales. Update quantities and click "Update cart" or go to Checkout.
+  Cart page – modern apparel layout. Compact thumbnails, clear order summary, checkout-focused.
 {% endcomment %}
 
-<section class="py-12 md:py-20 bg-background min-h-[60vh]" aria-label="Shopping cart">
-  <div class="container mx-auto px-6">
-    <header class="mb-10 md:mb-14">
-      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+<section class="main-cart-page py-8 md:py-12 bg-background min-h-[60vh]" aria-label="Shopping cart">
+  <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+    <header class="mb-6 md:mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
         {{ 'sections.cart.title' | t }}
       </h1>
-      <p class="mt-2 text-foreground/60">
-        {% if cart.item_count > 0 %}
+      {% if cart.item_count > 0 %}
+        <p class="mt-1 text-sm text-foreground/60">
           {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
-        {% endif %}
-      </p>
+        </p>
+      {% endif %}
     </header>
 
     {% if cart.item_count > 0 %}
-      <form action="{{ routes.cart_url }}" method="post" id="cart-form" class="max-w-5xl">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
-          <div class="lg:col-span-2">
-            <ul class="space-y-0 divide-y divide-border/40">
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form" class="main-cart-form">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+          <div class="lg:col-span-3">
+            <ul class="main-cart-items space-y-0 divide-y divide-border/30">
               {% for item in cart.items %}
-                <li class="py-6 md:py-8 first:pt-0 flex flex-col sm:flex-row gap-4 sm:gap-6">
-                  <a href="{{ item.url }}" class="flex-shrink-0 w-full sm:w-28 h-28 rounded-2xl overflow-hidden border border-border/40 bg-card hover:border-border transition-colors">
+                <li class="main-cart-item py-4 md:py-5 first:pt-0 flex gap-4">
+                  <a href="{{ item.url }}" class="main-cart-item-image flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border border-border/40 bg-card hover:border-border transition-colors">
                     {% if item.image != blank %}
-                      <img src="{{ item.image | image_url: width: 224 }}" alt="{{ item.image.alt | escape }}" class="w-full h-full object-cover" loading="lazy" width="112" height="112">
+                      <img src="{{ item.image | image_url: width: 96 }}" alt="{{ item.image.alt | escape }}" class="w-full h-full object-cover" loading="lazy" width="96" height="96">
                     {% else %}
                       {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
                     {% endif %}
                   </a>
-                  <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:justify-between gap-4">
-                    <div>
-                      <a href="{{ item.url }}" class="font-semibold text-foreground hover:text-accent transition-colors text-lg">{{ item.product.title }}</a>
+                  <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                    <div class="min-w-0">
+                      <a href="{{ item.url }}" class="main-cart-item-title font-semibold text-foreground hover:text-accent transition-colors text-sm md:text-base block truncate">{{ item.product.title }}</a>
                       {% unless item.product.has_only_default_variant %}
-                        <p class="text-sm text-foreground/60 mt-1">{{ item.variant.title }}</p>
+                        <p class="text-xs text-foreground/60 mt-0.5">{{ item.variant.title }}</p>
                       {% endunless %}
-                      <p class="text-foreground font-semibold mt-2">{{ item.final_line_price | money }}</p>
+                      <p class="text-sm font-semibold text-foreground mt-1 sm:mt-1.5">{{ item.final_line_price | money }}</p>
                     </div>
-                    <div class="flex items-center gap-4 sm:gap-6">
+                    <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
                       <label for="updates_{{ item.key }}" class="visually-hidden">Quantity for {{ item.product.title }}</label>
-                      <div class="flex items-center border border-border rounded-xl overflow-hidden bg-card">
-                        <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" max="99" class="w-14 py-2.5 text-center bg-transparent text-foreground border-x border-border focus:outline-none focus:ring-0 text-sm">
+                      <div class="main-cart-qty flex items-center border border-border rounded-lg overflow-hidden bg-card">
+                        <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" max="99" class="w-11 py-2 text-center bg-transparent text-foreground border-x border-border focus:outline-none focus:ring-0 text-sm">
                       </div>
-                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-sm text-foreground/60 hover:text-accent transition-colors whitespace-nowrap">
+                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-xs text-foreground/50 hover:text-accent transition-colors whitespace-nowrap">
                         {{ 'sections.cart.remove' | t }}
                       </a>
                     </div>
@@ -52,21 +52,21 @@
             </ul>
           </div>
 
-          <div class="lg:col-span-1">
-            <div class="sticky top-24 rounded-2xl border border-border/50 bg-card p-6 md:p-8 shadow-lg shadow-black/10">
-              <div class="flex justify-between items-baseline mb-4">
-                <span class="text-foreground/70">{{ 'sections.cart.subtotal' | t }}</span>
-                <span class="text-2xl font-bold text-foreground">{{ cart.total_price | money }}</span>
+          <div class="lg:col-span-2">
+            <div class="main-cart-summary sticky top-20 rounded-xl border border-border/40 bg-card p-5 md:p-6">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-sm text-foreground/70">{{ 'sections.cart.subtotal' | t }}</span>
+                <span class="text-xl font-bold text-foreground">{{ cart.total_price | money }}</span>
               </div>
-              <p class="text-sm text-foreground/50 mb-6">Shipping and taxes calculated at checkout.</p>
-              <div class="space-y-3">
-                <button type="submit" name="checkout" class="w-full py-3.5 px-6 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+              <p class="text-xs text-foreground/50 mb-5">Shipping and taxes calculated at checkout.</p>
+              <div class="space-y-2">
+                <button type="submit" name="checkout" class="main-cart-checkout-btn w-full py-3 px-5 rounded-lg bg-accent text-accent-foreground font-semibold text-sm hover:opacity-92 transition-opacity">
                   {{ 'sections.cart.checkout' | t }}
                 </button>
-                <button type="submit" name="update" class="w-full py-3 px-6 rounded-xl border border-border text-foreground font-medium hover:bg-card transition-colors">
+                <button type="submit" name="update" class="w-full py-2.5 px-5 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-card transition-colors">
                   {{ 'sections.cart.update' | t }}
                 </button>
-                <a href="{{ routes.all_products_collection_url }}" class="block w-full py-3 px-6 rounded-xl border border-border text-foreground text-center font-medium hover:bg-card transition-colors">
+                <a href="{{ routes.all_products_collection_url }}" class="block w-full py-2.5 px-5 rounded-lg border border-border text-foreground text-sm text-center font-medium hover:bg-card transition-colors">
                   {{ 'sections.cart.continue_shopping' | t }}
                 </a>
               </div>
@@ -75,18 +75,25 @@
         </div>
       </form>
     {% else %}
-      <div class="max-w-md mx-auto text-center py-12">
-        <div class="w-24 h-24 rounded-full bg-card border border-border/50 flex items-center justify-center mx-auto mb-6 text-foreground/40">
-          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <div class="main-cart-empty max-w-sm mx-auto text-center py-16">
+        <div class="w-16 h-16 rounded-full bg-card border border-border/40 flex items-center justify-center mx-auto mb-5 text-foreground/40">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
         </div>
-        <h2 class="text-xl font-semibold text-foreground mb-2">{{ 'sections.cart.empty' | t }}</h2>
-        <p class="text-foreground/60 mb-8">Add items from the homepage or any collection to get started.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="inline-flex px-8 py-3.5 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+        <h2 class="text-lg font-semibold text-foreground mb-2">{{ 'sections.cart.empty' | t }}</h2>
+        <p class="text-sm text-foreground/60 mb-6">Add items from the homepage or any collection to get started.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="inline-flex px-6 py-3 rounded-lg bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
           {{ 'sections.cart.continue_shopping' | t }}
         </a>
       </div>
     {% endif %}
   </div>
 </section>
+
+<style>
+  .main-cart-page .main-cart-item-image img { object-fit: cover; }
+  .main-cart-page .main-cart-qty input::-webkit-inner-spin-button,
+  .main-cart-page .main-cart-qty input::-webkit-outer-spin-button { opacity: 1; }
+  .main-cart-page .main-cart-checkout-btn { min-height: 44px; }
+</style>
