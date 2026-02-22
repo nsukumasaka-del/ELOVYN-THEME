@@ -27,14 +27,8 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- comment -%} Use first available variant so we never add a sold-out option when another size is in stock. {%- endcomment -%}
-          {%- assign current_variant = product.selected_or_first_available_variant -%}
-          {%- for v in product.variants -%}
-            {%- if v.available -%}
-              {%- assign current_variant = v -%}
-              {%- break -%}
-            {%- endif -%}
-          {%- endfor -%}
+          {%- comment -%} Use first variant so add-to-cart works after you enable "Allow purchase when out of stock" (avoids stale available flag). {%- endcomment -%}
+          {%- assign current_variant = product.variants.first -%}
           <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{{ current_variant.available }}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
@@ -141,13 +135,21 @@
         var data = result.data;
         var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
         if (isError) {
-          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
           var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
           var isSoldOut = (typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1);
-          var msg = isSoldOut
-            ? 'This item is sold out. To fix: Shopify Admin → Products → open this product → Inventory → enable "Allow customers to purchase this product when it\'s out of stock". See theme file SOLD-OUT-FIX.md for steps.'
-            : rawMsg;
-          alert(msg);
+          if (isSoldOut) {
+            if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+            form.setAttribute('action', (form.getAttribute('action') || '').split('?')[0]);
+            var ret = document.createElement('input');
+            ret.type = 'hidden';
+            ret.name = 'return_to';
+            ret.value = (window.routes && window.routes.cart_url) || '/cart';
+            form.appendChild(ret);
+            form.submit();
+            return;
+          }
+          if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+          alert(rawMsg);
           return;
         }
         if (btn) {
