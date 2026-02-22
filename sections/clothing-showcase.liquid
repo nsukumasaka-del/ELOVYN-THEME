@@ -90,6 +90,7 @@
     if (existing) existing.remove();
     var toast = document.createElement('div');
     toast.id = 'clothing-showcase-toast';
+    toast.className = 'clothing-showcase-toast--success';
     toast.innerHTML = '<span>Added to cart</span> <a href="' + cartUrl + '">View cart</a>';
     document.body.appendChild(toast);
     setTimeout(function() { toast.classList.add('clothing-showcase-toast--show'); }, 10);
@@ -97,6 +98,21 @@
       toast.classList.remove('clothing-showcase-toast--show');
       setTimeout(function() { toast.remove(); }, 300);
     }, 3000);
+  }
+
+  function showErrorToast(message) {
+    var existing = document.getElementById('clothing-showcase-toast');
+    if (existing) existing.remove();
+    var toast = document.createElement('div');
+    toast.id = 'clothing-showcase-toast';
+    toast.className = 'clothing-showcase-toast--error';
+    toast.innerHTML = '<span>' + (message || 'Unable to add. Try again.') + '</span>';
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.classList.add('clothing-showcase-toast--show'); }, 10);
+    setTimeout(function() {
+      toast.classList.remove('clothing-showcase-toast--show');
+      setTimeout(function() { toast.remove(); }, 300);
+    }, 3500);
   }
 
   section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
@@ -135,21 +151,9 @@
         var data = result.data;
         var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
         if (isError) {
-          var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
-          var isSoldOut = (typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1);
-          if (isSoldOut) {
-            if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-            form.setAttribute('action', (form.getAttribute('action') || '').split('?')[0]);
-            var ret = document.createElement('input');
-            ret.type = 'hidden';
-            ret.name = 'return_to';
-            ret.value = (window.routes && window.routes.cart_url) || '/cart';
-            form.appendChild(ret);
-            form.submit();
-            return;
-          }
           if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          alert(rawMsg);
+          var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
+          showErrorToast(typeof rawMsg === 'string' ? rawMsg : 'Unable to add. Try again.');
           return;
         }
         if (btn) {
@@ -165,13 +169,7 @@
       })
       .catch(function() {
         if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-        form.setAttribute('action', (form.getAttribute('action') || '').split('?')[0]);
-        var input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'return_to';
-        input.value = (window.routes && window.routes.cart_url) || '/cart';
-        form.appendChild(input);
-        form.submit();
+        showErrorToast('Unable to add. Try again.');
       });
     });
   });
@@ -377,6 +375,10 @@
   }
   #clothing-showcase-toast a:hover {
     text-decoration: underline;
+  }
+  #clothing-showcase-toast.clothing-showcase-toast--error {
+    border-color: hsl(var(--destructive) / 0.5);
+    background: hsl(var(--destructive) / 0.08);
   }
 </style>
 
