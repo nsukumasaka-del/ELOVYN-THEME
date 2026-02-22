@@ -3,7 +3,7 @@
   Dropshipping collections (graphic-tees, custom-tees, jfuncy-...) show price + Add to cart.
 {% endcomment %}
 
-{%- assign dropshipping_handles = "graphic-tees,custom-tees,jfuncy-s-6xl-oversize-men-cotton-tee-tops,shirts" | split: "," -%}
+{%- assign dropshipping_handles = "graphic-tees,custom-tees,jfuncy-s-6xl-oversize-men-cotton-tee-tops,shirts,frontpage" | split: "," -%}
 {%- assign is_dropshipping = false -%}
 {%- for handle in dropshipping_handles -%}
   {%- if collection.handle == handle -%}
@@ -150,6 +150,21 @@
     setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(0)'; toast.style.opacity = '1'; }, 10);
     setTimeout(function() { toast.style.transform = 'translateX(-50%) translateY(100px)'; toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 3000);
   }
+  function tryFormSubmit(form, btn, originalText) {
+    if (btn) { btn.disabled = false; btn.textContent = originalText; }
+    var action = (form.getAttribute('action') || '').split('?')[0];
+    form.setAttribute('action', action);
+    var existing = form.querySelector('input[name="return_to"]');
+    if (!existing) {
+      var inp = document.createElement('input');
+      inp.type = 'hidden';
+      inp.name = 'return_to';
+      inp.value = cartUrl;
+      form.appendChild(inp);
+    }
+    form.submit();
+  }
+
   forms.forEach(function(form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -157,41 +172,41 @@
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn ? btn.textContent : 'Add to cart';
       var idInput = form.querySelector('input[name="id"]');
-      var qtyInput = form.querySelector('input[name="quantity"]');
       var variantId = idInput ? idInput.value.trim() : '';
-      var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
-      var variantIdNum = parseInt(variantId, 10);
-      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
-        if (btn) btn.disabled = false;
+      if (!variantId) {
         showToast('Unable to add. Try again.', true);
         return;
       }
       if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
-      var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
+      var formData = new FormData(form);
       fetch(addUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Accept': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify(payload)
+        body: formData
       })
         .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
         .then(function(result) {
           var data = result.data;
           var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
           if (isError) {
-            var msg = (data && (data.description || data.message)) || 'Unable to add. Try again.';
+            var msg = (data && (data.description || data.message)) || '';
+            var isSoldOut = typeof msg === 'string' && msg.toLowerCase().indexOf('sold out') !== -1;
+            if (isSoldOut) {
+              tryFormSubmit(form, btn, originalText);
+              return;
+            }
+            if (btn) { btn.disabled = false; btn.textContent = originalText; }
             showToast(typeof msg === 'string' ? msg : 'Unable to add. Try again.', true);
             return;
           }
-          if (btn) btn.textContent = 'Added!';
+          if (btn) { btn.disabled = false; btn.textContent = 'Added!'; }
           showToast('Added to cart', false);
           if (typeof window.updateCartCount === 'function') window.updateCartCount();
           setTimeout(function() { if (btn) btn.textContent = originalText; }, 2000);
         })
         .catch(function() {
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
-          showToast('Unable to add. Try again.', true);
+          tryFormSubmit(form, btn, originalText);
         });
     });
   });

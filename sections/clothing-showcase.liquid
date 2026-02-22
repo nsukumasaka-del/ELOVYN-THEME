@@ -144,12 +144,12 @@
         }
         var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
         var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
-        var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
+        var formData = new FormData(form);
         fetch(addUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          headers: { 'Accept': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify(payload)
+          body: formData
         })
         .then(function(res) {
           return res.json().then(function(data) { return { ok: res.ok, data: data }; });
@@ -158,8 +158,23 @@
           var data = result.data;
           var isError = (data && data.status === 422) || (data && data.message) || !result.ok;
           if (isError) {
+            var rawMsg = (data && (data.description || data.message)) || '';
+            var isSoldOut = typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1;
+            if (isSoldOut) {
+              if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
+              var action = (form.getAttribute('action') || '').split('?')[0];
+              form.setAttribute('action', action);
+              if (!form.querySelector('input[name="return_to"]')) {
+                var inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = 'return_to';
+                inp.value = (window.routes && window.routes.cart_url) || '/cart';
+                form.appendChild(inp);
+              }
+              form.submit();
+              return;
+            }
             if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-            var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
             showErrorToast(typeof rawMsg === 'string' ? rawMsg : 'Unable to add. Try again.');
             return;
           }
@@ -176,7 +191,16 @@
         })
         .catch(function() {
           if (btn) { btn.disabled = false; btn.classList.remove('clothing-showcase-btn--loading'); btn.textContent = originalText; }
-          showErrorToast('Unable to add. Try again.');
+          var action = (form.getAttribute('action') || '').split('?')[0];
+          form.setAttribute('action', action);
+          if (!form.querySelector('input[name="return_to"]')) {
+            var inp = document.createElement('input');
+            inp.type = 'hidden';
+            inp.name = 'return_to';
+            inp.value = (window.routes && window.routes.cart_url) || '/cart';
+            form.appendChild(inp);
+          }
+          form.submit();
         });
       });
     });
