@@ -77,345 +77,53 @@
     },
     "sponsored_picks": {
       "type": "clothing-showcase",
-      "blocks": {
-        "amazon_link_1": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_2": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_3": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_4": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_5": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_6": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_7": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_8": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_9": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_10": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_11": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_12": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "amazon_link_1",
-        "amazon_link_2",
-        "amazon_link_3",
-        "amazon_link_4",
-        "amazon_link_5",
-        "amazon_link_6",
-        "amazon_link_7",
-        "amazon_link_8",
-        "amazon_link_9",
-        "amazon_link_10",
-        "amazon_link_11",
-        "amazon_link_12"
-      ],
+      "name": "Custom tees",
       "settings": {
+        "section_id": "apparel",
         "collection": "frontpage",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
         "description": "Stand out with bold designs and custom prints. Your style, your statement.",
-        "button_text_amazon": "Add to cart",
-        "button_text_product": "Add to cart"
+        "show_view_all": true,
+        "view_all_text": "View all"
       }
     },
     "hoodies": {
       "type": "clothing-showcase",
-      "blocks": {
-        "amazon_link_1": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_2": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_3": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_4": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_5": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_6": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_7": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_8": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_9": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_10": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_11": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_12": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "amazon_link_1",
-        "amazon_link_2",
-        "amazon_link_3",
-        "amazon_link_4",
-        "amazon_link_5",
-        "amazon_link_6",
-        "amazon_link_7",
-        "amazon_link_8",
-        "amazon_link_9",
-        "amazon_link_10",
-        "amazon_link_11",
-        "amazon_link_12"
-      ],
+      "name": "Hoodies",
       "settings": {
+        "section_id": "apparel",
         "collection": "hoodies",
         "products_to_show": 8,
         "heading": "Hoodies",
         "description": "Cozy, comfortable, and on-trend. Find your next favorite hoodie.",
-        "button_text_amazon": "View on Amazon",
-        "button_text_product": "View product"
+        "show_view_all": true,
+        "view_all_text": "View all"
       }
     },
     "sweatshirts": {
       "type": "clothing-showcase",
-      "blocks": {
-        "amazon_link_1": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_2": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_3": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_4": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_5": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_6": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_7": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_8": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_9": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_10": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_11": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        },
-        "amazon_link_12": {
-          "type": "amazon_link",
-          "settings": {
-            "product": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "amazon_link_1",
-        "amazon_link_2",
-        "amazon_link_3",
-        "amazon_link_4",
-        "amazon_link_5",
-        "amazon_link_6",
-        "amazon_link_7",
-        "amazon_link_8",
-        "amazon_link_9",
-        "amazon_link_10",
-        "amazon_link_11",
-        "amazon_link_12"
-      ],
+      "name": "Sweatshirts",
       "settings": {
+        "section_id": "apparel",
         "collection": "sweatshirts",
         "products_to_show": 4,
         "heading": "Sweatshirts",
         "description": "Classic crewnecks and pullovers. Perfect for layering.",
-        "button_text_amazon": "View on Amazon",
-        "button_text_product": "View product"
+        "show_view_all": true,
+        "view_all_text": "View all"
       }
     },
     "graphic_tees": {
       "type": "collection-grid-shop",
+      "name": "Sponsored",
       "settings": {
         "section_id": "Sponsored picks",
         "collection": "tech",
         "products_to_show": 8,
         "heading": "Sponsored picks",
         "description": "Handpicked favorites. Click through for the best deals on hoodies, sweatshirts, and graphic tees.",
+        "button_text": "View product",
         "show_view_all": true,
         "view_all_text": "View all"
       }
