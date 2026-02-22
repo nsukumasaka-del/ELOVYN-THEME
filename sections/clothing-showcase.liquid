@@ -108,24 +108,33 @@
         var btn = form.querySelector('button[type="submit"]');
         var originalText = btn ? btn.textContent : 'Add to cart';
         var idInput = form.querySelector('input[name="id"]');
-        if (!idInput || !idInput.value.trim()) {
+        var qtyInput = form.querySelector('input[name="quantity"]');
+        var variantId = idInput ? idInput.value.trim() : '';
+        var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
+        if (!variantId) {
           showToast('Unable to add. Try again.', false);
           return;
         }
         if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
         var addUrl = (window.routes && window.routes.cart_add_url || form.getAttribute('action') || '').replace(/\/add\/?(\?.*)?$/i, '') + '/add.js';
+        var body = 'id=' + encodeURIComponent(variantId) + '&quantity=' + encodeURIComponent(quantity);
         fetch(addUrl, {
           method: 'POST',
-          headers: { 'Accept': 'application/json' },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
           credentials: 'same-origin',
-          body: new FormData(form)
+          body: body
         })
         .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
         .then(function(r) {
           var err = (r.data && (r.data.status === 422 || r.data.message)) || !r.ok;
           if (btn) { btn.disabled = false; btn.textContent = originalText; }
           if (err) {
-            showToast((r.data && (r.data.description || r.data.message)) || 'Unable to add. Try again.', false);
+            var rawMsg = (r.data && (r.data.description || r.data.message)) || '';
+            var isSoldOut = typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1;
+            var msg = isSoldOut
+              ? 'This item could not be added. To sell it: Shopify Admin → Products → open this product → Inventory → turn on "Allow customers to purchase when out of stock".'
+              : (rawMsg || 'Unable to add. Try again.');
+            showToast(msg, false);
             return;
           }
           if (btn) { btn.textContent = 'Added!'; }
