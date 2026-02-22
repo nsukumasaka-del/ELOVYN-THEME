@@ -123,14 +123,18 @@
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       e.stopPropagation();
+      var btn = form.querySelector('button[type="submit"]');
+      var originalText = btn ? btn.textContent : 'Add to cart';
       var idInput = form.querySelector('input[name="id"]');
       var qtyInput = form.querySelector('input[name="quantity"]');
       var variantId = idInput ? idInput.value.trim() : '';
       var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
       var variantIdNum = parseInt(variantId, 10);
-      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) { form.submit(); return; }
-      var btn = form.querySelector('button[type="submit"]');
-      var originalText = btn ? btn.textContent : 'Add to cart';
+      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
+        if (btn) btn.disabled = false;
+        showErrorToast('Unable to add. Try again.');
+        return;
+      }
       if (btn) {
         btn.disabled = true;
         btn.classList.add('clothing-showcase-btn--loading');
