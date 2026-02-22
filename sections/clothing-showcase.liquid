@@ -145,7 +145,7 @@
           var rawMsg = (data && (data.description || data.message)) || (window.cartStrings && window.cartStrings.error) || 'Unable to add. Try again.';
           var isSoldOut = (typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1);
           var msg = isSoldOut
-            ? 'This item is currently out of stock. To allow customers to order it anyway, in Shopify Admin go to Products → open this product → Inventory, and enable "Allow customers to purchase this product when it\'s out of stock".'
+            ? 'This item is sold out. To fix: Shopify Admin → Products → open this product → Inventory → enable "Allow customers to purchase this product when it\'s out of stock". See theme file SOLD-OUT-FIX.md for steps.'
             : rawMsg;
           alert(msg);
           return;
