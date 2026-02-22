@@ -144,12 +144,12 @@
         }
         var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
         var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
-        var formData = new FormData(form);
+        var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
         fetch(addUrl, {
           method: 'POST',
-          headers: { 'Accept': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           credentials: 'same-origin',
-          body: formData
+          body: JSON.stringify(payload)
         })
         .then(function(res) {
           return res.json().then(function(data) { return { ok: res.ok, data: data }; });

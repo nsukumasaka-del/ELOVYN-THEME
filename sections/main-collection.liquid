@@ -27,10 +27,10 @@
 
     {% if collection.products.size > 0 %}
       {% if is_dropshipping %}
-        {%- comment -%} Dropshipping (custom-tees, graphic-tees, etc.): all products show price + Add to cart, no sold-out UI. {%- endcomment -%}
+        {%- comment -%} Dropshipping (custom-tees, graphic-tees, etc.): all products show price + Add to cart. Use first variant so add works with "continue selling when out of stock". {%- endcomment -%}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
           {% for product in collection.products %}
-            {%- assign current_variant = product.selected_or_first_available_variant -%}
+            {%- assign current_variant = product.variants.first -%}
             <div class="product-card-shop group bg-card rounded-2xl overflow-hidden border border-border/40 hover:border-border hover:shadow-xl hover:shadow-black/20 transition-all duration-300">
               <a href="{{ product.url }}" class="block aspect-[4/5] relative overflow-hidden">
                 {% if product.featured_image != blank %}
@@ -156,9 +156,24 @@
       e.stopPropagation();
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn ? btn.textContent : 'Add to cart';
+      var idInput = form.querySelector('input[name="id"]');
+      var qtyInput = form.querySelector('input[name="quantity"]');
+      var variantId = idInput ? idInput.value.trim() : '';
+      var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
+      var variantIdNum = parseInt(variantId, 10);
+      if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
+        if (btn) btn.disabled = false;
+        showToast('Unable to add. Try again.', true);
+        return;
+      }
       if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
-      var formData = new FormData(form);
-      fetch(addUrl, { method: 'POST', headers: { 'Accept': 'application/json' }, credentials: 'same-origin', body: formData })
+      var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
+      fetch(addUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
+      })
         .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
         .then(function(result) {
           var data = result.data;
