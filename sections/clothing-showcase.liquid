@@ -1,6 +1,6 @@
 {% comment %}
   Clothing Showcase Section - Displays products from a collection with price and Add to cart.
-  No product link blocks; all products use standard Add to cart.
+  All products in the section use the same behavior: Ajax add-to-cart (no redirect), error toast on failure, cart icon count update on success.
 {% endcomment %}
 
 <section id="{{ section.settings.section_id | default: 'apparel' }}" class="clothing-showcase-section py-24 md:py-32 bg-background">
@@ -27,8 +27,8 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- comment -%} Use first variant so add-to-cart works after you enable "Allow purchase when out of stock" (avoids stale available flag). {%- endcomment -%}
-          {%- assign current_variant = product.variants.first -%}
+          {%- comment -%} Use Shopify's first-available variant so add-to-cart works with current inventory. {%- endcomment -%}
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
           <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{{ current_variant.available }}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
@@ -115,6 +115,7 @@
     }, 3500);
   }
 
+  /* Apply add-to-cart (Ajax, no redirect, error toast) to every product form in this section */
   section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
     form.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -137,12 +138,12 @@
       }
       var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '';
       var addUrl = cartAddUrl ? cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js' : '/cart/add.js';
-      var payload = { items: [{ id: variantIdNum, quantity: quantity }] };
+      var formData = new FormData(form);
       fetch(addUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Accept': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify(payload)
+        body: formData
       })
       .then(function(res) {
         return res.json().then(function(data) { return { ok: res.ok, data: data }; });
