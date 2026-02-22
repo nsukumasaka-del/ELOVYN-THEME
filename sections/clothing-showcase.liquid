@@ -156,6 +156,7 @@
           btn.classList.add('clothing-showcase-btn--added');
         }
         showAddedToast();
+        if (typeof window.updateCartCount === 'function') window.updateCartCount();
         setTimeout(function() {
           if (btn) { btn.disabled = false; btn.textContent = originalText; btn.classList.remove('clothing-showcase-btn--added'); }
         }, 2000);
