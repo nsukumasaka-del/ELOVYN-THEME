@@ -1,15 +1,15 @@
 {% comment %}
-  Cart page – modern apparel layout. Compact thumbnails, clear order summary, checkout-focused.
+  Cart page – modern style. White background, black text, content starts below fixed header/logo.
 {% endcomment %}
 
-<section class="main-cart-page py-8 md:py-12 bg-background min-h-[60vh]" aria-label="Shopping cart">
-  <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+<section class="main-cart-page min-h-[60vh]" aria-label="Shopping cart">
+  <div class="main-cart-inner container mx-auto px-4 sm:px-6 max-w-6xl">
     <header class="mb-6 md:mb-8">
-      <h1 class="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+      <h1 class="main-cart-title">
         {{ 'sections.cart.title' | t }}
       </h1>
       {% if cart.item_count > 0 %}
-        <p class="mt-1 text-sm text-foreground/60">
+        <p class="main-cart-count">
           {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
         </p>
       {% endif %}
@@ -19,10 +19,10 @@
       <form action="{{ routes.cart_url }}" method="post" id="cart-form" class="main-cart-form">
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
           <div class="lg:col-span-3">
-            <ul class="main-cart-items space-y-0 divide-y divide-border/30">
+            <ul class="main-cart-items space-y-0 divide-y main-cart-divider">
               {% for item in cart.items %}
                 <li class="main-cart-item py-4 md:py-5 first:pt-0 flex gap-4">
-                  <a href="{{ item.url }}" class="main-cart-item-image flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border border-border/40 bg-card hover:border-border transition-colors">
+                  <a href="{{ item.url }}" class="main-cart-item-image flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border main-cart-border bg-white hover:border-black/30 transition-colors">
                     {% if item.image != blank %}
                       <img src="{{ item.image | image_url: width: 96 }}" alt="{{ item.image.alt | escape }}" class="w-full h-full object-cover" loading="lazy" width="96" height="96">
                     {% else %}
@@ -31,18 +31,18 @@
                   </a>
                   <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
                     <div class="min-w-0">
-                      <a href="{{ item.url }}" class="main-cart-item-title font-semibold text-foreground hover:text-accent transition-colors text-sm md:text-base block truncate">{{ item.product.title }}</a>
+                      <a href="{{ item.url }}" class="main-cart-item-title font-semibold text-black hover:opacity-70 transition-opacity text-sm md:text-base block truncate">{{ item.product.title }}</a>
                       {% unless item.product.has_only_default_variant %}
-                        <p class="text-xs text-foreground/60 mt-0.5">{{ item.variant.title }}</p>
+                        <p class="main-cart-variant text-xs mt-0.5">{{ item.variant.title }}</p>
                       {% endunless %}
-                      <p class="text-sm font-semibold text-foreground mt-1 sm:mt-1.5">{{ item.final_line_price | money }}</p>
+                      <p class="main-cart-price text-sm font-semibold text-black mt-1 sm:mt-1.5">{{ item.final_line_price | money }}</p>
                     </div>
                     <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
                       <label for="updates_{{ item.key }}" class="visually-hidden">Quantity for {{ item.product.title }}</label>
-                      <div class="main-cart-qty flex items-center border border-border rounded-lg overflow-hidden bg-card">
-                        <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" max="99" class="w-11 py-2 text-center bg-transparent text-foreground border-x border-border focus:outline-none focus:ring-0 text-sm">
+                      <div class="main-cart-qty flex items-center border main-cart-border rounded-lg overflow-hidden bg-white">
+                        <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" max="99" class="w-11 py-2 text-center bg-transparent text-black border-x main-cart-border focus:outline-none focus:ring-0 text-sm">
                       </div>
-                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-xs text-foreground/50 hover:text-accent transition-colors whitespace-nowrap">
+                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="main-cart-remove text-xs hover:opacity-70 transition-opacity whitespace-nowrap">
                         {{ 'sections.cart.remove' | t }}
                       </a>
                     </div>
@@ -53,20 +53,20 @@
           </div>
 
           <div class="lg:col-span-2">
-            <div class="main-cart-summary sticky top-20 rounded-xl border border-border/40 bg-card p-5 md:p-6">
+            <div class="main-cart-summary sticky top-20 rounded-xl border main-cart-border bg-white p-5 md:p-6">
               <div class="flex justify-between items-baseline mb-1">
-                <span class="text-sm text-foreground/70">{{ 'sections.cart.subtotal' | t }}</span>
-                <span class="text-xl font-bold text-foreground">{{ cart.total_price | money }}</span>
+                <span class="main-cart-label text-sm">{{ 'sections.cart.subtotal' | t }}</span>
+                <span class="main-cart-total text-xl font-bold text-black">{{ cart.total_price | money }}</span>
               </div>
-              <p class="text-xs text-foreground/50 mb-5">Shipping and taxes calculated at checkout.</p>
+              <p class="main-cart-note text-xs mb-5">Shipping and taxes calculated at checkout.</p>
               <div class="space-y-2">
-                <button type="submit" name="checkout" class="main-cart-checkout-btn w-full py-3 px-5 rounded-lg bg-accent text-accent-foreground font-semibold text-sm hover:opacity-92 transition-opacity">
+                <button type="submit" name="checkout" class="main-cart-checkout-btn w-full py-3 px-5 rounded-lg font-semibold text-sm hover:opacity-92 transition-opacity">
                   {{ 'sections.cart.checkout' | t }}
                 </button>
-                <button type="submit" name="update" class="w-full py-2.5 px-5 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-card transition-colors">
+                <button type="submit" name="update" class="main-cart-update-btn w-full py-2.5 px-5 rounded-lg border main-cart-border text-black bg-white text-sm font-medium hover:bg-gray-50 transition-colors">
                   {{ 'sections.cart.update' | t }}
                 </button>
-                <a href="{{ routes.all_products_collection_url }}" class="block w-full py-2.5 px-5 rounded-lg border border-border text-foreground text-sm text-center font-medium hover:bg-card transition-colors">
+                <a href="{{ routes.all_products_collection_url }}" class="main-cart-continue block w-full py-2.5 px-5 rounded-lg border main-cart-border text-black text-sm text-center font-medium bg-white hover:bg-gray-50 transition-colors">
                   {{ 'sections.cart.continue_shopping' | t }}
                 </a>
               </div>
@@ -76,14 +76,14 @@
       </form>
     {% else %}
       <div class="main-cart-empty max-w-sm mx-auto text-center py-16">
-        <div class="w-16 h-16 rounded-full bg-card border border-border/40 flex items-center justify-center mx-auto mb-5 text-foreground/40">
+        <div class="w-16 h-16 rounded-full bg-gray-100 border main-cart-border flex items-center justify-center mx-auto mb-5 text-black/40">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
         </div>
-        <h2 class="text-lg font-semibold text-foreground mb-2">{{ 'sections.cart.empty' | t }}</h2>
-        <p class="text-sm text-foreground/60 mb-6">Add items from the homepage or any collection to get started.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="inline-flex px-6 py-3 rounded-lg bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
+        <h2 class="main-cart-empty-title text-lg font-semibold text-black mb-2">{{ 'sections.cart.empty' | t }}</h2>
+        <p class="main-cart-empty-text text-sm text-black/60 mb-6">Add items from the homepage or any collection to get started.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="inline-flex px-6 py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity main-cart-checkout-btn">
           {{ 'sections.cart.continue_shopping' | t }}
         </a>
       </div>
@@ -92,8 +92,33 @@
 </section>
 
 <style>
+  .main-cart-page {
+    background: #ffffff;
+    color: #111111;
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 768px) {
+    .main-cart-page { padding-top: 7rem; padding-bottom: 4rem; }
+  }
+  .main-cart-title { font-size: 1.5rem; font-weight: 700; color: #111111; letter-spacing: -0.02em; }
+  @media (min-width: 768px) { .main-cart-title { font-size: 1.875rem; } }
+  .main-cart-count { margin-top: 0.25rem; font-size: 0.875rem; color: rgba(0,0,0,0.6); }
+  .main-cart-divider { border-color: rgba(0,0,0,0.08); }
+  .main-cart-border { border-color: rgba(0,0,0,0.12); }
+  .main-cart-variant { color: rgba(0,0,0,0.6); }
+  .main-cart-label { color: rgba(0,0,0,0.65); }
+  .main-cart-note { color: rgba(0,0,0,0.5); }
+  .main-cart-remove { color: rgba(0,0,0,0.5); }
   .main-cart-page .main-cart-item-image img { object-fit: cover; }
   .main-cart-page .main-cart-qty input::-webkit-inner-spin-button,
   .main-cart-page .main-cart-qty input::-webkit-outer-spin-button { opacity: 1; }
-  .main-cart-page .main-cart-checkout-btn { min-height: 44px; }
+  .main-cart-checkout-btn {
+    min-height: 44px;
+    background: #111111;
+    color: #ffffff;
+  }
+  .main-cart-checkout-btn:hover { opacity: 0.92; }
+  .main-cart-empty-title { color: #111111; }
+  .main-cart-empty-text { color: rgba(0,0,0,0.6); }
 </style>
