@@ -16,7 +16,8 @@
     </header>
 
     {% if cart.item_count > 0 %}
-      <form action="{{ routes.cart_url }}" method="post" id="cart-form" class="main-cart-form">
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form" class="main-cart-form" data-auto-update-cart>
+        <input type="hidden" name="update" value="Update">
         <div class="main-cart-grid">
           <div class="main-cart-items-col">
             <ul class="main-cart-items space-y-0 divide-y main-cart-divider">
@@ -62,9 +63,6 @@
               <div class="main-cart-buttons">
                 <button type="submit" name="checkout" class="main-cart-checkout-btn">
                   {{ 'sections.cart.checkout' | t }}
-                </button>
-                <button type="submit" name="update" class="main-cart-update-btn">
-                  {{ 'sections.cart.update' | t }}
                 </button>
                 <a href="{{ routes.all_products_collection_url }}" class="main-cart-continue">
                   {{ 'sections.cart.continue_shopping' | t }}
@@ -437,7 +435,6 @@
     word-wrap: break-word;
   }
   .main-cart-checkout-btn:hover { opacity: 0.92; }
-  .main-cart-update-btn,
   .main-cart-continue {
     display: block;
     width: 100%;
@@ -458,7 +455,6 @@
     line-height: 1.4;
     word-wrap: break-word;
   }
-  .main-cart-update-btn:hover,
   .main-cart-continue:hover { background: rgba(0,0,0,0.04); }
 
   /* Empty state – visible text, proper alignment */
@@ -519,3 +515,16 @@
     padding: 0;
   }
 </style>
+
+<script>
+  (function() {
+    var form = document.getElementById('cart-form');
+    if (!form) return;
+    var inputs = form.querySelectorAll('input[name="updates[]"]');
+    inputs.forEach(function(input) {
+      input.addEventListener('change', function() {
+        form.submit();
+      });
+    });
+  })();
+</script>
