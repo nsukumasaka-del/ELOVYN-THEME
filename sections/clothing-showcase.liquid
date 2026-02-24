@@ -27,12 +27,12 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6" data-clothing-showcase-products>
         {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- comment -%} Use first available variant; fallback to first variant so add-to-cart works. {%- endcomment -%}
+          {%- comment -%} Use first available variant so add-to-cart works; fallback to first variant for display. {%- endcomment -%}
           {%- assign current_variant = product.selected_or_first_available_variant -%}
           {%- if current_variant == nil -%}
             {%- assign current_variant = product.variants.first -%}
           {%- endif -%}
-          <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{{ current_variant.available }}">
+          <div class="product-card-shop clothing-showcase-card" data-product-url="{{ product.url }}" data-variant-available="{% if current_variant.available %}true{% else %}false{% endif %}">
             <a href="{{ product.url }}" class="clothing-showcase-card-image">
               {% if product.featured_image != blank %}
                 <img
@@ -61,8 +61,8 @@
               <form action="{{ routes.cart_add_url }}" method="post" class="clothing-showcase-form" data-clothing-add-to-cart>
                 <input type="hidden" name="id" value="{{ current_variant.id }}">
                 <input type="hidden" name="quantity" value="1">
-                <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add" data-add-to-cart-btn>
-                  {{ 'products.product.add_to_cart' | t }}
+                <button type="submit" name="add" class="clothing-showcase-btn clothing-showcase-btn-add{% unless current_variant.available %} clothing-showcase-btn-soldout{% endunless %}" data-add-to-cart-btn {% unless current_variant.available %}disabled{% endunless %}>
+                  {% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}
                 </button>
               </form>
             </div>
@@ -140,12 +140,21 @@
             setTimeout(function() { if (btn) btn.textContent = originalText; }, 2000);
             return;
           }
-          var rawMsg = (r.data && (r.data.description || r.data.message)) || '';
-          var isSoldOut = typeof rawMsg === 'string' && rawMsg.toLowerCase().indexOf('sold out') !== -1;
-          var msg = isSoldOut
-            ? 'This item could not be added. To sell it: Shopify Admin → Products → open this product → Inventory → turn on "Allow customers to purchase when out of stock".'
-            : (rawMsg || 'Unable to add. Try again.');
-          showToast(msg, false);
+          var data = r.data || {};
+          var description = typeof data.description === 'string' ? data.description : '';
+          var message = typeof data.message === 'string' ? data.message : '';
+          var errors = data.errors;
+          var rawMsg = description || message || (typeof errors === 'string' ? errors : '') || '';
+          var lower = rawMsg.toLowerCase();
+          var userMsg;
+          if (lower.indexOf('sold out') !== -1) {
+            userMsg = 'Item is sold out.';
+          } else if (rawMsg.trim()) {
+            userMsg = rawMsg.trim();
+          } else {
+            userMsg = 'Unable to add to cart. Please try again or choose a different option.';
+          }
+          showToast(userMsg, false);
         })
         .catch(function() {
           if (btn) { btn.disabled = false; btn.textContent = originalText; }
@@ -308,6 +317,16 @@
   }
   .clothing-showcase-btn-add:active {
     transform: translateY(0);
+  }
+  .clothing-showcase-btn-add:disabled,
+  .clothing-showcase-btn-add.clothing-showcase-btn-soldout {
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+  }
+  .clothing-showcase-btn-add:disabled:hover,
+  .clothing-showcase-btn-add.clothing-showcase-btn-soldout:hover {
+    transform: none;
   }
   .clothing-showcase-btn--loading {
     opacity: 0.85;
