@@ -64,9 +64,7 @@
                 <button type="submit" name="checkout" class="main-cart-checkout-btn">
                   {{ 'sections.cart.checkout' | t }}
                 </button>
-                <a href="{{ routes.all_products_collection_url }}" class="main-cart-continue">
-                  {{ 'sections.cart.continue_shopping' | t }}
-                </a>
+                <a href="{{ routes.all_products_collection_url }}" class="main-cart-continue">{{ 'sections.cart.continue_shopping' | t }}</a>
               </div>
             </div>
           </div>
@@ -81,9 +79,7 @@
         </div>
         <h2 class="main-cart-empty-title">{{ 'sections.cart.empty' | t }}</h2>
         <p class="main-cart-empty-text">Add items from the homepage or any collection to get started.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="main-cart-checkout-btn main-cart-empty-cta">
-          {{ 'sections.cart.continue_shopping' | t }}
-        </a>
+        <a href="{{ routes.all_products_collection_url }}" class="main-cart-checkout-btn main-cart-empty-cta">{{ 'sections.cart.continue_shopping' | t }}</a>
       </div>
     {% endif %}
   </div>
@@ -361,12 +357,17 @@
   }
   .main-cart-summary {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 0.75rem;
-    padding: 1rem 1.25rem;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
     position: sticky;
     top: 5rem;
     box-sizing: border-box;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s ease;
+  }
+  .main-cart-summary:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
   }
   @media (min-width: 375px) {
     .main-cart-summary { padding: 1.25rem 1.5rem; top: 5.5rem; }
@@ -424,7 +425,7 @@
     color: #ffffff !important;
     background: #111111;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -445,7 +446,7 @@
     color: #111111 !important;
     background: #ffffff;
     border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -514,6 +515,14 @@
     margin: 0;
     padding: 0;
   }
+
+  /* Update cart button never shown – cart updates automatically on quantity change */
+  .main-cart-form button[name="update"],
+  .main-cart-form .main-cart-update-btn {
+    display: none !important;
+  }
+  .main-cart-form--updating { opacity: 0.7; pointer-events: none; }
+  .main-cart-form--updating .main-cart-checkout-btn { cursor: wait; }
 </style>
 
 <script>
@@ -521,10 +530,12 @@
     var form = document.getElementById('cart-form');
     if (!form) return;
     var inputs = form.querySelectorAll('input[name="updates[]"]');
+    function submitCart() {
+      form.classList.add('main-cart-form--updating');
+      form.submit();
+    }
     inputs.forEach(function(input) {
-      input.addEventListener('change', function() {
-        form.submit();
-      });
+      input.addEventListener('change', submitCart);
     });
   })();
 </script>
