@@ -1,5 +1,6 @@
 {% comment %}
-  Sponsored picks – Block-based: each product card is a block. Click a card in the theme editor to open its settings in the left sidebar and set the "View product" link (sponsor URL).
+  Sponsored picks – Products from a collection. Add "Product link" blocks to set the sponsor URL per product.
+  Click a product card in the theme editor to open that product's link settings in the left sidebar.
 {% endcomment %}
 
 <section id="{{ section.settings.section_id | default: 'shop' }}" class="sponsored-picks-section py-24 md:py-32 bg-background" data-sponsored-picks>
@@ -15,69 +16,81 @@
       {% endif %}
     </div>
 
-    {% if section.blocks.size > 0 %}
+    {%- assign collection = nil -%}
+    {%- if section.settings.collection != blank -%}
+      {%- assign collection = collections[section.settings.collection] -%}
+    {%- endif -%}
+    {%- if collection == nil and collections['frontpage'] != blank -%}
+      {%- assign collection = collections['frontpage'] -%}
+    {%- endif -%}
+
+    {% if collection != blank and collection.products.size > 0 %}
       <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {% for block in section.blocks %}
-          {%- if block.type != 'sponsored_product' -%}
-            {%- continue -%}
-          {%- endif -%}
-          {%- assign product = block.settings.product -%}
-          {%- assign card_url = product.url | default: '#' -%}
+        {% for product in collection.products limit: section.settings.products_to_show %}
+          {%- assign link_block = nil -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'product_link' and block.settings.product != blank -%}
+              {%- if block.settings.product.id == product.id -%}
+                {%- assign link_block = block -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign card_url = product.url -%}
           {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
-          {%- if block.settings.button_text != blank -%}
-            {%- assign card_button_text = block.settings.button_text -%}
-          {%- endif -%}
           {%- assign card_open_new_tab = false -%}
-          {%- if block.settings.url != blank -%}
-            {%- assign card_url = block.settings.url -%}
-            {%- assign card_open_new_tab = true -%}
+          {%- if link_block != nil -%}
+            {%- if link_block.settings.url != blank -%}
+              {%- assign card_url = link_block.settings.url -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- endif -%}
+            {%- if link_block.settings.button_text != blank -%}
+              {%- assign card_button_text = link_block.settings.button_text -%}
+            {%- endif -%}
           {%- endif -%}
 
-          <a href="{{ card_url }}" class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %} {{ block.shopify_attributes }}>
+          <a href="{{ card_url }}" class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}{% if link_block %} {{ link_block.shopify_attributes }}{% endif %}>
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
-              {% if product != blank and product.featured_image != blank %}
+              {% if product.featured_image != blank %}
                 <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
               {% else %}
-                <span class="sponsored-picks-placeholder w-full h-full flex items-center justify-center bg-muted/30 text-foreground/50 text-sm">
-                  {% if product == blank %}Select product{% else %}{{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}{% endif %}
-                </span>
+                {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
               {% endif %}
               <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
             </span>
             <div class="sponsored-picks-card-content">
-              {% if product != blank %}
-                {% if product.vendor != blank %}
-                  <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
-                {% endif %}
-                <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
-                {% if product.description != blank %}
-                  <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
-                {% endif %}
-              {% else %}
-                <p class="sponsored-picks-tagline">Sponsored product</p>
-                <h3 class="sponsored-picks-title">Click to choose a product</h3>
-                <p class="sponsored-picks-desc-inner">Then set the sponsor link in the sidebar.</p>
+              {% if product.vendor != blank %}
+                <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+              {% endif %}
+              <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+              {% if product.description != blank %}
+                <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
               {% endif %}
               <span class="sponsored-picks-cta">{{ card_button_text }}</span>
             </div>
           </a>
         {% endfor %}
       </div>
-      {% if section.settings.show_view_all and section.settings.view_all_collection != blank %}
-        {%- assign view_all_collection = collections[section.settings.view_all_collection] -%}
-        {% if view_all_collection.url != blank %}
-          <div class="text-center mt-10">
-            <a href="{{ view_all_collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
-              {{ section.settings.view_all_text | default: 'View all' }}
-            </a>
-          </div>
-        {% endif %}
+      {% if section.settings.show_view_all and collection.url != blank %}
+        <div class="text-center mt-10">
+          <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
+            {{ section.settings.view_all_text | default: 'View all' }}
+          </a>
+        </div>
       {% endif %}
     {% else %}
       <div class="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border text-foreground/60">
-        <p class="mb-4">No sponsored products yet.</p>
-        <p class="text-sm">Click <strong>Add block</strong> → <strong>Sponsored product</strong> in the left sidebar, then choose a product and set the sponsor link for the "View product" button.</p>
+        <p class="mb-2">No products in this collection.</p>
+        <p class="text-sm">Select a collection in the section settings above, or add products to the selected collection in Shopify Admin.</p>
+      </div>
+    {% endif %}
+
+    {%- comment -%} In editor: show hint to add blocks if there are products but no link blocks yet {%- endcomment -%}
+    {% if collection != blank and collection.products.size > 0 and section.blocks.size == 0 %}
+      <div class="sponsored-picks-add-blocks-hint text-center mt-8 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
+        <p class="font-medium mb-1">Set sponsor links for products</p>
+        <p>Scroll down in the <strong>left sidebar</strong> and click <strong>Add block</strong> → <strong>Product link</strong>. For each block, select a product and enter the sponsor URL. Then click that product’s card here to edit its link.</p>
       </div>
     {% endif %}
   </div>
@@ -168,34 +181,49 @@
     opacity: 0.95;
     transform: translateY(-1px);
   }
-  .sponsored-picks-placeholder {
-    min-height: 200px;
-  }
   .product-card-overlay-inner .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  @media screen and (max-width: 749px) {
+    .sponsored-picks-add-blocks-hint { font-size: 0.8125rem; }
+  }
 </style>
 
 {% schema %}
 {
-  "name": "Collection grid (shop)",
+  "name": "Sponsored picks",
   "settings": [
     {
       "type": "header",
-      "content": "Sponsored product links"
+      "content": "Product links (sponsor URL per product)"
     },
     {
       "type": "paragraph",
-      "content": "Each card is a block. Click a product card in the preview to open its settings in the left sidebar. There you can choose the product and set the sponsor link for the \"View product\" button so customers are redirected to the sponsor's page."
+      "content": "Products come from the collection below. To set a sponsor link for the \"View product\" button: in the left sidebar scroll to this section, click **Add block**, then choose **Product link**. In the block, select the product and enter the Sponsor product link. You can also click a product card in the preview to open its link settings."
     },
     {
       "type": "text",
       "id": "section_id",
       "label": "Section ID (for anchor links)",
       "default": "shop"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Products from this collection appear in the grid. Add a \"Product link\" block for each product you want to link to a sponsor page."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
     },
     {
       "type": "text",
@@ -208,26 +236,20 @@
       "id": "description",
       "label": "Description",
       "default": "Handpicked favorites. Click through for the best deals.",
-      "info": "Clear to hide the description."
+      "info": "Clear to hide."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Default button text",
       "default": "View product",
-      "info": "Used when a block's button text is empty."
+      "info": "Used when a product has no block or the block's button text is empty."
     },
     {
       "type": "checkbox",
       "id": "show_view_all",
       "label": "Show View all link",
-      "default": false
-    },
-    {
-      "type": "collection",
-      "id": "view_all_collection",
-      "label": "View all link collection",
-      "info": "Optional. Where the View all button goes."
+      "default": true
     },
     {
       "type": "text",
@@ -238,19 +260,19 @@
   ],
   "blocks": [
     {
-      "type": "sponsored_product",
-      "name": "Sponsored product",
+      "type": "product_link",
+      "name": "Product link",
       "limit": 24,
       "settings": [
         {
           "type": "header",
-          "content": "Product (click the card to edit)"
+          "content": "Which product"
         },
         {
           "type": "product",
           "id": "product",
           "label": "Product",
-          "info": "The product shown on this card."
+          "info": "Select the product. This block sets the \"View product\" link for that product's card. Click the product card in the preview to open this block."
         },
         {
           "type": "header",
@@ -260,27 +282,25 @@
           "type": "url",
           "id": "url",
           "label": "Sponsor product link",
-          "info": "Where the \"View product\" button sends customers (e.g. sponsor's or affiliate page). Leave empty to use this product's store page."
+          "info": "URL where the \"View product\" button sends customers (e.g. sponsor's or affiliate page). Leave empty to use the product's store page."
         },
         {
           "type": "text",
           "id": "button_text",
           "label": "Button text (optional)",
           "placeholder": "View product",
-          "info": "Override the button label (e.g. \"View on partner site\", \"Shop now\")."
+          "info": "Override the button label for this product."
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Collection grid (shop)",
-      "blocks": [
-        { "type": "sponsored_product" },
-        { "type": "sponsored_product" },
-        { "type": "sponsored_product" },
-        { "type": "sponsored_product" }
-      ]
+      "name": "Sponsored picks",
+      "settings": {
+        "heading": "Sponsored picks",
+        "description": "Handpicked favorites. Click through for the best deals."
+      }
     }
   ]
 }
