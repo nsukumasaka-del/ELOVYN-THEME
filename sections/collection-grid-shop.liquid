@@ -27,49 +27,83 @@
 
     {% if collection != blank and collection.products.size > 0 %}
       <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- assign product_index = forloop.index0 -%}
-          {%- assign link_block = product_link_blocks[product_index] -%}
-          {%- assign card_url = product.url -%}
-          {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
-          {%- assign card_open_new_tab = false -%}
-          {%- if link_block != nil -%}
-            {%- if link_block.settings.url != blank -%}
-              {%- assign card_url = link_block.settings.url -%}
+        {%- comment -%} When we have Product link blocks: loop over section.blocks so the theme editor can select each card and open that block in the sidebar. 1st block = 1st product, 2nd = 2nd, etc. {%- endcomment -%}
+        {% if product_link_blocks.size > 0 %}
+          {%- assign product_link_index = 0 -%}
+          {% for block in section.blocks %}
+            {%- if block.type != 'product_link' -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- if product_link_index >= section.settings.products_to_show -%}
+              {%- break -%}
+            {%- endif -%}
+            {%- assign product = collection.products[product_link_index] -%}
+            {%- assign product_link_index = product_link_index | plus: 1 -%}
+            {%- if product == nil -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- assign card_url = product.url -%}
+            {%- assign card_button_text = block.settings.button_text | default: section.settings.button_text | default: 'View product' -%}
+            {%- assign card_open_new_tab = false -%}
+            {%- if block.settings.url != blank -%}
+              {%- assign card_url = block.settings.url -%}
               {%- assign card_open_new_tab = true -%}
             {%- endif -%}
-            {%- if link_block.settings.button_text != blank -%}
-              {%- assign card_button_text = link_block.settings.button_text -%}
-            {%- endif -%}
-          {%- endif -%}
 
-          {%- comment -%} Clicking the card opens this product's block (same position) in the left sidebar. {%- endcomment -%}
-          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}"{% if link_block %} {{ link_block.shopify_attributes }}{% elsif request.design_mode %} {{ section.shopify_attributes }}{% endif %}>
-            <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-            <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
-              {% if product.featured_image != blank %}
-                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
-              {% else %}
-                {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
-              {% endif %}
-              <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
-            </span>
-            <div class="sponsored-picks-card-content">
-              {% if product.vendor != blank %}
-                <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
-              {% endif %}
-              <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
-              {% if product.description != blank %}
-                <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
-              {% endif %}
-              {% if request.design_mode %}
-                <span class="sponsored-picks-cta sponsored-picks-cta-link" aria-hidden="true">{{ card_button_text }}</span>
-              {% else %}
-                <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
-              {% endif %}
+            <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
+              <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+              <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
+                {% if product.featured_image != blank %}
+                  <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
+                {% endif %}
+                <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
+              </span>
+              <div class="sponsored-picks-card-content">
+                {% if product.vendor != blank %}
+                  <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+                {% endif %}
+                <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+                {% if product.description != blank %}
+                  <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
+                {% endif %}
+                {% if request.design_mode %}
+                  <span class="sponsored-picks-cta sponsored-picks-cta-link" aria-hidden="true">{{ card_button_text }}</span>
+                {% else %}
+                  <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
+                {% endif %}
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        {% else %}
+          {%- comment -%} No blocks yet: show collection products so something appears; add blocks to get per-product affiliate links and sidebar click. {%- endcomment -%}
+          {% for product in collection.products limit: section.settings.products_to_show %}
+            {%- assign card_url = product.url -%}
+            {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
+            <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
+              <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+              <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
+                {% if product.featured_image != blank %}
+                  <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
+                {% endif %}
+                <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
+              </span>
+              <div class="sponsored-picks-card-content">
+                {% if product.vendor != blank %}
+                  <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+                {% endif %}
+                <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+                {% if product.description != blank %}
+                  <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
+                {% endif %}
+                <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link">{{ card_button_text }}</a>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
       {% if section.settings.show_view_all and collection.url != blank %}
         <div class="text-center mt-10">
@@ -211,7 +245,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Select a **Collection** below. Products from it appear in the grid. Add one **Product link** block per product (1st block = 1st product). In each block, paste the **Product link** (affiliate URL). Click a product card in the preview to open its block in the sidebar."
+      "content": "Select a **Collection** below. Add one **Product link (affiliate)** block per product (1st block = 1st product). In each block, set **Product link (affiliate URL)**. In the preview, **click a product card** to open that product's block here in the sidebar."
     },
     {
       "type": "text",
@@ -270,14 +304,18 @@
   "blocks": [
     {
       "type": "product_link",
-      "name": "Product link",
+      "name": "Product link (affiliate)",
       "limit": 24,
       "settings": [
+        {
+          "type": "header",
+          "content": "Affiliate link for this product"
+        },
         {
           "type": "url",
           "id": "url",
           "label": "Product link (affiliate URL)",
-          "info": "Block 1 = 1st product, Block 2 = 2nd, etc. Paste the affiliate link for that product."
+          "info": "This block controls the 1st product, the next block the 2nd, and so on. Paste the affiliate or sponsor URL for that product's \"View product\" button."
         },
         {
           "type": "text",
