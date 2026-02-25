@@ -49,10 +49,10 @@
               {%- assign card_url = block.settings.url -%}
               {%- assign card_open_new_tab = true -%}
             {%- endif -%}
-            {%- comment -%} Fallback: Men's Athletic Fit Tee → Amazon link {%- endcomment -%}
+            {%- comment -%} Optional: Men's Athletic Fit Tee – use section setting if set {%- endcomment -%}
             {%- assign title_lower = product.title | downcase -%}
-            {%- if card_open_new_tab == false and title_lower contains 'athletic fit tee' -%}
-              {%- assign card_url = 'https://amzn.to/4aQzyT4' -%}
+            {%- if card_open_new_tab == false and title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
+              {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
               {%- assign card_open_new_tab = true -%}
             {%- endif -%}
 
@@ -89,8 +89,8 @@
             {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
             {%- assign title_lower = product.title | downcase -%}
             {%- assign card_open_new_tab = false -%}
-            {%- if title_lower contains 'athletic fit tee' -%}
-              {%- assign card_url = 'https://amzn.to/4aQzyT4' -%}
+            {%- if title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
+              {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
               {%- assign card_open_new_tab = true -%}
             {%- endif -%}
             <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
@@ -299,6 +299,16 @@
       "label": "Default button text",
       "default": "View product",
       "info": "Used when a block's button text is left empty."
+    },
+    {
+      "type": "header",
+      "content": "Men's Athletic Fit Tee (optional)"
+    },
+    {
+      "type": "url",
+      "id": "athletic_fit_tee_amazon_url",
+      "label": "Amazon link for Athletic Fit Tee",
+      "info": "Add a URL to make the \"View product\" button for \"Men's Athletic Fit Tee ULTRA-SOFT PLAIN TEE\" go to this link (e.g. Amazon). Leave blank to use the normal product page."
     },
     {
       "type": "checkbox",
