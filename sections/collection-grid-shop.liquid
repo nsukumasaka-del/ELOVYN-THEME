@@ -51,6 +51,12 @@
               {%- assign card_button_text = link_block.settings.button_text -%}
             {%- endif -%}
           {%- endif -%}
+          {%- comment -%} Fallback: Men's Athletic Fit Tee ULTRA-SOFT PLAIN TEE → Amazon link https://amzn.to/4aQzyT4 {%- endcomment -%}
+          {%- assign title_lower = product.title | downcase -%}
+          {%- if card_url == product.url and title_lower contains 'athletic fit tee' -%}
+            {%- assign card_url = 'https://amzn.to/4aQzyT4' -%}
+            {%- assign card_open_new_tab = true -%}
+          {%- endif -%}
 
           {%- comment -%} Card is never a product link; only the "View on Amazon" button goes to sponsor URL. Clicking the card in the editor opens link settings. {%- endcomment -%}
           <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode and link_block %} cursor-pointer{% endif %}"{% if link_block %} {{ link_block.shopify_attributes }}{% endif %}>
