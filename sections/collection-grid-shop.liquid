@@ -49,6 +49,12 @@
               {%- assign card_url = block.settings.url -%}
               {%- assign card_open_new_tab = true -%}
             {%- endif -%}
+            {%- comment -%} Fallback: Men's Athletic Fit Tee → Amazon link {%- endcomment -%}
+            {%- assign title_lower = product.title | downcase -%}
+            {%- if card_open_new_tab == false and title_lower contains 'athletic fit tee' -%}
+              {%- assign card_url = 'https://amzn.to/4aQzyT4' -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- endif -%}
 
             <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
               <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
@@ -81,6 +87,12 @@
           {% for product in collection.products limit: section.settings.products_to_show %}
             {%- assign card_url = product.url -%}
             {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
+            {%- assign title_lower = product.title | downcase -%}
+            {%- assign card_open_new_tab = false -%}
+            {%- if title_lower contains 'athletic fit tee' -%}
+              {%- assign card_url = 'https://amzn.to/4aQzyT4' -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- endif -%}
             <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
               <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
               <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
@@ -99,7 +111,7 @@
                 {% if product.description != blank %}
                   <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
                 {% endif %}
-                <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link">{{ card_button_text }}</a>
+                <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
               </div>
             </div>
           {% endfor %}
@@ -245,7 +257,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Select a **Collection** below. Add one **Product link (affiliate)** block per product (1st block = 1st product). In each block, set **Product link (affiliate URL)**. In the preview, **click a product card** to open that product's block here in the sidebar."
+      "content": "Select a **Collection** below. Add one **Product link (affiliate)** block per product (1st block = 1st product). In each block, set **Amazon or affiliate link** so the \"View product\" button uses your link. Click a product card in the preview to open its block here."
     },
     {
       "type": "text",
@@ -314,15 +326,15 @@
         {
           "type": "url",
           "id": "url",
-          "label": "Product link (affiliate URL)",
-          "info": "This block controls the 1st product, the next block the 2nd, and so on. Paste the affiliate or sponsor URL for that product's \"View product\" button."
+          "label": "Amazon or affiliate link",
+          "info": "Paste your Amazon (e.g. amzn.to/xxxxx) or other affiliate URL. The \"View product\" button will use this link. Block 1 = 1st product, Block 2 = 2nd, etc."
         },
         {
           "type": "text",
           "id": "button_text",
           "label": "Button text (optional)",
           "placeholder": "View product",
-          "info": "Override the button label for this product."
+          "info": "Label for the button (e.g. \"View product\" or \"View on Amazon\")."
         }
       ]
     }
