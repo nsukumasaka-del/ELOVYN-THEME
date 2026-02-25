@@ -26,27 +26,10 @@
 
     {% if collection != blank and collection.products.size > 0 %}
       <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {%- assign product_link_blocks = section.blocks | where: 'type', 'product_link' -%}
         {% for product in collection.products limit: section.settings.products_to_show %}
           {%- assign product_index = forloop.index0 -%}
-          {%- assign link_block = nil -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'product_link' and block.settings.product != blank and block.settings.product.id == product.id -%}
-              {%- assign link_block = block -%}
-              {%- break -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if link_block == nil -%}
-            {%- assign link_count = 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'product_link' -%}
-                {%- if link_count == product_index -%}
-                  {%- assign link_block = block -%}
-                  {%- break -%}
-                {%- endif -%}
-                {%- assign link_count = link_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
+          {%- assign link_block = product_link_blocks[product_index] -%}
           {%- assign card_url = product.url -%}
           {%- assign card_button_text = section.settings.button_text | default: 'View on Amazon' -%}
           {%- assign card_open_new_tab = false -%}
@@ -108,7 +91,7 @@
     {% if collection != blank and collection.products.size > 0 %}
       <div class="sponsored-picks-add-blocks-hint text-center mt-8 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
         <p class="font-medium mb-1">Set the "View on Amazon" link</p>
-        <p><strong>Add a link for each product:</strong> In the left sidebar, click <strong>Add block</strong> → <strong>Sponsored product link</strong>. In each block, select the <strong>Product</strong> and paste the <strong>Product link</strong> (Amazon or sponsor URL). You can also click a product card above to open its block.</p>
+        <p>Each block has its own <strong>Product link</strong> setting. Block 1 = 1st product, Block 2 = 2nd, etc. Add blocks and paste the URL in each block. Click a product card above to open that product's block.</p>
 ’s      </div>
     {% endif %}
   </div>
@@ -229,7 +212,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Products come from the collection below. To add a link for a sponsored product: click **Add block** → **Sponsored product link**. In the block, select the **Product** and paste the **Product link** (e.g. Amazon or sponsor URL). You can add one block per sponsored item and choose which product each link applies to. Clicking a product card in the preview also opens its block (if it has one)."
+      "content": "Products come from the collection below. Each block has its own **Product link** setting: Block 1 = 1st product, Block 2 = 2nd product, and so on. Add one block per product and paste the sponsor or Amazon URL in that block's **Product link**. Click a product card in the preview to open that product's block in the sidebar."
     },
     {
       "type": "text",
@@ -241,7 +224,7 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Products from this collection appear in the grid. Add \"Sponsored product link\" blocks to set the link for each product's button manually."
+      "info": "Products from this collection appear in the grid. Each block's \"Product link\" applies to the product in the same position (1st block = 1st product)."
     },
     {
       "type": "range",
@@ -288,28 +271,14 @@
   "blocks": [
     {
       "type": "product_link",
-      "name": "Sponsored product link",
+      "name": "Product link",
       "limit": 24,
       "settings": [
         {
-          "type": "header",
-          "content": "Which product"
-        },
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product",
-          "info": "Select the sponsored product. This block's link will be used for its \"View on Amazon\" button."
-        },
-        {
-          "type": "header",
-          "content": "Link for the button"
-        },
-        {
           "type": "url",
           "id": "url",
-          "label": "Product link (sponsor / Amazon URL)",
-          "info": "Paste the full URL (e.g. Amazon or sponsor page). Customers will go here when they click \"View on Amazon\" for this product."
+          "label": "Product link",
+          "info": "Sponsor or Amazon URL for this product. Block 1 = 1st product, Block 2 = 2nd, etc."
         },
         {
           "type": "text",
