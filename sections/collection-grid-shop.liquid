@@ -1,16 +1,16 @@
-  {% comment %}
-  Collection grid (shop) – Original overlay style: image card with overlay on hover (title, description, View product).
-  No price/Add to cart below; presentation "the way it was before."
+{% comment %}
+  Collection grid (shop) / Sponsored picks – Ad-optimized product cards with optional per-product links.
+  Add "Product link" blocks to set a custom URL for each product (e.g. affiliate links). Order matches product order.
 {% endcomment %}
 
-<section id="{{ section.settings.section_id | default: 'shop' }}" class="py-24 md:py-32 bg-background">
+<section id="{{ section.settings.section_id | default: 'shop' }}" class="sponsored-picks-section py-24 md:py-32 bg-background" data-sponsored-picks>
   <div class="container mx-auto px-6">
     <div class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
-        {{ section.settings.heading | default: "Shop the collection" }}
+      <h2 class="sponsored-picks-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
+        {{ section.settings.heading | default: "Sponsored picks" }}
       </h2>
       {% if section.settings.description != blank %}
-        <p class="text-lg text-foreground/60 max-w-xl mx-auto">
+        <p class="sponsored-picks-desc text-lg text-foreground/60 max-w-xl mx-auto">
           {{ section.settings.description }}
         </p>
       {% endif %}
@@ -25,34 +25,52 @@
     {%- endif -%}
 
     {% if collection != blank and collection.products.size > 0 %}
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
+      <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {% for product in collection.products limit: section.settings.products_to_show %}
-          <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40">
-            <a href="{{ product.url }}" class="block aspect-[4/5] relative overflow-hidden">
+          {%- assign product_index = forloop.index0 -%}
+          {%- assign link_block = nil -%}
+          {%- assign link_count = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'product_link' -%}
+              {%- if link_count == product_index -%}
+                {%- assign link_block = block -%}
+                {%- break -%}
+              {%- endif -%}
+              {%- assign link_count = link_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign card_url = product.url -%}
+          {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
+          {%- assign card_open_new_tab = false -%}
+          {%- if link_block != nil and link_block.settings.url != blank -%}
+            {%- assign card_url = link_block.settings.url -%}
+            {%- assign card_open_new_tab = true -%}
+            {%- if link_block.settings.button_text != blank -%}
+              {%- assign card_button_text = link_block.settings.button_text -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          <a href="{{ card_url }}" class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}{% if link_block %} {{ link_block.shopify_attributes }}{% endif %}>
+            <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+            <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
               {% if product.featured_image != blank %}
-                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
               {% else %}
-                {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
               {% endif %}
-            </a>
-            <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-              <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="relative z-10">
-                {% if product.vendor != blank %}
-                  <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.vendor }}</p>
-                {% endif %}
-                <h2 class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="{{ product.title | escape }}">
-                  {{ product.title }}
-                </h2>
-                {% if product.description != blank %}
-                  <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{{ product.description | strip_html | truncate: 100 }}</p>
-                {% endif %}
-                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <a href="{{ product.url }}" class="btn-hero text-xs">{{ section.settings.button_text | default: 'View product' }}</a>
-                </div>
-              </div>
+              <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
+            </span>
+            <div class="sponsored-picks-card-content">
+              {% if product.vendor != blank %}
+                <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+              {% endif %}
+              <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+              {% if product.description != blank %}
+                <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
+              {% endif %}
+              <span class="sponsored-picks-cta">{{ card_button_text }}</span>
             </div>
-          </div>
+          </a>
         {% endfor %}
       </div>
       {% if section.settings.show_view_all and collection.url != blank %}
@@ -69,6 +87,90 @@
 </section>
 
 <style>
+  .sponsored-picks-section .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sponsored-picks-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    border-radius: 0.25rem;
+  }
+  .sponsored-picks-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .sponsored-picks-card-link {
+    flex-shrink: 0;
+  }
+  .sponsored-picks-card-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+    pointer-events: none;
+  }
+  .sponsored-picks-card-content {
+    padding: 1rem 1rem 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .sponsored-picks-tagline {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--accent));
+  }
+  .sponsored-picks-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: hsl(var(--foreground));
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sponsored-picks-desc-inner {
+    font-size: 0.8125rem;
+    color: hsl(var(--foreground) / 0.6);
+    margin: 0;
+    line-height: 1.4;
+  }
+  .sponsored-picks-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    background: hsl(var(--accent));
+    border-radius: 0.5rem;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .sponsored-picks-card:hover .sponsored-picks-cta {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
   .product-card-overlay-inner .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -82,17 +184,25 @@
   "name": "Collection grid (shop)",
   "settings": [
     {
+      "type": "header",
+      "content": "Sponsored product links"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add 'Product link' blocks to set a custom URL for each sponsored product (e.g. affiliate or external links). The first block applies to the first product, the second to the second product, and so on. Leave a block's URL empty to use the product's normal store link."
+    },
+    {
       "type": "text",
       "id": "section_id",
       "label": "Section ID (for anchor links)",
       "default": "shop",
-      "info": "Optional. e.g. graphic-tees. Leave as 'shop' if not using anchor links."
+      "info": "Optional. e.g. sponsored-picks. Used for anchor links."
     },
     {
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Products from this collection are shown in the overlay card style."
+      "info": "Products from this collection are shown. Often used for Sponsored picks."
     },
     {
       "type": "range",
@@ -107,20 +217,21 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Shop the collection"
+      "default": "Sponsored picks"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Optional short description for this collection.",
+      "default": "Handpicked favorites. Click through for the best deals.",
       "info": "Clear in the editor to hide the description."
     },
     {
       "type": "text",
       "id": "button_text",
-      "label": "Button text",
-      "default": "View product"
+      "label": "Default button text",
+      "default": "View product",
+      "info": "Used when a product has no custom link block or the block's button text is empty."
     },
     {
       "type": "checkbox",
@@ -135,9 +246,41 @@
       "default": "View all"
     }
   ],
+  "blocks": [
+    {
+      "type": "product_link",
+      "name": "Product link",
+      "limit": 24,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Link for this product"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Product link URL",
+          "info": "Set the link for this product (affiliate, external, or store page). Leave empty to use the product's store page."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text (optional)",
+          "placeholder": "View product",
+          "info": "Override the button label for this product (e.g. 'View on Amazon', 'Shop now')."
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Collection grid (shop)"
+      "name": "Collection grid (shop)",
+      "blocks": [
+        { "type": "product_link" },
+        { "type": "product_link" },
+        { "type": "product_link" },
+        { "type": "product_link" }
+      ]
     }
   ]
 }
