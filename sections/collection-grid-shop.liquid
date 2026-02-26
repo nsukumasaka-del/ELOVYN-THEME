@@ -88,7 +88,7 @@
         <p class="text-sm">Select a collection in the section settings above, or add products to the selected collection in Shopify Admin.</p>
       </div>
     {% endif %}
-    {% if (product_link_blocks.size > 0 or (collection != blank and collection.products.size > 0)) and section.settings.show_view_all and collection != blank and collection.url != blank %}
+    {% if section.settings.show_view_all and collection != blank and collection.url != blank %}
       <div class="text-center mt-10">
         <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
           {{ section.settings.view_all_text | default: 'View all' }}
