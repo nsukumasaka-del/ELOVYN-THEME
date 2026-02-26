@@ -78,10 +78,46 @@
         {% endfor %}
       </div>
     {% elsif collection != blank and collection.products.size > 0 %}
-      <div class="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border text-foreground/60">
-        <p class="mb-2">No sponsored product blocks yet.</p>
-        <p class="text-sm">Click <strong>Add block</strong> in the left sidebar, then <strong>Product link (affiliate)</strong>. In each block, select the <strong>Product</strong> and add the <strong>Amazon or affiliate link</strong>. Click a product card to open its link settings.</p>
+      {%- comment -%} No blocks yet: show collection products so your products are visible. Add blocks to set each product's Amazon link. {%- endcomment -%}
+      <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {% for product in collection.products limit: section.settings.products_to_show %}
+          {%- assign card_url = '#' -%}
+          {%- assign card_button_text = section.settings.button_text | default: 'View on Amazon' -%}
+          {%- assign card_open_new_tab = false -%}
+          {%- assign title_lower = product.title | downcase -%}
+          {%- if title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
+            {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
+            {%- assign card_open_new_tab = true -%}
+          {%- endif -%}
+          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block">
+            <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+            <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
+              {% if product.featured_image != blank %}
+                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
+              {% endif %}
+              <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
+            </span>
+            <div class="sponsored-picks-card-content">
+              {% if product.vendor != blank %}
+                <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+              {% endif %}
+              <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
+              {% if product.description != blank %}
+                <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
+              {% endif %}
+              <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
+            </div>
+          </div>
+        {% endfor %}
       </div>
+      {% if request.design_mode %}
+        <div class="text-center mt-6 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
+          <p class="font-medium mb-1">Add links for each product</p>
+          <p>Click <strong>Add block</strong> in the left sidebar, then <strong>Product link (affiliate)</strong>. In each block, select the <strong>Product</strong> and add the <strong>Amazon or affiliate link</strong>. Your products will stay visible and you can set each button link.</p>
+        </div>
+      {% endif %}
     {% elsif collection == blank or collection.products.size == 0 %}
       <div class="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border text-foreground/60">
         <p class="mb-2">No products in this collection.</p>
