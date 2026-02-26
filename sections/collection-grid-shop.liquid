@@ -42,18 +42,19 @@
             {%- if product == nil -%}
               {%- continue -%}
             {%- endif -%}
-            {%- assign card_url = product.url -%}
+            {%- comment -%} Sponsored section: button goes to sponsor only, never to store product page {%- endcomment -%}
+            {%- assign card_url = '#' -%}
             {%- assign card_button_text = block.settings.button_text | default: section.settings.button_text | default: 'View product' -%}
             {%- assign card_open_new_tab = false -%}
             {%- if block.settings.url != blank -%}
               {%- assign card_url = block.settings.url -%}
               {%- assign card_open_new_tab = true -%}
-            {%- endif -%}
-            {%- comment -%} Optional: Men's Athletic Fit Tee – use section setting if set {%- endcomment -%}
-            {%- assign title_lower = product.title | downcase -%}
-            {%- if card_open_new_tab == false and title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
-              {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
-              {%- assign card_open_new_tab = true -%}
+            {%- else -%}
+              {%- assign title_lower = product.title | downcase -%}
+              {%- if title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
+                {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
+                {%- assign card_open_new_tab = true -%}
+              {%- endif -%}
             {%- endif -%}
 
             <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
@@ -85,7 +86,8 @@
         {% else %}
           {%- comment -%} No blocks yet: show collection products so something appears; add blocks to get per-product affiliate links and sidebar click. {%- endcomment -%}
           {% for product in collection.products limit: section.settings.products_to_show %}
-            {%- assign card_url = product.url -%}
+            {%- comment -%} Sponsored section: button goes to sponsor only, never to store product page {%- endcomment -%}
+            {%- assign card_url = '#' -%}
             {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
             {%- assign title_lower = product.title | downcase -%}
             {%- assign card_open_new_tab = false -%}
