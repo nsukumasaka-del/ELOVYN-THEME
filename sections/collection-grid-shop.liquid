@@ -55,9 +55,6 @@
 
           {%- comment -%} Block attributes on wrapper; in editor show which sidebar block to click to edit this card's link. {%- endcomment -%}
           <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
-            {% if request.design_mode %}
-              <span class="sponsored-picks-edit-hint" aria-hidden="true">Edit link → sidebar: <strong>Product link (affiliate) {{ forloop.index }}</strong></span>
-            {% endif %}
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
               {% if product != blank and product.featured_image != blank %}
@@ -83,6 +80,7 @@
                 <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
               {% endif %}
             </div>
+            <span class="sponsored-picks-edit-hint" aria-hidden="true">Edit link → sidebar: <strong>Product link (affiliate) {{ forloop.index }}</strong></span>
           </div>
         {% endfor %}
       </div>
@@ -187,18 +185,24 @@
     color: #fff;
     border-radius: 0.25rem;
   }
+  /* Edit hint: only visible in theme editor; always in DOM so section data-theme-editor can show it */
   .sponsored-picks-edit-hint {
-    display: block;
+    display: none;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 2;
+    z-index: 10;
     padding: 0.5rem 0.75rem;
     font-size: 0.75rem;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.9);
     color: #fff;
     border-radius: 0 0 1rem 1rem;
+  }
+  .sponsored-picks-section[data-theme-editor] .sponsored-picks-edit-hint {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   .sponsored-picks-edit-hint strong {
     font-weight: 700;
