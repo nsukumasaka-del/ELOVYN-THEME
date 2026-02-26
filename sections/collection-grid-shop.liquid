@@ -24,41 +24,33 @@
     {%- endif -%}
     {%- assign product_link_blocks = section.blocks | where: 'type', 'product_link' -%}
 
-    {% if collection != blank and collection.products.size > 0 %}
+    {% if product_link_blocks.size > 0 %}
       <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {%- comment -%} Each product card finds its block by product: the block that has this product selected. So you can edit each product's link individually. {%- endcomment -%}
-        {% for product in collection.products limit: section.settings.products_to_show %}
-          {%- assign link_block = nil -%}
-          {%- for block in product_link_blocks -%}
-            {%- if block.settings.product != blank and block.settings.product.id == product.id -%}
-              {%- assign link_block = block -%}
-              {%- break -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if link_block == nil -%}
-            {%- assign link_block = product_link_blocks[forloop.index0] -%}
+        {%- comment -%} Loop over blocks so clicking a card opens that block's settings in the sidebar. Each card = one block; block has Product picker + link. {%- endcomment -%}
+        {% for block in section.blocks %}
+          {%- if block.type != 'product_link' -%}
+            {%- continue -%}
           {%- endif -%}
-          {%- comment -%} Sponsored section: button goes to sponsor only, never to store product page {%- endcomment -%}
+          {%- assign product = block.settings.product -%}
           {%- assign card_url = '#' -%}
-          {%- assign card_button_text = section.settings.button_text | default: 'View on Amazon' -%}
+          {%- assign card_button_text = block.settings.button_text | default: section.settings.button_text | default: 'View on Amazon' -%}
           {%- assign card_open_new_tab = false -%}
-          {%- if link_block != nil -%}
-            {%- if link_block.settings.url != blank -%}
-              {%- assign card_url = link_block.settings.url -%}
-              {%- assign card_open_new_tab = true -%}
-            {%- endif -%}
-            {%- assign card_button_text = link_block.settings.button_text | default: section.settings.button_text | default: 'View on Amazon' -%}
-          {%- endif -%}
-          {%- assign title_lower = product.title | downcase -%}
-          {%- if card_url == '#' and title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
-            {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
+          {%- if block.settings.url != blank -%}
+            {%- assign card_url = block.settings.url -%}
             {%- assign card_open_new_tab = true -%}
           {%- endif -%}
+          {%- if product != blank -%}
+            {%- assign title_lower = product.title | downcase -%}
+            {%- if card_url == '#' and title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
+              {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- endif -%}
+          {%- endif -%}
 
-          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}"{% if link_block != nil %} {{ link_block.shopify_attributes }}{% elsif request.design_mode %} {{ section.shopify_attributes }}{% endif %}>
+          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
-              {% if product.featured_image != blank %}
+              {% if product != blank and product.featured_image != blank %}
                 <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
               {% else %}
                 {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
@@ -66,11 +58,13 @@
               <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
             </span>
             <div class="sponsored-picks-card-content">
-              {% if product.vendor != blank %}
+              {% if product != blank and product.vendor != blank %}
                 <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
               {% endif %}
-              <h3 class="sponsored-picks-title" title="{{ product.title | escape }}">{{ product.title }}</h3>
-              {% if product.description != blank %}
+              <h3 class="sponsored-picks-title" title="{{ product.title | default: 'Product' | escape }}">
+                {{ product.title | default: 'Select a product' }}
+              </h3>
+              {% if product != blank and product.description != blank %}
                 <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
               {% endif %}
               {% if request.design_mode %}
@@ -82,25 +76,30 @@
           </div>
         {% endfor %}
       </div>
-      {% if section.settings.show_view_all and collection.url != blank %}
-        <div class="text-center mt-10">
-          <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
-            {{ section.settings.view_all_text | default: 'View all' }}
-          </a>
-        </div>
-      {% endif %}
-    {% else %}
+    {% elsif collection != blank and collection.products.size > 0 %}
+      <div class="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border text-foreground/60">
+        <p class="mb-2">No sponsored product blocks yet.</p>
+        <p class="text-sm">Click <strong>Add block</strong> in the left sidebar, then <strong>Product link (affiliate)</strong>. In each block, select the <strong>Product</strong> and add the <strong>Amazon or affiliate link</strong>. Click a product card to open its link settings.</p>
+      </div>
+    {% elsif collection == blank or collection.products.size == 0 %}
       <div class="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border text-foreground/60">
         <p class="mb-2">No products in this collection.</p>
         <p class="text-sm">Select a collection in the section settings above, or add products to the selected collection in Shopify Admin.</p>
       </div>
     {% endif %}
+    {% if (product_link_blocks.size > 0 or (collection != blank and collection.products.size > 0)) and section.settings.show_view_all and collection != blank and collection.url != blank %}
+      <div class="text-center mt-10">
+        <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-foreground font-semibold hover:bg-card transition-colors">
+          {{ section.settings.view_all_text | default: 'View all' }}
+        </a>
+      </div>
+    {% endif %}
 
     {%- comment -%} In editor: show hint to add blocks if there are products but no link blocks yet {%- endcomment -%}
-    {% if request.design_mode and collection != blank and collection.products.size > 0 %}
+    {% if request.design_mode and product_link_blocks.size > 0 %}
       <div class="sponsored-picks-add-blocks-hint text-center mt-8 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
-        <p class="font-medium mb-1">Add a link for each product</p>
-        <p>Click <strong>Add block</strong> → <strong>Product link (affiliate)</strong>. In each block, select the <strong>Product</strong> and paste its <strong>Amazon or affiliate link</strong>. Each product card has its own link. Click a product card above to open its block.</p>
+        <p class="font-medium mb-1">Edit product link</p>
+        <p><strong>Click any product card above</strong> – the product link settings will open in the left sidebar so you can change the Product, Amazon link, and button text.</p>
 ’s      </div>
     {% endif %}
   </div>
@@ -222,7 +221,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Select a **Collection** below. Click **Add block** then **Product link (affiliate)** for each product. In each block, choose the **Product** and set its **Amazon or affiliate link**. Each product card has its own link – edit them individually. Click a product card in the preview to open its block."
+      "content": "Add a **Product link (affiliate)** block for each sponsored product. In each block, select the **Product** and its **Amazon or affiliate link**. **Click any product card** in the preview – the product link settings will open in the left sidebar so you can edit that product's link."
     },
     {
       "type": "text",
