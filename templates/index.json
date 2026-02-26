@@ -123,9 +123,16 @@
         "products_to_show": 8,
         "heading": "Sponsored picks",
         "description": "Handpicked favorites. Click through for the best deals on hoodies, sweatshirts, and graphic tees.",
-        "button_text": "View product",
+        "button_text": "View on Amazon",
         "athletic_fit_tee_amazon_url": "https://amzn.to/4r0vRjF",
-        "show_view_all": true,
+        "coofandy_button_amazon_url": "",
+        "extra_link_1_contains": "https://amzn.to/4rCvo8d",
+        "extra_link_1_url": "",
+        "extra_link_2_contains": "",
+        "extra_link_2_url": "",
+        "extra_link_3_contains": "",
+        "extra_link_3_url": "",
+        "show_view_all": false,
         "view_all_text": "View all"
       }
     }
