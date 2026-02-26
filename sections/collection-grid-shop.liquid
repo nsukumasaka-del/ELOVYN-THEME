@@ -44,7 +44,7 @@
             {%- endif -%}
             {%- comment -%} Sponsored section: button goes to sponsor only, never to store product page {%- endcomment -%}
             {%- assign card_url = '#' -%}
-            {%- assign card_button_text = block.settings.button_text | default: section.settings.button_text | default: 'View product' -%}
+            {%- assign card_button_text = block.settings.button_text | default: section.settings.button_text | default: 'View on Amazon' -%}
             {%- assign card_open_new_tab = false -%}
             {%- if block.settings.url != blank -%}
               {%- assign card_url = block.settings.url -%}
@@ -88,7 +88,7 @@
           {% for product in collection.products limit: section.settings.products_to_show %}
             {%- comment -%} Sponsored section: button goes to sponsor only, never to store product page {%- endcomment -%}
             {%- assign card_url = '#' -%}
-            {%- assign card_button_text = section.settings.button_text | default: 'View product' -%}
+            {%- assign card_button_text = section.settings.button_text | default: 'View on Amazon' -%}
             {%- assign title_lower = product.title | downcase -%}
             {%- assign card_open_new_tab = false -%}
             {%- if title_lower contains 'athletic fit tee' and section.settings.athletic_fit_tee_amazon_url != blank -%}
@@ -259,7 +259,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Select a **Collection** below. Add one **Product link (affiliate)** block per product (1st block = 1st product). In each block, set **Amazon or affiliate link** so the \"View product\" button uses your link. Click a product card in the preview to open its block here."
+      "content": "Select a **Collection** below. Add one **Product link (affiliate)** block per product (1st block = 1st product). In each block, set **Amazon or affiliate link** so the \"View on Amazon\" button uses that product's link. Click a product card in the preview to open its block here."
     },
     {
       "type": "text",
@@ -299,7 +299,7 @@
       "type": "text",
       "id": "button_text",
       "label": "Default button text",
-      "default": "View product",
+      "default": "View on Amazon",
       "info": "Used when a block's button text is left empty."
     },
     {
@@ -310,7 +310,7 @@
       "type": "url",
       "id": "athletic_fit_tee_amazon_url",
       "label": "Amazon link for Athletic Fit Tee",
-      "info": "Add a URL to make the \"View product\" button for \"Men's Athletic Fit Tee ULTRA-SOFT PLAIN TEE\" go to this link (e.g. Amazon). Leave blank to use the normal product page."
+      "info": "Add a URL to make the \"View on Amazon\" button for \"Men's Athletic Fit Tee ULTRA-SOFT PLAIN TEE\" go to this Amazon link. Leave blank and no link will be used."
     },
     {
       "type": "checkbox",
@@ -339,14 +339,14 @@
           "type": "url",
           "id": "url",
           "label": "Amazon or affiliate link",
-          "info": "Paste your Amazon (e.g. amzn.to/xxxxx) or other affiliate URL. The \"View product\" button will use this link. Block 1 = 1st product, Block 2 = 2nd, etc."
+          "info": "Paste this product's Amazon affiliate URL (e.g. amzn.to/xxxxx). The \"View on Amazon\" button will redirect customers here. Block 1 = 1st product, Block 2 = 2nd, etc."
         },
         {
           "type": "text",
           "id": "button_text",
           "label": "Button text (optional)",
-          "placeholder": "View product",
-          "info": "Label for the button (e.g. \"View product\" or \"View on Amazon\")."
+          "placeholder": "View on Amazon",
+          "info": "Override the button label for this product (default is \"View on Amazon\")."
         }
       ]
     }
