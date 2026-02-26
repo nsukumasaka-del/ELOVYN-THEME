@@ -48,6 +48,9 @@
                 {%- assign card_url = 'https://amzn.to/4r0vRjF' -%}
               {%- endif -%}
               {%- assign card_open_new_tab = true -%}
+            {%- elsif card_url == '#' and title_lower contains 'coofandy' and title_lower contains 'button' -%}
+              {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
+              {%- assign card_open_new_tab = true -%}
             {%- endif -%}
           {%- endif -%}
 
@@ -95,6 +98,9 @@
             {%- else -%}
               {%- assign card_url = 'https://amzn.to/4r0vRjF' -%}
             {%- endif -%}
+            {%- assign card_open_new_tab = true -%}
+          {%- elsif title_lower contains 'coofandy' and title_lower contains 'button' -%}
+            {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
             {%- assign card_open_new_tab = true -%}
           {%- endif -%}
           <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block">
