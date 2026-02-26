@@ -71,8 +71,8 @@
             {%- endif -%}
           {%- endif -%}
 
-          {%- comment -%} Block attributes on wrapper; in editor show which sidebar block to click to edit this card's link. {%- endcomment -%}
-          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
+          {%- comment -%} Card wrapper; in editor a transparent overlay with block attributes receives clicks so clicking the product opens that block's settings in the sidebar. {%- endcomment -%}
+          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block">
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
               {% if product != blank and product.featured_image != blank %}
@@ -99,6 +99,9 @@
               {% endif %}
             </div>
             <span class="sponsored-picks-edit-hint" aria-hidden="true">Edit link → sidebar: <strong>Product link (affiliate) {{ forloop.index }}</strong></span>
+            {% if request.design_mode %}
+              <span class="sponsored-picks-block-overlay" {{ block.shopify_attributes }} aria-hidden="true" title="Click to edit this product's link in the sidebar"></span>
+            {% endif %}
           </div>
         {% endfor %}
       </div>
@@ -186,20 +189,29 @@
     {% if request.design_mode and product_link_blocks.size > 0 %}
       <div class="sponsored-picks-add-blocks-hint text-center mt-8 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
         <p class="font-medium mb-1">Edit a product's link</p>
-        <p><strong>In the left sidebar</strong>, under "Sponsored picks", click a block (e.g. <strong>Product link (affiliate) 1</strong>). That block's settings will open so you can set the Product, Amazon link, and button text for that card.</p>
-        <p class="mt-2 text-xs">Tip: If your theme supports it, turn on <strong>Preview inspector</strong> (inspect/select tool in the editor toolbar), then click a product card to open its block.</p>
-’s      </div>
+        <p><strong>Click a product card</strong> above to open that product's block in the sidebar and edit its Product, Amazon link, and button text. You can also click a block name in the left sidebar.</p>
+’      </div>
     {% endif %}
   </div>
 </section>
 
 <style>
-  /* In theme editor, ensure clicks hit the card div (which has block attributes) so the editor can open the block */
+  /* In theme editor: overlay with block attributes receives clicks so clicking the product opens that block's settings in the sidebar */
+  .sponsored-picks-section[data-theme-editor] .sponsored-picks-block-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    cursor: pointer;
+    pointer-events: auto;
+  }
   .sponsored-picks-section[data-theme-editor] .sponsored-picks-card {
     pointer-events: auto;
   }
   .sponsored-picks-section[data-theme-editor] .sponsored-picks-card * {
     pointer-events: none;
+  }
+  .sponsored-picks-section[data-theme-editor] .sponsored-picks-card .sponsored-picks-block-overlay {
+    pointer-events: auto;
   }
   .sponsored-picks-section .line-clamp-2 {
     display: -webkit-box;
