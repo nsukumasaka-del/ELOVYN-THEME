@@ -26,7 +26,6 @@
 
     {% if product_link_blocks.size > 0 %}
       <div class="sponsored-picks-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {%- comment -%} Loop over blocks so clicking a card opens that block's settings in the sidebar. Each card = one block; block has Product picker + link. {%- endcomment -%}
         {% for block in section.blocks %}
           {%- if block.type != 'product_link' -%}
             {%- continue -%}
@@ -54,8 +53,11 @@
             {%- endif -%}
           {%- endif -%}
 
-          {%- comment -%} Block attributes on wrapper so theme editor can select this block when card is clicked. Use both Liquid output and explicit attribute for compatibility. {%- endcomment -%}
+          {%- comment -%} Block attributes on wrapper; in editor show which sidebar block to click to edit this card's link. {%- endcomment -%}
           <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
+            {% if request.design_mode %}
+              <span class="sponsored-picks-edit-hint" aria-hidden="true">Edit link → sidebar: <strong>Product link (affiliate) {{ forloop.index }}</strong></span>
+            {% endif %}
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
             <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
               {% if product != blank and product.featured_image != blank %}
@@ -184,6 +186,22 @@
     background: rgba(0,0,0,0.75);
     color: #fff;
     border-radius: 0.25rem;
+  }
+  .sponsored-picks-edit-hint {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    border-radius: 0 0 1rem 1rem;
+  }
+  .sponsored-picks-edit-hint strong {
+    font-weight: 700;
   }
   .sponsored-picks-card {
     display: flex;
