@@ -2,7 +2,7 @@
   Sponsored picks – Each product card can have its own link. Add a block per product, select the product in the block, and set its Amazon link. Edit each product's link individually.
 {% endcomment %}
 
-<section id="{{ section.settings.section_id | default: 'shop' }}" class="sponsored-picks-section py-24 md:py-32 bg-background" data-sponsored-picks{% if request.design_mode %} {{ section.shopify_attributes }}{% endif %}>
+<section id="{{ section.settings.section_id | default: 'shop' }}" class="sponsored-picks-section py-24 md:py-32 bg-background" data-sponsored-picks{% if request.design_mode %} data-theme-editor="true"{% endif %} {{ section.shopify_attributes }}>
   <div class="container mx-auto px-6">
     <div class="text-center mb-16">
       <h2 class="sponsored-picks-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
@@ -47,56 +47,34 @@
             {%- endif -%}
           {%- endif -%}
 
-          {%- comment -%} In theme editor, wrap card in a link with block attributes so clicking opens the block in the sidebar. On storefront, plain div. {%- endcomment -%}
-          {% if request.design_mode %}
-            <a href="javascript:void(0)" class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block cursor-pointer flex flex-col text-left no-underline" role="button" {{ block.shopify_attributes }}>
-              <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-              <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
-                {% if product != blank and product.featured_image != blank %}
-                  <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
-                {% endif %}
-                <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
-              </span>
-              <div class="sponsored-picks-card-content">
-                {% if product != blank and product.vendor != blank %}
-                  <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
-                {% endif %}
-                <h3 class="sponsored-picks-title" title="{{ product.title | default: 'Product' | escape }}">
-                  {{ product.title | default: 'Select a product' }}
-                </h3>
-                {% if product != blank and product.description != blank %}
-                  <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
-                {% endif %}
+          {%- comment -%} Block attributes on wrapper so theme editor can select this block when card is clicked. Use both Liquid output and explicit attribute for compatibility. {%- endcomment -%}
+          <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block{% if request.design_mode %} cursor-pointer{% endif %}" {{ block.shopify_attributes }}>
+            <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+            <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
+              {% if product != blank and product.featured_image != blank %}
+                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
+              {% endif %}
+              <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
+            </span>
+            <div class="sponsored-picks-card-content">
+              {% if product != blank and product.vendor != blank %}
+                <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
+              {% endif %}
+              <h3 class="sponsored-picks-title" title="{{ product.title | default: 'Product' | escape }}">
+                {{ product.title | default: 'Select a product' }}
+              </h3>
+              {% if product != blank and product.description != blank %}
+                <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
+              {% endif %}
+              {% if request.design_mode %}
                 <span class="sponsored-picks-cta sponsored-picks-cta-link" aria-hidden="true">{{ card_button_text }}</span>
-              </div>
-            </a>
-          {% else %}
-            <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block">
-              <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-              <span class="sponsored-picks-card-link block aspect-[4/5] relative overflow-hidden">
-                {% if product != blank and product.featured_image != blank %}
-                  <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-picks-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width="300" height="375">
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'sponsored-picks-img w-full h-full object-cover' }}
-                {% endif %}
-                <span class="sponsored-picks-card-gradient" aria-hidden="true"></span>
-              </span>
-              <div class="sponsored-picks-card-content">
-                {% if product != blank and product.vendor != blank %}
-                  <p class="sponsored-picks-tagline">{{ product.vendor }}</p>
-                {% endif %}
-                <h3 class="sponsored-picks-title" title="{{ product.title | default: 'Product' | escape }}">
-                  {{ product.title | default: 'Select a product' }}
-                </h3>
-                {% if product != blank and product.description != blank %}
-                  <p class="sponsored-picks-desc-inner line-clamp-2">{{ product.description | strip_html | truncate: 80 }}</p>
-                {% endif %}
+              {% else %}
                 <a href="{{ card_url }}" class="sponsored-picks-cta sponsored-picks-cta-link"{% if card_open_new_tab %} target="_blank" rel="noopener noreferrer sponsored"{% endif %}>{{ card_button_text }}</a>
-              </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
         {% endfor %}
       </div>
     {% elsif collection != blank and collection.products.size > 0 %}
@@ -121,16 +99,22 @@
     {%- comment -%} In editor: show hint to add blocks if there are products but no link blocks yet {%- endcomment -%}
     {% if request.design_mode and product_link_blocks.size > 0 %}
       <div class="sponsored-picks-add-blocks-hint text-center mt-8 py-4 px-4 rounded-xl bg-muted/40 text-foreground/70 text-sm">
-        <p class="font-medium mb-1">Edit product link</p>
-        <p><strong>Click any product card above</strong> – the product link settings will open in the left sidebar so you can change the Product, Amazon link, and button text.</p>
+        <p class="font-medium mb-1">Edit a product's link</p>
+        <p><strong>In the left sidebar</strong>, under "Sponsored picks", click a block (e.g. <strong>Product link (affiliate) 1</strong>). That block's settings will open so you can set the Product, Amazon link, and button text for that card.</p>
+        <p class="mt-2 text-xs">Tip: If your theme supports it, turn on <strong>Preview inspector</strong> (inspect/select tool in the editor toolbar), then click a product card to open its block.</p>
 ’s      </div>
     {% endif %}
   </div>
 </section>
 
-
-
 <style>
+  /* In theme editor, ensure clicks hit the card div (which has block attributes) so the editor can open the block */
+  .sponsored-picks-section[data-theme-editor] .sponsored-picks-card {
+    pointer-events: auto;
+  }
+  .sponsored-picks-section[data-theme-editor] .sponsored-picks-card * {
+    pointer-events: none;
+  }
   .sponsored-picks-section .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -244,7 +228,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Add a **Product link (affiliate)** block for each sponsored product. In each block, select the **Product** and its **Amazon or affiliate link**. **Click any product card** in the preview – the product link settings will open in the left sidebar so you can edit that product's link."
+      "content": "Add a **Product link (affiliate)** block for each sponsored product. In each block, select the **Product** and its **Amazon or affiliate link**. To edit a product's link: in the left sidebar, click the block name (e.g. **Product link (affiliate) 1**); or use your theme's **Preview inspector** (inspect tool) and click the product card."
     },
     {
       "type": "text",
