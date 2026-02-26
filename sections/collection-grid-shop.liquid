@@ -38,18 +38,36 @@
             {%- assign card_url = block.settings.url -%}
             {%- assign card_open_new_tab = true -%}
           {%- endif -%}
-          {%- if product != blank -%}
+          {%- if product != blank and card_url == '#' -%}
             {%- assign title_lower = product.title | downcase -%}
-            {%- if card_url == '#' and title_lower contains 'athletic fit tee' -%}
+            {%- if title_lower contains 'athletic fit tee' -%}
               {%- if section.settings.athletic_fit_tee_amazon_url != blank -%}
                 {%- assign card_url = section.settings.athletic_fit_tee_amazon_url -%}
               {%- else -%}
                 {%- assign card_url = 'https://amzn.to/4r0vRjF' -%}
               {%- endif -%}
               {%- assign card_open_new_tab = true -%}
-            {%- elsif card_url == '#' and title_lower contains 'coofandy' and title_lower contains 'button' -%}
-              {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
+            {%- elsif title_lower contains 'coofandy' and title_lower contains 'button' -%}
+              {%- if section.settings.coofandy_button_amazon_url != blank -%}
+                {%- assign card_url = section.settings.coofandy_button_amazon_url -%}
+              {%- else -%}
+                {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
+              {%- endif -%}
               {%- assign card_open_new_tab = true -%}
+            {%- else -%}
+              {%- assign e1 = section.settings.extra_link_1_contains | downcase -%}
+              {%- assign e2 = section.settings.extra_link_2_contains | downcase -%}
+              {%- assign e3 = section.settings.extra_link_3_contains | downcase -%}
+              {%- if section.settings.extra_link_1_contains != blank and title_lower contains e1 and section.settings.extra_link_1_url != blank -%}
+                {%- assign card_url = section.settings.extra_link_1_url -%}
+                {%- assign card_open_new_tab = true -%}
+              {%- elsif section.settings.extra_link_2_contains != blank and title_lower contains e2 and section.settings.extra_link_2_url != blank -%}
+                {%- assign card_url = section.settings.extra_link_2_url -%}
+                {%- assign card_open_new_tab = true -%}
+              {%- elsif section.settings.extra_link_3_contains != blank and title_lower contains e3 and section.settings.extra_link_3_url != blank -%}
+                {%- assign card_url = section.settings.extra_link_3_url -%}
+                {%- assign card_open_new_tab = true -%}
+              {%- endif -%}
             {%- endif -%}
           {%- endif -%}
 
@@ -100,8 +118,26 @@
             {%- endif -%}
             {%- assign card_open_new_tab = true -%}
           {%- elsif title_lower contains 'coofandy' and title_lower contains 'button' -%}
-            {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
+            {%- if section.settings.coofandy_button_amazon_url != blank -%}
+              {%- assign card_url = section.settings.coofandy_button_amazon_url -%}
+            {%- else -%}
+              {%- assign card_url = 'https://amzn.to/4aEyV02' -%}
+            {%- endif -%}
             {%- assign card_open_new_tab = true -%}
+          {%- else -%}
+            {%- assign e1 = section.settings.extra_link_1_contains | downcase -%}
+            {%- assign e2 = section.settings.extra_link_2_contains | downcase -%}
+            {%- assign e3 = section.settings.extra_link_3_contains | downcase -%}
+            {%- if section.settings.extra_link_1_contains != blank and title_lower contains e1 and section.settings.extra_link_1_url != blank -%}
+              {%- assign card_url = section.settings.extra_link_1_url -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- elsif section.settings.extra_link_2_contains != blank and title_lower contains e2 and section.settings.extra_link_2_url != blank -%}
+              {%- assign card_url = section.settings.extra_link_2_url -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- elsif section.settings.extra_link_3_contains != blank and title_lower contains e3 and section.settings.extra_link_3_url != blank -%}
+              {%- assign card_url = section.settings.extra_link_3_url -%}
+              {%- assign card_open_new_tab = true -%}
+            {%- endif -%}
           {%- endif -%}
           <div class="sponsored-picks-card group relative bg-card rounded-2xl overflow-hidden border border-border/60 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 block">
             <span class="sponsored-picks-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
@@ -300,7 +336,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Add a **Product link (affiliate)** block for each sponsored product. In each block, select the **Product** and its **Amazon or affiliate link**. To edit a product's link: in the left sidebar, click the block name (e.g. **Product link (affiliate) 1**); or use your theme's **Preview inspector** (inspect tool) and click the product card."
+      "content": "Set Amazon/affiliate links below for products by name, or add **Product link (affiliate)** blocks to set a link per product in each block."
     },
     {
       "type": "text",
@@ -345,13 +381,62 @@
     },
     {
       "type": "header",
-      "content": "Men's Athletic Fit Tee (optional)"
+      "content": "Amazon links (edit here or in blocks)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Set links below for specific products. You can also add **Product link (affiliate)** blocks and set a link per product in each block."
     },
     {
       "type": "url",
       "id": "athletic_fit_tee_amazon_url",
       "label": "Amazon link for Athletic Fit Tee",
-      "info": "URL for the \"View on Amazon\" button for \"Men's Athletic Fit Tee ULTRA-SOFT PLAIN TEE\". Default: https://amzn.to/4r0vRjF. Change or clear to override."
+      "info": "Product title contains \"athletic fit tee\". Default: https://amzn.to/4r0vRjF."
+    },
+    {
+      "type": "url",
+      "id": "coofandy_button_amazon_url",
+      "label": "Amazon link for COOFANDY Button-Down",
+      "info": "Product title contains \"coofandy\" and \"button\". Default: https://amzn.to/4aEyV02."
+    },
+    {
+      "type": "header",
+      "content": "More product links (match by title)"
+    },
+    {
+      "type": "text",
+      "id": "extra_link_1_contains",
+      "label": "Product 3 – title contains (e.g. shirt)",
+      "info": "If the product title contains this text, the link below is used."
+    },
+    {
+      "type": "url",
+      "id": "extra_link_1_url",
+      "label": "Product 3 – Amazon link"
+    },
+    {
+      "type": "text",
+      "id": "extra_link_2_contains",
+      "label": "Product 4 – title contains (e.g. pants)"
+    },
+    {
+      "type": "url",
+      "id": "extra_link_2_url",
+      "label": "Product 4 – Amazon link"
+    },
+    {
+      "type": "text",
+      "id": "extra_link_3_contains",
+      "label": "Product 5 – title contains (e.g. jacket)"
+    },
+    {
+      "type": "url",
+      "id": "extra_link_3_url",
+      "label": "Product 5 – Amazon link"
+    },
+    {
+      "type": "header",
+      "content": "View all link"
     },
     {
       "type": "checkbox",
