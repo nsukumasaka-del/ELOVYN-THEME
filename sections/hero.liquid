@@ -30,21 +30,28 @@
   }
 </style>
 
-<section class="relative h-screen w-full overflow-hidden">
+<section
+  class="relative w-full overflow-hidden hero-section"
+  style="height: {{ section.settings.hero_height | default: 80 }}vh;"
+  data-section-id="{{ section.id }}"
+>
   {%- comment -%} Background Image {%- endcomment -%}
   <div class="absolute inset-0">
+    {%- assign hero_position = section.settings.hero_image_position | default: 'center center' -%}
     {%- if section.settings.hero_image != blank -%}
       <img
         src="{{ section.settings.hero_image | image_url: width: 1920 }}"
         alt="{{ section.settings.hero_image.alt | escape }}"
-        class="w-full h-full object-cover object-top"
+        class="w-full h-full object-cover"
+        style="object-position: {{ hero_position }};"
         loading="eager"
       >
     {%- else -%}
       <img
         src="{{ 'hoodie.png' | asset_url }}"
         alt="Hoodie"
-        class="w-full h-full object-cover object-top"
+        class="w-full h-full object-cover"
+        style="object-position: {{ hero_position }};"
         loading="eager"
       >
     {%- endif -%}
@@ -102,6 +109,29 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero Image"
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "label": "Hero height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 80
+    },
+    {
+      "type": "select",
+      "id": "hero_image_position",
+      "label": "Hero image position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" }
+      ],
+      "default": "center center"
     },
     {
       "type": "text",
