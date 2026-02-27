@@ -841,7 +841,9 @@ body.template-product .content-for-layout {
 }
 /* Prevent overlap with fixed/sticky header – use --header-height if theme sets it */
 .template-product main,
-.template-product .content-for-layout {
+.template-product .content-for-layout,
+.template-cart main,
+.template-cart .content-for-layout {
   padding-top: var(--header-height, 100px);
 }
 
@@ -1160,5 +1162,37 @@ body.template-product #elovyn-header-wrap .elovyn-logo-img {
   color: #ffffff !important;
 }
 #elovyn-header-wrap.header--black .elovyn-logo-img {
+  filter: brightness(1.1);
+}
+
+/* Cart page: ensure header is always visible with black background */
+body.template-cart #elovyn-header-wrap {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+body.template-cart #elovyn-header-wrap.scrolled {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
+body.template-cart #elovyn-header-wrap .elovyn-nav a,
+body.template-cart #elovyn-header-wrap .site-nav .nav-link,
+body.template-cart #elovyn-header-wrap .elovyn-header-right a,
+body.template-cart #elovyn-header-wrap .elovyn-header-right button,
+body.template-cart #elovyn-header-wrap .elovyn-logo-link,
+body.template-cart #elovyn-header-wrap a {
+  color: #ffffff !important;
+}
+body.template-cart #elovyn-header-wrap svg,
+body.template-cart #elovyn-header-wrap .icon {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+body.template-cart #elovyn-header-wrap .elovyn-logo-img {
   filter: brightness(1.1);
 }
