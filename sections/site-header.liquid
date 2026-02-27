@@ -79,7 +79,7 @@
     #elovyn-header-wrap .elovyn-logo-link { font-size: 1.25rem; }
   }
   #elovyn-header-wrap .elovyn-logo-img {
-    height: 3rem;
+    height: auto;
     max-height: 3rem;
     width: auto;
     display: block;
@@ -87,14 +87,17 @@
   }
   @media (min-width: 768px) {
     #elovyn-header-wrap .elovyn-logo-img {
-      height: 5rem;
       max-height: 5rem;
     }
   }
   @media (min-width: 1024px) {
     #elovyn-header-wrap .elovyn-logo-img {
-      height: 8rem;
       max-height: 8rem;
+    }
+  }
+  @media (max-width: 768px) {
+    #elovyn-header-wrap .elovyn-logo-img {
+      width: calc({{ section.settings.logo_width | default: 150 }}px * 0.7);
     }
   }
   /* Desktop nav bar - visible from 1024px */
@@ -121,6 +124,16 @@
   }
   #elovyn-header-wrap .elovyn-nav a:hover {
     color: #fff;
+  }
+  /* Optional: site-nav helper class for easy theming in Theme Editor */
+  #elovyn-header-wrap .site-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0 15px;
+    font-weight: 500;
+  }
+  #elovyn-header-wrap .site-nav a:hover {
+    opacity: 0.75;
   }
   /* Right side: icons + CTA + hamburger - visible on all screens */
   #elovyn-header-wrap .elovyn-header-right {
@@ -292,15 +305,36 @@
     <div class="elovyn-header-inner">
       {%- comment -%} Logo {%- endcomment -%}
       <a href="{% if section.settings.logo_link != blank %}{{ section.settings.logo_link }}{% else %}{{ routes.root_url }}{% endif %}" class="elovyn-logo-link">
-        {%- if section.settings.logo != blank -%}
-          <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ section.settings.logo_alt | default: shop.name }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
+        {%- assign logo_width = section.settings.logo_width | default: 150 -%}
+        {%- if section.settings.logo_image != blank -%}
+          <img
+            src="{{ section.settings.logo_image | image_url: width: logo_width }}"
+            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
+        {%- elsif section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | image_url: width: logo_width }}"
+            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
         {%- else -%}
-          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
+          <img
+            src="{{ 'elovyn-logo.png' | asset_url }}"
+            alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
         {%- endif -%}
       </a>
 
       {%- comment -%} Navigation bar {%- endcomment -%}
-      <nav class="elovyn-nav" role="navigation" aria-label="Main navigation">
+      <nav class="elovyn-nav site-nav" role="navigation" aria-label="Main navigation">
         {%- if section.blocks.size > 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'nav_link' -%}
@@ -396,6 +430,21 @@
       "info": "Shown at 8rem height like the original. Leave blank to show store name."
     },
     {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image",
+      "info": "Optional override for the logo image above."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo Width (px)",
+      "min": 50,
+      "max": 300,
+      "step": 5,
+      "default": 150
+    },
+    {
       "type": "text",
       "id": "logo_alt",
       "label": "Logo alt text",
@@ -453,22 +502,22 @@
       {
         "type": "nav_link",
         "settings": {
-          "label": "Clothes",
-          "url": "#clothing"
+          "label": "Hoodies",
+          "url": "/collections/hoodies"
         }
       },
       {
         "type": "nav_link",
         "settings": {
-          "label": "Hair Products",
-          "url": "#bikes"
+          "label": "Sweatshirts",
+          "url": "/collections/sweatshirts"
         }
       },
       {
         "type": "nav_link",
         "settings": {
-          "label": "Accessories",
-          "url": "#features"
+          "label": "Graphic Tees",
+          "url": "/collections/graphic-tees"
         }
       },
       {
