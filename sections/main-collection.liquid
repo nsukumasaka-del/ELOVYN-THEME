@@ -26,7 +26,60 @@
     </header>
 
     {% if collection.products.size > 0 %}
-      {% if is_dropshipping %}
+      {% if collection.handle == 'sponsored' %}
+        {%- comment -%} Sponsored collection: affiliate links from product metafields (affiliate.external_url, affiliate.button_label). Editable in Admin → Products → Metafields. {%- endcomment -%}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads">
+          {% for product in collection.products %}
+            {%- assign affiliate_url = product.metafields.affiliate.external_url.value | default: product.metafields.affiliate.external_url -%}
+            {%- assign affiliate_label = product.metafields.affiliate.button_label.value | default: product.metafields.affiliate.button_label | default: 'View Product' -%}
+            <div class="product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40">
+              <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+              <div class="aspect-[4/5] relative overflow-hidden">
+                {% if affiliate_url != blank %}
+                  <a href="{{ affiliate_url }}" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+                    {% if product.featured_image != blank %}
+                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                    {% endif %}
+                  </a>
+                {% else %}
+                  <a href="{{ product.url }}" class="block w-full h-full">
+                    {% if product.featured_image != blank %}
+                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                    {% endif %}
+                  </a>
+                {% endif %}
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
+                <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                  {% if product.vendor != blank %}
+                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.vendor }}</p>
+                  {% endif %}
+                  {% if affiliate_url != blank %}
+                    <a href="{{ affiliate_url }}" target="_blank" rel="noopener noreferrer" class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 block" title="{{ product.title | escape }}">{{ product.title }}</a>
+                  {% else %}
+                    <a href="{{ product.url }}" class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 block" title="{{ product.title | escape }}">{{ product.title }}</a>
+                  {% endif %}
+                  {% if product.description != blank %}
+                    <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{{ product.description | strip_html | truncate: 100 }}</p>
+                  {% endif %}
+                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {% if affiliate_url != blank %}
+                      <a href="{{ affiliate_url }}" class="btn-hero text-xs button affiliate-button" target="_blank" rel="noopener noreferrer">{{ affiliate_label }}</a>
+                    {% else %}
+                      <a href="{{ product.url }}" class="btn-hero text-xs">{{ 'general.amazon.view_product' | t | default: 'View product' }}</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% elsif is_dropshipping %}
         {%- comment -%} Dropshipping (custom-tees, graphic-tees, etc.): all products show price + Add to cart. Use first variant so add works with "continue selling when out of stock". {%- endcomment -%}
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid gap-4 md:gap-6">
           {% for product in collection.products %}
