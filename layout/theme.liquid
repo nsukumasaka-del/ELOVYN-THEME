@@ -81,9 +81,9 @@
     </a>
 
     {% comment %}
-      Header: always rendered on ALL pages (homepage, collections, product, cart).
-      No conditionals – do not wrap in unless/if that excludes any template.
-      Configure via Theme Editor → Header section (site-header).
+      GLOBAL HEADER – single source for navigation. Loads on ALL pages (homepage, collections, product, cart).
+      Do NOT add {% section 'header' %} or {% section 'site-header' %} anywhere else.
+      Do NOT wrap in conditionals. Configure via Theme Editor → Header (site-header).
     {% endcomment %}
     <div class="layout-header-wrapper" id="layout-header-wrapper">
       {% sections 'header-group' %}
