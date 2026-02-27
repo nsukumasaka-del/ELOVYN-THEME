@@ -13,55 +13,7 @@
     "main_cart": {
       "type": "main-cart",
       "settings": {}
-    },
-    "site_header_LPtypn": {
-      "type": "site-header",
-      "blocks": {
-        "nav_link_WmJCYk": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/collections/hoodies"
-          }
-        },
-        "nav_link_UXRACh": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Sweatshirts",
-            "url": "/collections/sweatshirts"
-          }
-        },
-        "nav_link_EGtGkr": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Graphic Tees",
-            "url": "/collections/graphic-tees"
-          }
-        },
-        "nav_link_CfbJpU": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Shop All",
-            "url": "/collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "nav_link_WmJCYk",
-        "nav_link_UXRACh",
-        "nav_link_EGtGkr",
-        "nav_link_CfbJpU"
-      ],
-      "name": "Header",
-      "settings": {
-        "logo_width": 150,
-        "logo_alt": "Store Logo",
-        "logo_link": "/"
-      }
     }
   },
-  "order": [
-    "site_header_LPtypn",
-    "main_cart"
-  ]
+  "order": ["main_cart"]
 }

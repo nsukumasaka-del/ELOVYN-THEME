@@ -1,67 +1,10 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "layout": "theme",
   "sections": {
     "main_product": {
       "type": "main-product",
       "settings": {}
-    },
-    "site_header_b4xR8G": {
-      "type": "site-header",
-      "blocks": {
-        "nav_link_GL89NF": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/collections/hoodies"
-          }
-        },
-        "nav_link_ed8pan": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Sweatshirts",
-            "url": "/collections/sweatshirts"
-          }
-        },
-        "nav_link_gwPyLE": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Graphic Tees",
-            "url": "/collections/graphic-tees"
-          }
-        },
-        "nav_link_YXT3ck": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Shop All",
-            "url": "/collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "nav_link_GL89NF",
-        "nav_link_ed8pan",
-        "nav_link_gwPyLE",
-        "nav_link_YXT3ck"
-      ],
-      "name": "Header",
-      "settings": {
-        "logo_width": 150,
-        "logo_alt": "Store Logo",
-        "logo_link": "/"
-      }
     }
   },
-  "order": [
-    "main_product",
-    "site_header_b4xR8G"
-  ]
+  "order": ["main_product"]
 }
