@@ -947,20 +947,28 @@ body.template-product .content-for-layout {
 .amazon-product-details .product-form__submit {
   width: 100%;
   max-width: 100%;
-  background: #ffd814;
-  border: 1px solid #fcd200;
-  color: #111;
   font-weight: 600;
   padding: 14px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
 }
-.amazon-product-details .product-form__submit:hover:not(:disabled) {
-  background: #f7ca00;
-  border-color: #f2c200;
-}
 .amazon-product-details .product-form__submit:disabled {
+  background: #e5e5e5;
+  border-color: #e5e5e5;
+  color: #888;
+}
+/* Product page Add to Cart – match store theme (black/grey) */
+.template-product .product-form__submit {
+  background-color: #111111;
+  color: #ffffff;
+  border: 1px solid #111111;
+}
+.template-product .product-form__submit:hover:not(:disabled) {
+  background-color: #333333;
+  border-color: #333333;
+}
+.template-product .product-form__submit:disabled {
   background: #e5e5e5;
   border-color: #e5e5e5;
   color: #888;
@@ -978,6 +986,35 @@ body.template-product .content-for-layout {
 }
 .amazon-product-description p:last-child {
   margin-bottom: 0;
+}
+
+/* Hide images inside product description only (not main gallery) */
+.template-product .amazon-product-description img,
+.template-product .product__description img,
+.template-product .rte img {
+  display: none;
+}
+
+/* Thumbnail list – horizontal scroll, active state */
+.template-product .amazon-product-thumbs.thumbnail-list {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  overflow-x: auto;
+}
+.template-product .amazon-product-thumbs .amazon-product-thumb {
+  cursor: pointer;
+  background: #fff;
+}
+.template-product .amazon-product-thumbs .amazon-product-thumb img {
+  display: block;
+  border: 1px solid #ddd;
+}
+.template-product .amazon-product-thumbs .amazon-product-thumb:hover img {
+  border-color: #111;
+}
+.template-product .amazon-product-thumbs .amazon-product-thumb.thumbnail-active {
+  box-shadow: 0 0 0 2px #111111;
 }
 
 /* Selected variant option – amber on product page */

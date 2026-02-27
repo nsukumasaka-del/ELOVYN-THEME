@@ -17,9 +17,9 @@
         {{ 'product-1' | placeholder_svg_tag: 'amazon-product-main-img' }}
       {% endif %}
       {% if product.images.size > 1 %}
-        <div class="amazon-product-thumbs flex gap-2 mt-4 overflow-x-auto">
+        <div class="amazon-product-thumbs thumbnail-list">
           {% for image in product.images %}
-            <button type="button" class="flex-shrink-0 w-20 h-20 rounded overflow-hidden border border-gray-200 {% if forloop.first %}ring-2 ring-amber-400{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+            <button type="button" class="amazon-product-thumb flex-shrink-0 w-20 h-20 rounded overflow-hidden border border-gray-200 {% if forloop.first %}thumbnail-active{% endif %}" data-index="{{ forloop.index0 }}" data-src="{{ image | image_url: width: 800 }}" aria-label="View image {{ forloop.index }}">
               <img src="{{ image | image_url: width: 100 }}" alt="{{ image.alt | escape }}" class="w-full h-full object-cover" loading="lazy">
             </button>
           {% endfor %}
@@ -175,6 +175,20 @@
     btn.addEventListener('click', function() {
       var inp = form.querySelector('[data-quantity-input]');
       if (inp) { var n = parseInt(inp.value, 10) || 1; inp.value = Math.min(99, n + 1); }
+    });
+  });
+
+  var mainImg = document.getElementById('ProductPhotoImg');
+  var thumbs = document.querySelectorAll('.amazon-product-thumb');
+  thumbs.forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      var src = this.getAttribute('data-src');
+      if (mainImg && src) {
+        mainImg.src = src;
+        mainImg.alt = this.querySelector('img') ? this.querySelector('img').getAttribute('alt') || '' : '';
+      }
+      thumbs.forEach(function(t) { t.classList.remove('thumbnail-active'); });
+      this.classList.add('thumbnail-active');
     });
   });
 })();
