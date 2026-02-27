@@ -155,12 +155,54 @@
   }
   setActiveOptionStyles();
   form.addEventListener('submit', function(e) {
+    var submitter = e.submitter || document.activeElement;
+    var isAddButton = false;
+    if (submitter) {
+      if ((submitter.matches && submitter.matches('[data-add-to-cart], .product-form__submit')) || submitter.name === 'add') {
+        isAddButton = true;
+      }
+    }
+    // Let non Add to Cart submits (for example, dynamic checkout) behave normally.
+    if (!isAddButton) {
+      return;
+    }
+
+    e.preventDefault();
     if (form.dataset.processing === 'true') {
-      e.preventDefault();
-      return false;
+      return;
     }
     form.dataset.processing = 'true';
     if (addToCartBtn) addToCartBtn.disabled = true;
+
+    var cartAddUrl = (window.routes && window.routes.cart_add_url) || form.getAttribute('action') || '/cart/add';
+    var addUrl = cartAddUrl.replace(/\/add\/?(\?.*)?$/i, '') + '/add.js';
+    var formData = new FormData(form);
+
+    fetch(addUrl, {
+      method: 'POST',
+      body: formData,
+      credentials: 'same-origin',
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function(res) {
+      return res.json().then(function(data) {
+        return { ok: res.ok, data: data };
+      });
+    })
+    .then(function(result) {
+      if (result.ok) {
+        if (typeof window.updateCartCount === 'function') window.updateCartCount();
+      } else {
+        console.error('Add to cart error', result.data);
+      }
+    })
+    .catch(function(err) {
+      console.error('Add to cart failed', err);
+    })
+    .finally(function() {
+      form.dataset.processing = 'false';
+      if (addToCartBtn) addToCartBtn.disabled = false;
+    });
   });
   optionRadios.forEach(function(radio) {
     radio.addEventListener('change', function() { updateForm(findVariant()); });
