@@ -839,6 +839,13 @@ body.template-product {
 body.template-product .content-for-layout {
   background: #ffffff;
 }
+/* No black under nav – header wrapper is transparent so only the bar is dark */
+body.template-product .layout-header-wrapper,
+body.template-product #layout-header-wrapper,
+.template-product .layout-header-wrapper,
+.template-product #layout-header-wrapper {
+  background: transparent !important;
+}
 /* Prevent overlap with fixed/sticky header – use --header-height if theme sets it */
 .template-product main,
 .template-product .content-for-layout,
@@ -1088,6 +1095,14 @@ body.template-product .content-for-layout {
   }
 }
 
+/* Cart page: no black under nav – body and content area white */
+body.template-cart {
+  background: #ffffff !important;
+}
+body.template-cart .content-for-layout {
+  background: #ffffff;
+}
+
 /* Cart page: ensure header wrapper and nav bar are always visible and on top */
 body.template-cart .layout-header-wrapper,
 body.template-cart #layout-header-wrapper {
@@ -1097,6 +1112,7 @@ body.template-cart #layout-header-wrapper {
   z-index: 99999;
   height: auto !important;
   overflow: visible !important;
+  background: transparent !important;
 }
 body.template-cart #elovyn-header-wrap {
   position: fixed !important;
