@@ -12,15 +12,17 @@
     "hero": {
       "type": "hero",
       "settings": {
+        "hero_image": "shopify://shop_images/tj-sedisa-aH6Fj6i6CxA-unsplash.jpg",
+        "hero_height": 90,
+        "hero_zoom": 105,
+        "hero_focal_point": "center",
+        "hero_zoom_mobile": 100,
+        "hero_focal_point_mobile": "center",
         "heading": "Hoodies.",
         "subheading": "Sweatshirts. Graphic tees.",
         "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
         "button_text": "Shop All",
-<<<<<<< HEAD
-        "button_link": "/collections/shirts"
-=======
         "button_link": "shopify://collections/hoodies"
->>>>>>> a8eba354e3437bada51bfd2e53c16054210097ef
       }
     },
     "trust_marquee": {
