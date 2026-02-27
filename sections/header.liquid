@@ -289,15 +289,36 @@
     <div class="elovyn-header-inner">
       {%- comment -%} Logo {%- endcomment -%}
       <a href="{% if section.settings.logo_link != blank %}{{ section.settings.logo_link }}{% else %}{{ routes.root_url }}{% endif %}" class="elovyn-logo-link">
-        {%- if section.settings.logo != blank -%}
-          <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ section.settings.logo_alt | default: shop.name }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
+        {%- assign logo_width = section.settings.logo_width | default: 150 -%}
+        {%- if section.settings.logo_image != blank -%}
+          <img
+            src="{{ section.settings.logo_image | image_url: width: logo_width }}"
+            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
+        {%- elsif section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | image_url: width: logo_width }}"
+            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
         {%- else -%}
-          <img src="{{ 'elovyn-logo.png' | asset_url }}" alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}" class="elovyn-logo-img" loading="eager" width="400" height="128">
+          <img
+            src="{{ 'elovyn-logo.png' | asset_url }}"
+            alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}"
+            class="elovyn-logo-img"
+            loading="eager"
+            style="width: {{ logo_width }}px; height: auto;"
+          >
         {%- endif -%}
       </a>
 
       {%- comment -%} Navigation bar {%- endcomment -%}
-      <nav class="elovyn-nav" role="navigation" aria-label="Main navigation">
+      <nav class="elovyn-nav site-nav" role="navigation" aria-label="Main navigation">
         {%- if section.blocks.size > 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'nav_link' -%}
@@ -392,6 +413,21 @@
       "info": "Shown at 8rem height like the original. Leave blank to show store name."
     },
     {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image (override)",
+      "info": "Optional. Overrides the default logo image above."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width (px)",
+      "min": 50,
+      "max": 300,
+      "step": 5,
+      "default": 150
+    },
+    {
       "type": "text",
       "id": "logo_alt",
       "label": "Logo alt text",
@@ -449,22 +485,22 @@
       {
         "type": "nav_link",
         "settings": {
-          "label": "Clothes",
-          "url": "#clothing"
+          "label": "Hoodies",
+          "url": "/collections/hoodies"
         }
       },
       {
         "type": "nav_link",
         "settings": {
-          "label": "Hair Products",
-          "url": "#bikes"
+          "label": "Sweatshirts",
+          "url": "/collections/sweatshirts"
         }
       },
       {
         "type": "nav_link",
         "settings": {
-          "label": "Accessories",
-          "url": "#features"
+          "label": "Graphic Tees",
+          "url": "/collections/graphic-tees"
         }
       },
       {
