@@ -377,7 +377,6 @@
           {% render 'icon-shopping-bag', width: 20, height: 20 %}
           {%- if cart.item_count > 0 -%}<span class="elovyn-cart-badge">{{ cart.item_count }}</span>{%- endif -%}
         </a>
-        <a href="{% if section.settings.book_test_ride_link != blank %}{{ section.settings.book_test_ride_link }}{% else %}#{% endif %}" class="elovyn-cta">Book a test ride</a>
         <button type="button" class="elovyn-mobile-btn" aria-label="Toggle menu" aria-expanded="false">
           <span class="icon-open">{% render 'icon-menu', width: 24, height: 24 %}</span>
           <span class="icon-close">{% render 'icon-x', width: 24, height: 24 %}</span>
@@ -395,7 +394,6 @@
           <a href="{{ link_url }}" class="elovyn-mobile-link">{{ block.settings.text | default: 'Link' }}</a>
         {%- endif -%}
       {%- endfor -%}
-      <a href="{{ section.settings.book_test_ride_link | default: '/' }}" class="elovyn-mobile-cta">Book a test ride</a>
     </nav>
   </div>
 </div>
@@ -475,17 +473,6 @@
       "type": "paragraph",
       "content": "Add and reorder menu links below. Default links: Clothes, Hair Products, Accessories, Connect."
     },
-    {
-      "type": "header",
-      "content": "CTA button"
-    },
-    {
-      "type": "url",
-      "id": "book_test_ride_link",
-      "label": "Book a test ride link",
-      "default": "/",
-      "info": "URL for the 'Book a test ride' button."
-    }
   ],
   "blocks": [
     {
