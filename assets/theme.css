@@ -1088,6 +1088,24 @@ body.template-product .content-for-layout {
   }
 }
 
+/* Cart page: ensure header wrapper and nav bar are always visible and on top */
+body.template-cart .layout-header-wrapper,
+body.template-cart #layout-header-wrapper {
+  display: block !important;
+  visibility: visible !important;
+  position: relative;
+  z-index: 99999;
+  height: auto !important;
+  overflow: visible !important;
+}
+body.template-cart #elovyn-header-wrap {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 99999 !important;
+}
+
 /* ===== Cart + Product: same header – black background, white text & icons ===== */
 body.template-cart #elovyn-header-wrap,
 body.template-product #elovyn-header-wrap,

@@ -85,7 +85,9 @@
       No conditionals – do not wrap in unless/if that excludes any template.
       Configure via Theme Editor → Header section (site-header).
     {% endcomment %}
-    {% sections 'header-group' %}
+    <div class="layout-header-wrapper" id="layout-header-wrapper">
+      {% sections 'header-group' %}
+    </div>
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
