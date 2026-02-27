@@ -304,12 +304,12 @@
   <header class="elovyn-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo {%- endcomment -%}
-      <a href="{% if section.settings.logo_link != blank %}{{ section.settings.logo_link }}{% else %}{{ routes.root_url }}{% endif %}" class="elovyn-logo-link">
-        {%- assign logo_width = section.settings.logo_width | default: 150 -%}
+      {%- assign logo_width = section.settings.logo_width | default: 150 -%}
+      <a href="{{ section.settings.logo_link | default: routes.root_url }}" class="elovyn-logo-link">
         {%- if section.settings.logo_image != blank -%}
           <img
             src="{{ section.settings.logo_image | image_url: width: logo_width }}"
-            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            alt="{{ section.settings.logo_alt | default: 'Store Logo' }}"
             class="elovyn-logo-img"
             loading="eager"
             style="width: {{ logo_width }}px; height: auto;"
@@ -317,15 +317,15 @@
         {%- elsif section.settings.logo != blank -%}
           <img
             src="{{ section.settings.logo | image_url: width: logo_width }}"
-            alt="{{ section.settings.logo_alt | default: shop.name }}"
+            alt="{{ section.settings.logo_alt | default: 'Store Logo' }}"
             class="elovyn-logo-img"
             loading="eager"
             style="width: {{ logo_width }}px; height: auto;"
           >
         {%- else -%}
           <img
-            src="{{ 'elovyn-logo.png' | asset_url }}"
-            alt="{{ section.settings.logo_alt | default: 'ELOVYN' }}"
+            src="{{ 'logo.png' | asset_url }}"
+            alt="{{ section.settings.logo_alt | default: 'Store Logo' }}"
             class="elovyn-logo-img"
             loading="eager"
             style="width: {{ logo_width }}px; height: auto;"
@@ -335,20 +335,16 @@
 
       {%- comment -%} Navigation bar {%- endcomment -%}
       <nav class="elovyn-nav site-nav" role="navigation" aria-label="Main navigation">
-        {%- if section.blocks.size > 0 -%}
+        <ul>
           {%- for block in section.blocks -%}
             {%- if block.type == 'nav_link' -%}
-              {%- assign link_url = block.settings.url -%}
-              {%- if link_url == blank -%}{%- assign link_url = '#' -%}{%- endif -%}
-              <a href="{{ link_url }}" {{ block.shopify_attributes }}>{{ block.settings.label | default: 'Link' }}</a>
+              {%- assign link_url = block.settings.url | default: '/' -%}
+              <li {{ block.shopify_attributes }}>
+                <a href="{{ link_url }}">{{ block.settings.text | default: 'Link' }}</a>
+              </li>
             {%- endif -%}
           {%- endfor -%}
-        {%- else -%}
-          <a href="#clothing">Clothes</a>
-          <a href="#bikes">Hair Products</a>
-          <a href="#features">Accessories</a>
-          <a href="#community">Connect</a>
-        {%- endif -%}
+        </ul>
       </nav>
 
       {%- comment -%} Right: User icon, ShoppingBag icon, CTA, Menu/X {%- endcomment -%}
@@ -372,21 +368,13 @@
   {%- comment -%} Mobile menu overlay {%- endcomment -%}
   <div id="elovyn-mobile-menu" aria-hidden="true">
     <nav role="navigation" aria-label="Mobile menu">
-      {%- if section.blocks.size > 0 -%}
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'nav_link' -%}
-            {%- assign link_url = block.settings.url -%}
-            {%- if link_url == blank -%}{%- assign link_url = '#' -%}{%- endif -%}
-            <a href="{{ link_url }}" class="elovyn-mobile-link">{{ block.settings.label | default: 'Link' }}</a>
-          {%- endif -%}
-        {%- endfor -%}
-      {%- else -%}
-        <a href="#clothing" class="elovyn-mobile-link">Clothes</a>
-        <a href="#bikes" class="elovyn-mobile-link">Hair Products</a>
-        <a href="#features" class="elovyn-mobile-link">Accessories</a>
-        <a href="#community" class="elovyn-mobile-link">Connect</a>
-      {%- endif -%}
-      <a href="{% if section.settings.book_test_ride_link != blank %}{{ section.settings.book_test_ride_link }}{% else %}#{% endif %}" class="elovyn-mobile-cta">Book a test ride</a>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'nav_link' -%}
+          {%- assign link_url = block.settings.url | default: '/' -%}
+          <a href="{{ link_url }}" class="elovyn-mobile-link">{{ block.settings.text | default: 'Link' }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+      <a href="{{ section.settings.book_test_ride_link | default: '/' }}" class="elovyn-mobile-cta">Book a test ride</a>
     </nav>
   </div>
 </div>
@@ -415,7 +403,7 @@
 
 {% schema %}
 {
-  "name": "Header",
+  "name": "Site Header",
   "tag": "header",
   "class": "section-header",
   "settings": [
@@ -448,13 +436,15 @@
       "type": "text",
       "id": "logo_alt",
       "label": "Logo alt text",
-      "info": "Leave blank to use store name."
+      "default": "Store Logo",
+      "info": "Alt text for the logo. Defaults to 'Store Logo'."
     },
     {
       "type": "url",
       "id": "logo_link",
       "label": "Logo link",
-      "info": "Leave blank to link to homepage."
+      "default": "/",
+      "info": "Homepage link for the logo."
     },
     {
       "type": "header",
@@ -472,60 +462,58 @@
       "type": "url",
       "id": "book_test_ride_link",
       "label": "Book a test ride link",
-      "info": "URL for the 'Book a test ride' button. Leave blank for #."
+      "default": "/",
+      "info": "URL for the 'Book a test ride' button."
     }
   ],
   "blocks": [
     {
       "type": "nav_link",
-      "name": "Navigation link",
+      "name": "Navigation Link",
       "settings": [
         {
           "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Link"
+          "id": "text",
+          "label": "Navigation Text",
+          "default": "Hoodies"
         },
         {
           "type": "url",
           "id": "url",
-          "label": "Link URL",
-          "default": "/"
+          "label": "Navigation Link URL",
+          "default": "/collections/hoodies"
         }
       ]
     }
   ],
-  "default": {
-    "blocks": [
-      {
-        "type": "nav_link",
-        "settings": {
-          "label": "Hoodies",
-          "url": "/collections/hoodies"
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Header",
+      "blocks": [
+        {
+          "type": "nav_link",
+          "settings": {
+            "text": "Hoodies",
+            "url": "/collections/hoodies"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "text": "Sweatshirts",
+            "url": "/collections/sweatshirts"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "text": "Graphic Tees",
+            "url": "/collections/graphic-tees"
+          }
         }
-      },
-      {
-        "type": "nav_link",
-        "settings": {
-          "label": "Sweatshirts",
-          "url": "/collections/sweatshirts"
-        }
-      },
-      {
-        "type": "nav_link",
-        "settings": {
-          "label": "Graphic Tees",
-          "url": "/collections/graphic-tees"
-        }
-      },
-      {
-        "type": "nav_link",
-        "settings": {
-          "label": "Connect",
-          "url": "#community"
-        }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }
 {% endschema %}
