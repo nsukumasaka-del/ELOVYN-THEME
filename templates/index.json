@@ -9,6 +9,53 @@
  */
 {
   "sections": {
+    "site_header_P8YKmT": {
+      "type": "site-header",
+      "blocks": {
+        "nav_link_6wPngE": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Hoodies",
+            "url": "/collections/hoodies"
+          }
+        },
+        "nav_link_4L3mWe": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Sweatshirts",
+            "url": "/collections/sweatshirts"
+          }
+        },
+        "nav_link_idKVqf": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Graphic Tees",
+            "url": "/collections/graphic-tees"
+          }
+        },
+        "nav_link_PAhjc6": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Shop All",
+            "url": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "nav_link_6wPngE",
+        "nav_link_4L3mWe",
+        "nav_link_idKVqf",
+        "nav_link_PAhjc6"
+      ],
+      "name": "Header",
+      "settings": {
+        "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
+        "logo_width": 215,
+        "logo_alt": "",
+        "logo_link": "/",
+        "book_test_ride_link": "/"
+      }
+    },
     "hero": {
       "type": "hero",
       "settings": {
@@ -157,6 +204,7 @@
     }
   },
   "order": [
+    "site_header_P8YKmT",
     "hero",
     "trust_marquee",
     "sponsored_picks",
