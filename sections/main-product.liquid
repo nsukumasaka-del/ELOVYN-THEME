@@ -95,10 +95,30 @@
   </div>
 </div>
 
+<div id="cart-popup" class="cart-popup" aria-live="polite" role="status" hidden>
+  <div class="cart-popup-content">
+    <p class="cart-popup-message">Product added to cart</p>
+    <a href="{{ routes.cart_url }}" class="cart-popup-view">View Cart</a>
+  </div>
+</div>
+
 <script>
 (function() {
   var form = document.getElementById('product-form');
   if (!form) return;
+  var cartPopupTimeout = null;
+  function showCartPopup() {
+    var popup = document.getElementById('cart-popup');
+    if (!popup) return;
+    if (cartPopupTimeout) clearTimeout(cartPopupTimeout);
+    popup.removeAttribute('hidden');
+    popup.style.display = 'block';
+    cartPopupTimeout = setTimeout(function() {
+      popup.setAttribute('hidden', '');
+      popup.style.display = 'none';
+      cartPopupTimeout = null;
+    }, 4000);
+  }
   var variantIdInput = form.querySelector('[data-variant-id]');
   var addToCartBtn = form.querySelector('[data-add-to-cart]');
   var priceEl = document.querySelector('[data-product-price]');
@@ -192,6 +212,7 @@
     .then(function(result) {
       if (result.ok) {
         if (typeof window.updateCartCount === 'function') window.updateCartCount();
+        showCartPopup();
       } else {
         console.error('Add to cart error', result.data);
       }
