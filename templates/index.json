@@ -16,7 +16,7 @@
           "type": "nav_link",
           "settings": {
             "text": "Hoodies",
-            "url": "/collections/hoodies"
+            "url": "shopify://collections/hoodies"
           }
         },
         "nav_link_4L3mWe": {
@@ -52,8 +52,7 @@
         "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
         "logo_width": 215,
         "logo_alt": "",
-        "logo_link": "/",
-        "book_test_ride_link": "/"
+        "logo_link": "/"
       }
     },
     "hero": {
