@@ -67,7 +67,7 @@
         "type": "url",
         "id": "header_nav_shop_all_url",
         "label": "Shop All link",
-        "info": "e.g. /collections/all"
+        "info": "e.g. /collections/shirts"
       }
     ]
   },
