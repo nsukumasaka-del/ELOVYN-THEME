@@ -397,8 +397,8 @@
   }
 </style>
 
-<div id="elovyn-header-wrap">
-  <header class="elovyn-header" role="banner">
+<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% endif %}">
+  <header class="elovyn-header site-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo {%- endcomment -%}
       {%- assign logo_width = section.settings.logo_width | default: 150 -%}

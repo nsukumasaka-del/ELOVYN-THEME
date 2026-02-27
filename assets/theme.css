@@ -1130,3 +1130,35 @@ body.template-product #elovyn-header-wrap .elovyn-logo-link:hover {
 body.template-product #elovyn-header-wrap .elovyn-logo-img {
   filter: brightness(1.1);
 }
+
+/* Black header on Cart + Product only (request.page_type) */
+#elovyn-header-wrap.header--black {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+#elovyn-header-wrap.header--black.scrolled {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+#elovyn-header-wrap.header--black .site-nav a,
+#elovyn-header-wrap.header--black .nav-link,
+#elovyn-header-wrap.header--black .header__menu-item,
+#elovyn-header-wrap.header--black .elovyn-nav a,
+#elovyn-header-wrap.header--black .elovyn-header-right a,
+#elovyn-header-wrap.header--black .elovyn-header-right button,
+#elovyn-header-wrap.header--black .elovyn-logo-link,
+#elovyn-header-wrap.header--black a {
+  color: #ffffff !important;
+}
+#elovyn-header-wrap.header--black svg,
+#elovyn-header-wrap.header--black .icon {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+#elovyn-header-wrap.header--black .elovyn-logo-img {
+  filter: brightness(1.1);
+}
