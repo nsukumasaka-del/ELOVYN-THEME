@@ -9,6 +9,52 @@
  */
 {
   "sections": {
+    "site_header_KCJpFL": {
+      "type": "site-header",
+      "blocks": {
+        "nav_link_R7B7TT": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Hoodies",
+            "url": "/collections/hoodies"
+          }
+        },
+        "nav_link_7aWVNx": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Sweatshirts",
+            "url": "/collections/sweatshirts"
+          }
+        },
+        "nav_link_LJMFMR": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Graphic Tees",
+            "url": "/collections/graphic-tees"
+          }
+        },
+        "nav_link_FfW9Lb": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Shop All",
+            "url": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "nav_link_R7B7TT",
+        "nav_link_7aWVNx",
+        "nav_link_LJMFMR",
+        "nav_link_FfW9Lb"
+      ],
+      "name": "Header",
+      "settings": {
+        "logo_width": 150,
+        "logo_alt": "Store Logo",
+        "logo_link": "/",
+        "book_test_ride_link": "/"
+      }
+    },
     "hero": {
       "type": "hero",
       "settings": {
@@ -154,61 +200,15 @@
         "show_view_all": false,
         "view_all_text": "View all"
       }
-    },
-    "site_header_KCJpFL": {
-      "type": "site-header",
-      "blocks": {
-        "nav_link_R7B7TT": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/collections/hoodies"
-          }
-        },
-        "nav_link_7aWVNx": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Sweatshirts",
-            "url": "/collections/sweatshirts"
-          }
-        },
-        "nav_link_LJMFMR": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Graphic Tees",
-            "url": "/collections/graphic-tees"
-          }
-        },
-        "nav_link_FfW9Lb": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Shop All",
-            "url": "/collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "nav_link_R7B7TT",
-        "nav_link_7aWVNx",
-        "nav_link_LJMFMR",
-        "nav_link_FfW9Lb"
-      ],
-      "name": "Header",
-      "settings": {
-        "logo_width": 150,
-        "logo_alt": "Store Logo",
-        "logo_link": "/",
-        "book_test_ride_link": "/"
-      }
     }
   },
   "order": [
+    "site_header_KCJpFL",
     "hero",
     "trust_marquee",
     "sponsored_picks",
     "hoodies",
     "sweatshirts",
-    "graphic_tees",
-    "site_header_KCJpFL"
+    "graphic_tees"
   ]
 }
