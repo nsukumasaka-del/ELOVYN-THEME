@@ -149,6 +149,14 @@
     setActiveOptionStyles();
   }
   setActiveOptionStyles();
+  form.addEventListener('submit', function(e) {
+    if (form.dataset.processing === 'true') {
+      e.preventDefault();
+      return false;
+    }
+    form.dataset.processing = 'true';
+    if (addToCartBtn) addToCartBtn.disabled = true;
+  });
   optionRadios.forEach(function(radio) {
     radio.addEventListener('change', function() { updateForm(findVariant()); });
   });

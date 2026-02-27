@@ -185,4 +185,19 @@
     overflow: hidden;
   }
 </style>
+<script>
+(function() {
+  document.querySelectorAll('.cart-add-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+      if (form.dataset.processing === 'true') {
+        e.preventDefault();
+        return false;
+      }
+      form.dataset.processing = 'true';
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+    });
+  });
+})();
+</script>
 {% endif %}

@@ -104,10 +104,16 @@
   }
   sections.forEach(function(section) {
     section.querySelectorAll('form[data-clothing-add-to-cart]').forEach(function(form) {
+      if (form.dataset.clothingAddToCartBound === 'true') return;
+      form.dataset.clothingAddToCartBound = 'true';
+
       form.addEventListener('click', function(e) { e.stopPropagation(); }, true);
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        if (form.dataset.processing === 'true') return;
+        form.dataset.processing = 'true';
+
         var btn = form.querySelector('button[type="submit"]');
         var originalText = btn ? btn.textContent : 'Add to cart';
         var idInput = form.querySelector('input[name="id"]');
@@ -116,6 +122,7 @@
         var quantity = (qtyInput && parseInt(qtyInput.value, 10)) || 1;
         var variantIdNum = parseInt(variantId, 10);
         if (!variantId || isNaN(variantIdNum) || variantIdNum < 1) {
+          form.dataset.processing = 'false';
           showToast('Unable to add. Try again.', false);
           return;
         }
@@ -131,7 +138,6 @@
         })
         .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, status: res.status, data: data }; }); })
         .then(function(r) {
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
           var isSuccess = r.ok && r.data && Array.isArray(r.data.items) && r.data.items.length > 0;
           if (isSuccess) {
             if (btn) btn.textContent = 'Added!';
@@ -157,8 +163,11 @@
           showToast(userMsg, false);
         })
         .catch(function() {
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
           showToast('Unable to add. Try again.', false);
+        })
+        .finally(function() {
+          form.dataset.processing = 'false';
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
         });
       });
     });
