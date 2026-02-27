@@ -1178,7 +1178,50 @@ body.template-product #elovyn-header-wrap .elovyn-logo-link:hover,
 .template-product #elovyn-header-wrap .elovyn-logo-link:hover {
   opacity: 0.85;
 }
-/* White icons – cart and product */
+/* White icons – cart and product (search, cart, account, menu use stroke="currentColor") */
+body.template-cart #elovyn-header-wrap .elovyn-header-right svg,
+body.template-cart #elovyn-header-wrap .header-icons svg,
+body.template-product #elovyn-header-wrap .elovyn-header-right svg,
+body.template-product #elovyn-header-wrap .header-icons svg,
+.template-product #elovyn-header-wrap .elovyn-header-right svg,
+.template-product #elovyn-header-wrap .header-icons svg {
+  fill: none !important;
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+body.template-cart #elovyn-header-wrap .elovyn-header-right .icon,
+body.template-cart #elovyn-header-wrap .header-icons .icon,
+body.template-product #elovyn-header-wrap .elovyn-header-right .icon,
+body.template-product #elovyn-header-wrap .header-icons .icon,
+.template-product #elovyn-header-wrap .elovyn-header-right .icon,
+.template-product #elovyn-header-wrap .header-icons .icon {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+/* Ensure search and cart icon areas are visible and tappable on cart/product */
+body.template-cart #elovyn-header-wrap .header-icons,
+body.template-product #elovyn-header-wrap .header-icons,
+.template-product #elovyn-header-wrap .header-icons {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+body.template-cart #elovyn-header-wrap .header-search-toggle,
+body.template-cart #elovyn-header-wrap .elovyn-header-right a[href*="/cart"],
+body.template-product #elovyn-header-wrap .header-search-toggle,
+body.template-product #elovyn-header-wrap .elovyn-header-right a[href*="/cart"],
+.template-product #elovyn-header-wrap .header-search-toggle,
+.template-product #elovyn-header-wrap .elovyn-header-right a[href*="/cart"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 body.template-cart #elovyn-header-wrap svg,
 body.template-cart #elovyn-header-wrap .icon,
 body.template-product #elovyn-header-wrap svg,
@@ -1220,6 +1263,11 @@ body.template-product #elovyn-header-wrap .elovyn-logo-img,
 #elovyn-header-wrap.header--black .icon {
   fill: #ffffff !important;
   color: #ffffff !important;
+}
+#elovyn-header-wrap.header--black .elovyn-header-right svg,
+#elovyn-header-wrap.header--black .header-icons svg {
+  fill: none !important;
+  stroke: #ffffff !important;
 }
 #elovyn-header-wrap.header--black .elovyn-logo-img {
   filter: brightness(1.1);
