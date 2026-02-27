@@ -1,4 +1,5 @@
 {
+  "layout": "theme",
   "sections": {
     "main_product": {
       "type": "main-product",

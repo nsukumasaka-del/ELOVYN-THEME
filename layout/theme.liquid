@@ -81,8 +81,9 @@
     </a>
 
     {% comment %}
-      Header: rendered as a section group so it is fully editable in the Theme Editor.
-      Configure via the "Header" section (site-header) under the Header group.
+      Header: always rendered on ALL pages (homepage, collections, product, cart).
+      No conditionals – do not wrap in unless/if that excludes any template.
+      Configure via Theme Editor → Header section (site-header).
     {% endcomment %}
     {% sections 'header-group' %}
 
