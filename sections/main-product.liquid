@@ -1,10 +1,10 @@
 {% comment %}
-  Product page – Amazon-style clean white layout: image left, info right.
+  Product page – Amazon-style clean white layout: gallery left, details right.
 {% endcomment %}
 
-<div class="amazon-product-page">
-  <div class="amazon-product-container">
-    <div class="amazon-product-left product-gallery">
+<div class="amazon-product-wrapper">
+  <div class="amazon-product-inner">
+    <div class="amazon-product-gallery product-gallery">
       {% if product.featured_image != blank %}
         <img
           src="{{ product.featured_image | image_url: width: 800 }}"
@@ -27,7 +27,7 @@
       {% endif %}
     </div>
 
-    <div class="amazon-product-right product-detail">
+    <div class="amazon-product-details product-detail">
       {% if product.vendor != blank %}
         <p class="amazon-product-vendor">{{ product.vendor }}</p>
       {% endif %}
