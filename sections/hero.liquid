@@ -35,29 +35,30 @@
   style="height: {{ section.settings.hero_height | default: 80 }}vh;"
   data-section-id="{{ section.id }}"
 >
-  {%- comment -%} Background Image {%- endcomment -%}
-  <div class="absolute inset-0">
-    {%- assign hero_position = section.settings.hero_image_position | default: 'center center' -%}
-    {%- if section.settings.hero_image != blank -%}
-      <img
-        src="{{ section.settings.hero_image | image_url: width: 1920 }}"
-        alt="{{ section.settings.hero_image.alt | escape }}"
-        class="w-full h-full object-cover"
-        style="object-position: {{ hero_position }};"
-        loading="eager"
-      >
-    {%- else -%}
-      <img
-        src="{{ 'hoodie.png' | asset_url }}"
-        alt="Hoodie"
-        class="w-full h-full object-cover"
-        style="object-position: {{ hero_position }};"
-        loading="eager"
-      >
-    {%- endif -%}
-    <div class="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-  </div>
+  {%- comment -%} Background Image (zoom + focal point via CSS background) {%- endcomment -%}
+  {%- if section.settings.hero_image != blank -%}
+    {%- assign hero_bg_url = section.settings.hero_image | image_url: width: 1920 -%}
+  {%- else -%}
+    {%- assign hero_bg_url = 'hoodie.png' | asset_url -%}
+  {%- endif -%}
+  {%- assign hero_zoom = section.settings.hero_zoom | default: 100 -%}
+  {%- assign hero_focal = section.settings.hero_focal_point | default: 'center' -%}
+  <div
+    class="absolute inset-0 hero-bg"
+    role="img"
+    aria-label="{% if section.settings.hero_image != blank %}{{ section.settings.hero_image.alt | default: 'Hero background' | escape }}{% else %}Hero background{% endif %}"
+    style="background-image: url('{{ hero_bg_url }}'); background-size: {{ hero_zoom }}%; background-position: {{ hero_focal }}; background-repeat: no-repeat; background-attachment: scroll;"
+  ></div>
+  <style>
+    @media (max-width: 768px) {
+      #shopify-section-{{ section.id }} .hero-bg {
+        background-size: {{ section.settings.hero_zoom_mobile }}% !important;
+        background-position: {{ section.settings.hero_focal_point_mobile }} !important;
+      }
+    }
+  </style>
+  <div class="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" aria-hidden="true"></div>
 
   {%- comment -%} Content {%- endcomment -%}
   <div class="relative z-10 h-full flex flex-col justify-center container mx-auto px-6">
@@ -121,17 +122,68 @@
       "default": 80
     },
     {
+      "type": "range",
+      "id": "hero_zoom",
+      "label": "Hero image zoom (%)",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "default": 100,
+      "info": "Scale the image (50%–150%). Higher = more zoomed in."
+    },
+    {
       "type": "select",
-      "id": "hero_image_position",
-      "label": "Hero image position",
+      "id": "hero_focal_point",
+      "label": "Hero image focal point",
       "options": [
-        { "value": "center center", "label": "Center" },
-        { "value": "left center", "label": "Left" },
-        { "value": "right center", "label": "Right" },
-        { "value": "center top", "label": "Top" },
-        { "value": "center bottom", "label": "Bottom" }
+        { "value": "top left", "label": "Top Left" },
+        { "value": "top center", "label": "Top Center" },
+        { "value": "top right", "label": "Top Right" },
+        { "value": "center left", "label": "Center Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "center right", "label": "Center Right" },
+        { "value": "bottom left", "label": "Bottom Left" },
+        { "value": "bottom center", "label": "Bottom Center" },
+        { "value": "bottom right", "label": "Bottom Right" }
       ],
-      "default": "center center"
+      "default": "center",
+      "info": "Which part of the image is visible in the hero."
+    },
+    {
+      "type": "header",
+      "content": "Mobile (optional)"
+    },
+    {
+      "type": "range",
+      "id": "hero_zoom_mobile",
+      "label": "Hero image zoom on mobile (%)",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "default": 100,
+      "info": "Leave at 100 to match desktop."
+    },
+    {
+      "type": "select",
+      "id": "hero_focal_point_mobile",
+      "label": "Hero focal point on mobile",
+      "options": [
+        { "value": "top left", "label": "Top Left" },
+        { "value": "top center", "label": "Top Center" },
+        { "value": "top right", "label": "Top Right" },
+        { "value": "center left", "label": "Center Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "center right", "label": "Center Right" },
+        { "value": "bottom left", "label": "Bottom Left" },
+        { "value": "bottom center", "label": "Bottom Center" },
+        { "value": "bottom right", "label": "Bottom Right" }
+      ],
+      "default": "center",
+      "info": "Leave as Center to match desktop."
+    },
+    {
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
