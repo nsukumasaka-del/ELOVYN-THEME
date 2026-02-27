@@ -16,7 +16,11 @@
         "subheading": "Sweatshirts. Graphic tees.",
         "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
         "button_text": "Shop All",
+<<<<<<< HEAD
         "button_link": "/collections/shirts"
+=======
+        "button_link": "shopify://collections/hoodies"
+>>>>>>> a8eba354e3437bada51bfd2e53c16054210097ef
       }
     },
     "trust_marquee": {
