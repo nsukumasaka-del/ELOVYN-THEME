@@ -19,7 +19,7 @@
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 product-grid product-grid--ads gap-4 md:gap-6">
+      <div class="sponsored-grid">
         {% for block in section.blocks %}
           {%- assign product = block.settings.product -%}
           {%- if product == blank and block.settings.product != blank -%}
@@ -27,60 +27,55 @@
           {%- endif -%}
 
           {% if product != blank %}
-            <div class="sponsored-product product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 hover:border-accent/40" {{ block.shopify_attributes }}>
-              <span class="product-card__ad-badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
-              <div class="aspect-[4/5] relative overflow-hidden">
+            <article class="sponsored-card" {{ block.shopify_attributes }}>
+              <span class="sponsored-card__badge" aria-hidden="true">{{ 'general.amazon.sponsored' | t | default: 'Sponsored' }}</span>
+              <div class="sponsored-card__media">
                 {% if block.settings.affiliate_url != blank %}
-                  <a href="{{ block.settings.affiliate_url }}" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+                  <a href="{{ block.settings.affiliate_url }}" target="_blank" rel="noopener noreferrer" class="sponsored-card__link">
                     {% if product.featured_image != blank %}
-                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-card__img" loading="lazy" width="300" height="375">
                     {% else %}
-                      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                      {{ 'product-1' | placeholder_svg_tag: 'sponsored-card__img' }}
                     {% endif %}
                   </a>
                 {% else %}
-                  <a href="{{ product.url }}" class="block w-full h-full">
+                  <a href="{{ product.url }}" class="sponsored-card__link">
                     {% if product.featured_image != blank %}
-                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                      <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" class="sponsored-card__img" loading="lazy" width="300" height="375">
                     {% else %}
-                      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                      {{ 'product-1' | placeholder_svg_tag: 'sponsored-card__img' }}
                     {% endif %}
                   </a>
                 {% endif %}
               </div>
-              <div class="absolute bottom-0 left-0 right-0 product-card-overlay-inner">
-                <div class="absolute inset-0 bg-background/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="relative z-10">
-                  {% if product.vendor != blank %}
-                    <p class="product-card-tagline font-medium text-accent uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">{{ product.vendor }}</p>
-                  {% endif %}
-                  {% if block.settings.affiliate_url != blank %}
-                    <a href="{{ block.settings.affiliate_url }}" target="_blank" rel="noopener noreferrer" class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 block" title="{{ product.title | escape }}">{{ product.title }}</a>
-                  {% else %}
-                    <a href="{{ product.url }}" class="product-card-title font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 block" title="{{ product.title | escape }}">{{ product.title }}</a>
-                  {% endif %}
-                  {% if product.description != blank %}
-                    <p class="product-card-desc text-foreground/60 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{{ product.description | strip_html | truncate: 100 }}</p>
-                  {% endif %}
-                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {% if block.settings.affiliate_url != blank %}
-                      <a href="{{ block.settings.affiliate_url }}" class="btn-hero text-xs button affiliate-button" target="_blank" rel="noopener noreferrer">{{ block.settings.button_label | default: 'View Product' }}</a>
-                    {% else %}
-                      <a href="{{ product.url }}" class="btn-hero text-xs button">{{ 'general.amazon.view_product' | t | default: 'View Product' }}</a>
-                    {% endif %}
-                  </div>
-                </div>
+              <div class="sponsored-card__body">
+                {% if product.vendor != blank %}
+                  <p class="sponsored-card__vendor">{{ product.vendor }}</p>
+                {% endif %}
+                {% if block.settings.affiliate_url != blank %}
+                  <a href="{{ block.settings.affiliate_url }}" target="_blank" rel="noopener noreferrer" class="sponsored-card__title" title="{{ product.title | escape }}">{{ product.title }}</a>
+                {% else %}
+                  <a href="{{ product.url }}" class="sponsored-card__title" title="{{ product.title | escape }}">{{ product.title }}</a>
+                {% endif %}
+                {% if product.description != blank %}
+                  <p class="sponsored-card__desc">{{ product.description | strip_html | truncate: 80 }}</p>
+                {% endif %}
+                {% if block.settings.affiliate_url != blank %}
+                  <a href="{{ block.settings.affiliate_url }}" class="sponsored-card__cta" target="_blank" rel="noopener noreferrer">{{ block.settings.button_label | default: 'View Product' }}</a>
+                {% else %}
+                  <a href="{{ product.url }}" class="sponsored-card__cta sponsored-card__cta--secondary">{{ 'general.amazon.view_product' | t | default: 'View Product' }}</a>
+                {% endif %}
               </div>
-            </div>
+            </article>
           {% else %}
-            <div class="sponsored-product product-card product-card--ad group relative bg-card rounded-3xl overflow-hidden border-2 border-border/50 border-dashed" {{ block.shopify_attributes }}>
-              <div class="aspect-[4/5] flex items-center justify-center text-foreground/50 text-sm px-4">
-                {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover opacity-50' }}
+            <article class="sponsored-card sponsored-card--placeholder" {{ block.shopify_attributes }}>
+              <div class="sponsored-card__media">
+                {{ 'product-1' | placeholder_svg_tag: 'sponsored-card__img sponsored-card__img--muted' }}
               </div>
-              <div class="p-4 text-center text-foreground/60 text-sm">
-                Select a product in the block settings
+              <div class="sponsored-card__body">
+                <p class="sponsored-card__placeholder-text">Select a product in the block settings</p>
               </div>
-            </div>
+            </article>
           {% endif %}
         {% endfor %}
       </div>
@@ -92,6 +87,158 @@
     {% endif %}
   </div>
 </section>
+
+<style>
+  .sponsored-section .sponsored-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .sponsored-section .sponsored-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .sponsored-section .sponsored-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.75rem;
+    }
+  }
+
+  .sponsored-section .sponsored-card {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: 0 1px 3px hsl(var(--foreground) / 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .sponsored-section .sponsored-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px hsl(var(--foreground) / 0.1);
+    border-color: hsl(var(--accent) / 0.4);
+  }
+
+  .sponsored-section .sponsored-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-radius: 9999px;
+  }
+
+  .sponsored-section .sponsored-card__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: hsl(var(--muted) / 0.5);
+  }
+  .sponsored-section .sponsored-card__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .sponsored-section .sponsored-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .sponsored-section .sponsored-card:hover .sponsored-card__img {
+    transform: scale(1.05);
+  }
+  .sponsored-section .sponsored-card__img--muted {
+    opacity: 0.5;
+  }
+
+  .sponsored-section .sponsored-card__body {
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+  }
+  .sponsored-section .sponsored-card__vendor {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--accent));
+  }
+  .sponsored-section .sponsored-card__title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.2s ease;
+  }
+  .sponsored-section .sponsored-card__title:hover {
+    color: hsl(var(--accent));
+  }
+  .sponsored-section .sponsored-card__desc {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: hsl(var(--foreground) / 0.65);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+  .sponsored-section .sponsored-card__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  .sponsored-section .sponsored-card__cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .sponsored-section .sponsored-card__cta--secondary {
+    background: transparent;
+    color: hsl(var(--foreground));
+    border: 1.5px solid hsl(var(--border));
+  }
+  .sponsored-section .sponsored-card__cta--secondary:hover {
+    border-color: hsl(var(--accent));
+    color: hsl(var(--accent));
+  }
+  .sponsored-section .sponsored-card__placeholder-text {
+    font-size: 0.8125rem;
+    color: hsl(var(--foreground) / 0.5);
+    margin: 0;
+  }
+  .sponsored-section .sponsored-card--placeholder {
+    border-style: dashed;
+  }
+</style>
 
 {% schema %}
 {
