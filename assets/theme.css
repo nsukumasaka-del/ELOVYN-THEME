@@ -1088,52 +1088,79 @@ body.template-product .content-for-layout {
   }
 }
 
-/* ===== Premium Product Page Header (Amazon-inspired dark grey) ===== */
-.template-product #elovyn-header-wrap,
-body.template-product #elovyn-header-wrap {
-  background-color: #2f2f2f !important;
-  background: #2f2f2f !important;
+/* ===== Cart + Product: same header – black background, white text & icons ===== */
+body.template-cart #elovyn-header-wrap,
+body.template-product #elovyn-header-wrap,
+.template-product #elovyn-header-wrap {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-.template-product #elovyn-header-wrap.scrolled,
-body.template-product #elovyn-header-wrap.scrolled {
-  background-color: #2f2f2f !important;
-  background: #2f2f2f !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  border-bottom: 1px solid #444;
+body.template-cart #elovyn-header-wrap.scrolled,
+body.template-product #elovyn-header-wrap.scrolled,
+.template-product #elovyn-header-wrap.scrolled {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
+/* White nav text – cart and product */
+body.template-cart #elovyn-header-wrap .elovyn-nav a,
+body.template-cart #elovyn-header-wrap .site-nav .nav-link,
+body.template-cart #elovyn-header-wrap .elovyn-header-right a,
+body.template-cart #elovyn-header-wrap .elovyn-header-right button,
+body.template-cart #elovyn-header-wrap .elovyn-logo-link,
+body.template-cart #elovyn-header-wrap a,
+body.template-product #elovyn-header-wrap .elovyn-nav a,
+body.template-product #elovyn-header-wrap .site-nav .nav-link,
+body.template-product #elovyn-header-wrap .elovyn-header-right a,
+body.template-product #elovyn-header-wrap .elovyn-header-right button,
+body.template-product #elovyn-header-wrap .elovyn-logo-link,
+body.template-product #elovyn-header-wrap a,
 .template-product #elovyn-header-wrap .elovyn-nav a,
+.template-product #elovyn-header-wrap .site-nav .nav-link,
 .template-product #elovyn-header-wrap .elovyn-header-right a,
 .template-product #elovyn-header-wrap .elovyn-header-right button,
 .template-product #elovyn-header-wrap .elovyn-logo-link,
-body.template-product #elovyn-header-wrap .elovyn-nav a,
-body.template-product #elovyn-header-wrap .elovyn-header-right a,
-body.template-product #elovyn-header-wrap .elovyn-header-right button,
-body.template-product #elovyn-header-wrap .elovyn-logo-link {
+.template-product #elovyn-header-wrap a {
   color: #ffffff !important;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
-.template-product #elovyn-header-wrap .elovyn-nav a:hover,
-.template-product #elovyn-header-wrap .elovyn-header-right a:hover,
-.template-product #elovyn-header-wrap .elovyn-header-right button:hover,
-.template-product #elovyn-header-wrap .elovyn-logo-link:hover,
+body.template-cart #elovyn-header-wrap .elovyn-nav a:hover,
+body.template-cart #elovyn-header-wrap .elovyn-header-right a:hover,
+body.template-cart #elovyn-header-wrap .elovyn-header-right button:hover,
+body.template-cart #elovyn-header-wrap .elovyn-logo-link:hover,
 body.template-product #elovyn-header-wrap .elovyn-nav a:hover,
 body.template-product #elovyn-header-wrap .elovyn-header-right a:hover,
 body.template-product #elovyn-header-wrap .elovyn-header-right button:hover,
-body.template-product #elovyn-header-wrap .elovyn-logo-link:hover {
-  opacity: 0.75;
+body.template-product #elovyn-header-wrap .elovyn-logo-link:hover,
+.template-product #elovyn-header-wrap .elovyn-nav a:hover,
+.template-product #elovyn-header-wrap .elovyn-header-right a:hover,
+.template-product #elovyn-header-wrap .elovyn-header-right button:hover,
+.template-product #elovyn-header-wrap .elovyn-logo-link:hover {
+  opacity: 0.85;
 }
-.template-product #elovyn-header-wrap .elovyn-logo-img,
-body.template-product #elovyn-header-wrap .elovyn-logo-img {
+/* White icons – cart and product */
+body.template-cart #elovyn-header-wrap svg,
+body.template-cart #elovyn-header-wrap .icon,
+body.template-product #elovyn-header-wrap svg,
+body.template-product #elovyn-header-wrap .icon,
+.template-product #elovyn-header-wrap svg,
+.template-product #elovyn-header-wrap .icon {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+body.template-cart #elovyn-header-wrap .elovyn-logo-img,
+body.template-product #elovyn-header-wrap .elovyn-logo-img,
+.template-product #elovyn-header-wrap .elovyn-logo-img {
   filter: brightness(1.1);
 }
 
-/* Black header on Cart + Product only (request.page_type) */
+/* header--black class (request.page_type) – same look */
 #elovyn-header-wrap.header--black {
   background-color: #000000 !important;
   background: #000000 !important;
@@ -1148,7 +1175,6 @@ body.template-product #elovyn-header-wrap .elovyn-logo-img {
 }
 #elovyn-header-wrap.header--black .site-nav a,
 #elovyn-header-wrap.header--black .nav-link,
-#elovyn-header-wrap.header--black .header__menu-item,
 #elovyn-header-wrap.header--black .elovyn-nav a,
 #elovyn-header-wrap.header--black .elovyn-header-right a,
 #elovyn-header-wrap.header--black .elovyn-header-right button,
@@ -1162,37 +1188,5 @@ body.template-product #elovyn-header-wrap .elovyn-logo-img {
   color: #ffffff !important;
 }
 #elovyn-header-wrap.header--black .elovyn-logo-img {
-  filter: brightness(1.1);
-}
-
-/* Cart page: ensure header is always visible with black background */
-body.template-cart #elovyn-header-wrap {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background-color: #000000 !important;
-  background: #000000 !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-body.template-cart #elovyn-header-wrap.scrolled {
-  background-color: #000000 !important;
-  background: #000000 !important;
-}
-body.template-cart #elovyn-header-wrap .elovyn-nav a,
-body.template-cart #elovyn-header-wrap .site-nav .nav-link,
-body.template-cart #elovyn-header-wrap .elovyn-header-right a,
-body.template-cart #elovyn-header-wrap .elovyn-header-right button,
-body.template-cart #elovyn-header-wrap .elovyn-logo-link,
-body.template-cart #elovyn-header-wrap a {
-  color: #ffffff !important;
-}
-body.template-cart #elovyn-header-wrap svg,
-body.template-cart #elovyn-header-wrap .icon {
-  fill: #ffffff !important;
-  color: #ffffff !important;
-}
-body.template-cart #elovyn-header-wrap .elovyn-logo-img {
   filter: brightness(1.1);
 }
