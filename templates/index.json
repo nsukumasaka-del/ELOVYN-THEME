@@ -62,7 +62,7 @@
         "hero_height": 100,
         "hero_zoom": 105,
         "hero_focal_point": "top left",
-        "hero_zoom_mobile": 150,
+        "hero_zoom_mobile": 120,
         "hero_focal_point_mobile": "bottom center",
         "heading": "Hoodies.",
         "subheading": "Sweatshirts. Graphic tees.",
