@@ -81,9 +81,10 @@
     </a>
 
     {% comment %}
-      Header: always rendered via snippet so it never disappears. Customize under Theme settings (gear) → Header.
+      Header: rendered as a section group so it is fully editable in the Theme Editor.
+      Configure via the "Header" section (site-header) under the Header group.
     {% endcomment %}
-    {% render 'header-bar' %}
+    {% sections 'header-group' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
