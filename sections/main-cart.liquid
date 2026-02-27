@@ -65,6 +65,9 @@
                   {{ 'sections.cart.checkout' | t }}
                 </button>
                 <a href="{{ routes.root_url }}" class="main-cart-continue">{{ 'sections.cart.continue_shopping' | t }}</a>
+                <button type="button" class="main-cart-clear-btn" data-clear-cart data-confirm="{{ 'sections.cart.clear_cart_confirm' | t | escape }}" aria-label="{{ 'sections.cart.clear_cart' | t }}">
+                  {{ 'sections.cart.clear_cart' | t }}
+                </button>
               </div>
             </div>
           </div>
@@ -457,6 +460,25 @@
     word-wrap: break-word;
   }
   .main-cart-continue:hover { background: rgba(0,0,0,0.04); }
+  .main-cart-clear-btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(0,0,0,0.6);
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .main-cart-clear-btn:hover {
+    background: rgba(0,0,0,0.04);
+    color: #111111;
+    border-color: rgba(0,0,0,0.2);
+  }
 
   /* Empty state – visible text, proper alignment */
   .main-cart-empty {
@@ -537,5 +559,13 @@
     inputs.forEach(function(input) {
       input.addEventListener('change', submitCart);
     });
+    var clearBtn = form.querySelector('[data-clear-cart]');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function() {
+        if (!confirm(clearBtn.getAttribute('data-confirm') || 'Clear all items from your cart?')) return;
+        inputs.forEach(function(input) { input.value = '0'; });
+        submitCart();
+      });
+    }
   })();
 </script>

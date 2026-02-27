@@ -57,6 +57,8 @@
       "continue_shopping": "Back to products",
       "subtotal": "Subtotal",
       "checkout": "Check out",
+      "clear_cart": "Clear cart",
+      "clear_cart_confirm": "Clear all items from your cart?",
       "empty": "Your cart is empty.",
       "cart_error": "There was an error while updating your cart. Please try again.",
       "cart_quantity_error_html": "You can only add [quantity] of this item to your cart."

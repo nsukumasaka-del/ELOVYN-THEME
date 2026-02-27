@@ -1,94 +1,99 @@
 {% comment %}
-  Product page – price, variant selector, Add to cart (ready for sales).
+  Product page – Amazon-style clean white layout: image left, info right.
 {% endcomment %}
 
-<section class="py-16 md:py-24 bg-background">
-  <div class="container mx-auto px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-      <div class="product-gallery">
-        {% if product.featured_image != blank %}
-          <img
-            src="{{ product.featured_image | image_url: width: 800 }}"
-            alt="{{ product.featured_image.alt | escape }}"
-            class="w-full rounded-2xl border border-border/30"
-            id="ProductPhotoImg"
-            loading="eager"
-          >
-        {% else %}
-          {{ 'product-1' | placeholder_svg_tag: 'w-full rounded-2xl border border-border/30' }}
-        {% endif %}
-        {% if product.images.size > 1 %}
-          <div class="flex gap-2 mt-4 overflow-x-auto">
-            {% for image in product.images %}
-              <button type="button" class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-border/30 {% if forloop.first %}ring-2 ring-accent{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
-                <img src="{{ image | image_url: width: 100 }}" alt="{{ image.alt | escape }}" class="w-full h-full object-cover" loading="lazy">
-              </button>
+<div class="amazon-product-page">
+  <div class="amazon-product-container">
+    <div class="amazon-product-left product-gallery">
+      {% if product.featured_image != blank %}
+        <img
+          src="{{ product.featured_image | image_url: width: 800 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          class="amazon-product-main-img"
+          id="ProductPhotoImg"
+          loading="eager"
+        >
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'amazon-product-main-img' }}
+      {% endif %}
+      {% if product.images.size > 1 %}
+        <div class="amazon-product-thumbs flex gap-2 mt-4 overflow-x-auto">
+          {% for image in product.images %}
+            <button type="button" class="flex-shrink-0 w-20 h-20 rounded overflow-hidden border border-gray-200 {% if forloop.first %}ring-2 ring-amber-400{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+              <img src="{{ image | image_url: width: 100 }}" alt="{{ image.alt | escape }}" class="w-full h-full object-cover" loading="lazy">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="amazon-product-right product-detail">
+      {% if product.vendor != blank %}
+        <p class="amazon-product-vendor">{{ product.vendor }}</p>
+      {% endif %}
+      <h1 class="amazon-product-title">{{ product.title }}</h1>
+
+      <div class="amazon-product-rating" aria-hidden="true">
+        <span class="amazon-product-stars">★★★★★</span>
+        <span class="amazon-product-rating-label">Rating</span>
+      </div>
+
+      <div class="amazon-product-price" data-product-price>
+        {{ product.selected_or_first_available_variant.price | money }}
+      </div>
+      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+        <div class="amazon-product-compare">
+          <span class="line-through text-gray-500">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+          <span class="amazon-product-save">Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}</span>
+        </div>
+      {% endif %}
+
+      <form action="{{ routes.cart_add_url }}" method="post" id="product-form" class="product-form amazon-product-form" data-option-names='{{ product.options_with_values | map: "name" | json }}'>
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+        {% unless product.has_only_default_variant %}
+          <div class="amazon-product-options space-y-4 mb-6">
+            {% for option in product.options_with_values %}
+              <div>
+                <label for="Option-{{ section.id }}-{{ forloop.index0 }}" class="amazon-product-option-label">{{ option.name }}</label>
+                <div class="flex flex-wrap gap-2 option-values" data-option-index="{{ forloop.index0 }}">
+                  {% for value in option.values %}
+                    <label class="relative cursor-pointer option-value-label">
+                      <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" class="sr-only option-radio" data-option-index="{{ forloop.parentloop.index0 }}" {% if option.selected_value == value %}checked{% endif %}>
+                      <span class="block px-4 py-2 rounded border border-gray-300 bg-white text-gray-900 hover:border-amber-400 transition-colors option-value-span">{{ value }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
             {% endfor %}
           </div>
-        {% endif %}
-      </div>
+        {% endunless %}
 
-      <div class="product-detail">
-        {% if product.vendor != blank %}
-          <p class="text-sm font-medium text-accent uppercase tracking-wider mb-2">{{ product.vendor }}</p>
-        {% endif %}
-        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-4">{{ product.title }}</h1>
-
-        <div class="flex items-center gap-3 mb-6 flex-wrap">
-          <span class="text-2xl font-bold text-foreground" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</span>
-          {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-            <span class="text-lg text-foreground/50 line-through">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
-            <span class="text-sm font-medium text-accent bg-accent/20 px-2 py-1 rounded">Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}</span>
-          {% endif %}
+        <div class="amazon-product-actions flex flex-wrap items-center gap-4 mb-6">
+          <div class="flex items-center border border-gray-300 rounded overflow-hidden bg-white">
+            <label for="Quantity-{{ section.id }}" class="visually-hidden">{{ 'products.product.quantity' | t | default: 'Quantity' }}</label>
+            <button type="button" class="quantity-btn px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors" aria-label="Decrease quantity" data-quantity-minus>-</button>
+            <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" max="99" class="w-14 text-center py-3 bg-transparent text-gray-900 border-x border-gray-300 focus:outline-none focus:ring-0" data-quantity-input>
+            <button type="button" class="quantity-btn px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors" aria-label="Increase quantity" data-quantity-plus>+</button>
+          </div>
+          <button type="submit" name="add" class="product-form__submit flex-1 min-w-[200px] py-3 px-6 rounded font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
+            {% if product.selected_or_first_available_variant.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </button>
         </div>
+      </form>
 
-        <form action="{{ routes.cart_add_url }}" method="post" id="product-form" class="product-form" data-option-names='{{ product.options_with_values | map: "name" | json }}'>
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
-
-          {% unless product.has_only_default_variant %}
-            <div class="space-y-4 mb-6">
-              {% for option in product.options_with_values %}
-                <div>
-                  <label for="Option-{{ section.id }}-{{ forloop.index0 }}" class="block text-sm font-semibold text-foreground mb-2">{{ option.name }}</label>
-                  <div class="flex flex-wrap gap-2 option-values" data-option-index="{{ forloop.index0 }}">
-                    {% for value in option.values %}
-                      <label class="relative cursor-pointer option-value-label">
-                        <input type="radio" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" class="sr-only option-radio" data-option-index="{{ forloop.parentloop.index0 }}" {% if option.selected_value == value %}checked{% endif %}>
-                        <span class="block px-4 py-2 rounded-xl border-2 border-border bg-card text-foreground hover:border-foreground/30 transition-colors option-value-span">{{ value }}</span>
-                      </label>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-          {% endunless %}
-
-          <div class="flex flex-wrap items-center gap-4 mb-6">
-            <div class="flex items-center border border-border rounded-xl overflow-hidden bg-card">
-              <label for="Quantity-{{ section.id }}" class="visually-hidden">{{ 'products.product.quantity' | t | default: 'Quantity' }}</label>
-              <button type="button" class="quantity-btn px-4 py-3 text-foreground hover:bg-secondary transition-colors" aria-label="Decrease quantity" data-quantity-minus>-</button>
-              <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" max="99" class="w-14 text-center py-3 bg-transparent text-foreground border-x border-border focus:outline-none focus:ring-0" data-quantity-input>
-              <button type="button" class="quantity-btn px-4 py-3 text-foreground hover:bg-secondary transition-colors" aria-label="Increase quantity" data-quantity-plus>+</button>
-            </div>
-            <button type="submit" name="add" class="flex-1 min-w-[200px] py-3 px-6 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
-              {% if product.selected_or_first_available_variant.available %}
-                {{ 'products.product.add_to_cart' | t }}
-              {% else %}
-                {{ 'products.product.sold_out' | t }}
-              {% endif %}
-            </button>
-          </div>
-        </form>
-
-        {% if product.description != blank %}
-          <div class="prose prose-invert max-w-none text-foreground/80 mt-8 border-t border-border/30 pt-8">
-            {{ product.description }}
-          </div>
-        {% endif %}
-      </div>
+      {% if product.description != blank %}
+        <div class="amazon-product-description">
+          {{ product.description }}
+        </div>
+      {% endif %}
     </div>
   </div>
-</section>
+</div>
 
 <script>
 (function() {
