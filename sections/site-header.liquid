@@ -319,6 +319,82 @@
     justify-content: center;
     padding: 0 0.25rem;
   }
+  /* Search toggle (matches other header icons) */
+  #elovyn-header-wrap .header-icons {
+    display: flex;
+    align-items: center;
+    gap: inherit;
+  }
+  #elovyn-header-wrap .header-search-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: inherit;
+  }
+  /* Search drawer */
+  .search-drawer {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  .search-drawer.active {
+    display: block;
+    pointer-events: auto;
+  }
+  .search-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .search-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 90%;
+    height: 100%;
+    background: #fff;
+    padding: 30px;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+  .search-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #111;
+    padding: 0.25rem;
+  }
+  .search-drawer-form {
+    margin-top: 2.5rem;
+  }
+  .search-drawer-form input[type="search"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .search-drawer-form .search-drawer-submit {
+    padding: 10px 20px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  @media (max-width: 480px) {
+    .search-content { width: 100%; max-width: 100%; }
+  }
 </style>
 
 <div id="elovyn-header-wrap">
@@ -368,8 +444,11 @@
         </ul>
       </nav>
 
-      {%- comment -%} Right: User icon, ShoppingBag icon, CTA, Menu/X {%- endcomment -%}
-      <div class="elovyn-header-right">
+      {%- comment -%} Right: Search, Account, Cart, Menu/X {%- endcomment -%}
+      <div class="elovyn-header-right header-icons">
+        <button type="button" class="header-search-toggle elovyn-header-right-btn" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}">
+          {% render 'icon-search', width: 20, height: 20 %}
+        </button>
         <a href="{{ routes.account_login_url }}" aria-label="Account">
           {% render 'icon-user', width: 20, height: 20 %}
         </a>
@@ -396,6 +475,18 @@
       {%- endfor -%}
     </nav>
   </div>
+
+  {%- comment -%} Search drawer (Shopify /search) {%- endcomment -%}
+  <div class="search-drawer" id="SearchDrawer" aria-hidden="true">
+    <div class="search-overlay" aria-hidden="true"></div>
+    <div class="search-content">
+      <button type="button" class="search-close" aria-label="{{ 'general.search.close' | t | default: 'Close search' }}">&times;</button>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer-form">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t | default: 'Search products...' }}" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}" autocomplete="off">
+        <button type="submit" class="search-drawer-submit">{{ 'general.search.submit' | t | default: 'Search' }}</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -417,6 +508,32 @@
     window.addEventListener('scroll', function() {
       wrap.classList.toggle('scrolled', window.pageYOffset > 50);
     });
+
+    /* Search drawer */
+    var searchToggle = wrap && wrap.querySelector('.header-search-toggle');
+    var searchDrawer = document.getElementById('SearchDrawer');
+    var searchClose = searchDrawer && searchDrawer.querySelector('.search-close');
+    var searchOverlay = searchDrawer && searchDrawer.querySelector('.search-overlay');
+    if (searchToggle && searchDrawer) {
+      searchToggle.addEventListener('click', function() {
+        searchDrawer.classList.add('active');
+        searchDrawer.setAttribute('aria-hidden', 'false');
+        var input = searchDrawer.querySelector('input[type="search"]');
+        if (input) { input.focus(); }
+      });
+    }
+    if (searchClose) {
+      searchClose.addEventListener('click', function() {
+        searchDrawer.classList.remove('active');
+        searchDrawer.setAttribute('aria-hidden', 'true');
+      });
+    }
+    if (searchOverlay) {
+      searchOverlay.addEventListener('click', function() {
+        searchDrawer.classList.remove('active');
+        searchDrawer.setAttribute('aria-hidden', 'true');
+      });
+    }
   })();
 </script>
 
