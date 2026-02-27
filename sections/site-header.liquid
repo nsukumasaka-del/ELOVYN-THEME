@@ -100,20 +100,35 @@
       width: calc({{ section.settings.logo_width | default: 150 }}px * 0.7);
     }
   }
-  /* Desktop nav bar - visible from 1024px */
+  /* Desktop nav bar - visible from 1024px, horizontal row */
   #elovyn-header-wrap .elovyn-nav {
     display: none;
     align-items: center;
-    gap: 1.5rem;
+    flex: 1;
+    justify-content: center;
+    max-width: 600px;
   }
   @media (min-width: 1024px) {
     #elovyn-header-wrap .elovyn-nav {
       display: flex !important;
-      flex: 1;
-      justify-content: center;
-      max-width: 600px;
     }
   }
+  /* Horizontal navigation list */
+  #elovyn-header-wrap .site-nav .nav-list,
+  #elovyn-header-wrap .elovyn-nav .nav-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  #elovyn-header-wrap .site-nav .nav-item,
+  #elovyn-header-wrap .elovyn-nav .nav-item {
+    display: inline-block;
+  }
+  #elovyn-header-wrap .elovyn-nav .nav-link,
   #elovyn-header-wrap .elovyn-nav a {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
@@ -122,18 +137,24 @@
     transition: color 0.2s;
     white-space: nowrap;
   }
+  #elovyn-header-wrap .elovyn-nav .nav-link:hover,
   #elovyn-header-wrap .elovyn-nav a:hover {
     color: #fff;
   }
-  /* Optional: site-nav helper class for easy theming in Theme Editor */
-  #elovyn-header-wrap .site-nav a {
+  #elovyn-header-wrap .site-nav .nav-link {
     color: #ffffff;
-    text-decoration: none;
-    padding: 0 15px;
+    padding: 0 2px;
     font-weight: 500;
   }
-  #elovyn-header-wrap .site-nav a:hover {
-    opacity: 0.75;
+  #elovyn-header-wrap .site-nav .nav-link:hover {
+    opacity: 0.7;
+  }
+  /* Mobile: desktop nav list stays horizontal when visible; mobile menu (#elovyn-mobile-menu) stays stacked */
+  @media (max-width: 1023px) {
+    #elovyn-header-wrap .elovyn-nav .nav-list {
+      flex-direction: row;
+      gap: 15px;
+    }
   }
   /* Right side: icons + CTA + hamburger - visible on all screens */
   #elovyn-header-wrap .elovyn-header-right {
@@ -335,12 +356,12 @@
 
       {%- comment -%} Navigation bar {%- endcomment -%}
       <nav class="elovyn-nav site-nav" role="navigation" aria-label="Main navigation">
-        <ul>
+        <ul class="nav-list">
           {%- for block in section.blocks -%}
             {%- if block.type == 'nav_link' -%}
               {%- assign link_url = block.settings.url | default: '/' -%}
-              <li {{ block.shopify_attributes }}>
-                <a href="{{ link_url }}">{{ block.settings.text | default: 'Link' }}</a>
+              <li class="nav-item" {{ block.shopify_attributes }}>
+                <a href="{{ link_url }}" class="nav-link">{{ block.settings.text | default: 'Link' }}</a>
               </li>
             {%- endif -%}
           {%- endfor -%}
