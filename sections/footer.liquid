@@ -2,7 +2,7 @@
   Modern footer – Takealot-inspired: clean dark layout, link columns, newsletter, Contact us links to a separate page.
 {% endcomment %}
 
-<footer class="footer-modern">
+<footer class="footer-modern site-footer" style="background-color: {{ section.settings.footer_bg_color | default: '#000000' }};">
   <div class="footer-modern__inner">
     {%- comment -%} Top: logo, description, link columns {%- endcomment -%}
     <div class="footer-modern__top">
@@ -23,6 +23,25 @@
             {%- if settings.social_twitter_link != blank -%}<a href="{{ settings.social_twitter_link }}" class="footer-modern__social-link" aria-label="Twitter">Twitter</a>{%- endif -%}
             {%- if settings.social_facebook_link != blank -%}<a href="{{ settings.social_facebook_link }}" class="footer-modern__social-link" aria-label="Facebook">Facebook</a>{%- endif -%}
             {%- if settings.social_youtube_link != blank -%}<a href="{{ settings.social_youtube_link }}" class="footer-modern__social-link" aria-label="YouTube">YouTube</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.facebook_link != blank or section.settings.instagram_link != blank or section.settings.twitter_link != blank or section.settings.tiktok_link != blank or section.settings.youtube_link != blank -%}
+          <div class="footer-social">
+            {%- if section.settings.facebook_link != blank -%}
+              <a href="{{ section.settings.facebook_link }}" target="_blank" rel="noopener noreferrer">Facebook</a>
+            {%- endif -%}
+            {%- if section.settings.instagram_link != blank -%}
+              <a href="{{ section.settings.instagram_link }}" target="_blank" rel="noopener noreferrer">Instagram</a>
+            {%- endif -%}
+            {%- if section.settings.twitter_link != blank -%}
+              <a href="{{ section.settings.twitter_link }}" target="_blank" rel="noopener noreferrer">X</a>
+            {%- endif -%}
+            {%- if section.settings.tiktok_link != blank -%}
+              <a href="{{ section.settings.tiktok_link }}" target="_blank" rel="noopener noreferrer">TikTok</a>
+            {%- endif -%}
+            {%- if section.settings.youtube_link != blank -%}
+              <a href="{{ section.settings.youtube_link }}" target="_blank" rel="noopener noreferrer">YouTube</a>
+            {%- endif -%}
           </div>
         {%- endif -%}
       </div>
@@ -208,12 +227,21 @@
   .footer-modern__legal { display: flex; gap: 1.25rem; }
   .footer-modern__legal-link { font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.2s; }
   .footer-modern__legal-link:hover { color: rgba(255, 255, 255, 0.85); }
+  .footer-social { margin-top: 20px; }
+  .footer-social a { margin-right: 15px; text-decoration: none; color: inherit; font-weight: 500; }
+  .footer-social a:hover { opacity: 0.7; }
 </style>
 
 {% schema %}
 {
   "name": "Footer",
   "settings": [
+    {
+      "type": "color",
+      "id": "footer_bg_color",
+      "label": "Footer Background Color",
+      "default": "#000000"
+    },
     {
       "type": "image_picker",
       "id": "logo",
@@ -230,6 +258,31 @@
       "id": "show_social_icons",
       "label": "Show social links",
       "default": true
+    },
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "twitter_link",
+      "label": "Twitter (X) URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_link",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube_link",
+      "label": "YouTube URL"
     },
     {
       "type": "url",
