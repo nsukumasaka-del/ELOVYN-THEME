@@ -1,0 +1,32 @@
+{
+  "layout": "theme",
+  "sections": {
+    "contact_page": {
+      "type": "contact",
+      "settings": {
+        "heading": "Contact us",
+        "subheading": "Get in touch. Send a message or use the details below.",
+        "show_form": true,
+        "contact_email": "hello@yourstore.com",
+        "contact_phone": "+1 (555) 123-4567",
+        "address_line_1": "123 Main Street",
+        "address_line_2": "Suite 100",
+        "city_country": "New York, NY 10001",
+        "hours_text": "Mon – Fri: 9am – 6pm\nSat: 10am – 4pm\nSun: Closed",
+        "show_social": true
+      },
+      "blocks": {
+        "link_faq": {
+          "type": "link",
+          "settings": {
+            "label": "Help center",
+            "text": "FAQ & Returns",
+            "url": "/pages/faq"
+          }
+        }
+      },
+      "block_order": ["link_faq"]
+    }
+  },
+  "order": ["contact_page"]
+}
