@@ -157,7 +157,7 @@
         "products_to_show": 8,
         "heading": "Hoodies",
         "description": "Cozy, comfortable, and on-trend. Find your next favorite hoodie.",
-        "show_view_all": true,
+        "show_view_all": false,
         "view_all_text": "View all"
       }
     },
