@@ -89,8 +89,8 @@
     <div class="footer-modern__bottom">
       {%- assign copy_year = 'now' | date: '%Y' -%}
       {%- assign copy_name = section.settings.copyright_name | default: shop.name -%}
-      {%- assign copy_template = section.settings.copyright_text | default: "© {year} {name}. All rights reserved." -%}
-      <p class="footer-modern__copy">{{ copy_template | replace: '{year}', copy_year | replace: '{name}', copy_name }}</p>
+      {%- assign copy_template = section.settings.copyright_text | default: "© __year__ __name__. All rights reserved." -%}
+      <p class="footer-modern__copy">{{ copy_template | replace: '__year__', copy_year | replace: '__name__', copy_name }}</p>
       <nav class="footer-modern__legal" aria-label="Legal">
         <a href="{{ section.settings.privacy_url | default: '#' }}" class="footer-modern__legal-link">Privacy</a>
         <a href="{{ section.settings.terms_url | default: '#' }}" class="footer-modern__legal-link">Terms</a>
@@ -258,14 +258,14 @@
       "id": "copyright_name",
       "label": "Copyright name",
       "default": "",
-      "info": "Used in the copyright line if you use {name} in the template below."
+      "info": "Used in the copyright line if you use __name__ in the template below."
     },
     {
       "type": "textarea",
       "id": "copyright_text",
       "label": "Copyright line",
-      "default": "© {year} {name}. All rights reserved.",
-      "info": "Use {year} for current year, {name} for copyright name."
+      "default": "© __year__ __name__. All rights reserved.",
+      "info": "Use __year__ for current year, __name__ for copyright name."
     },
     {
       "type": "header",
