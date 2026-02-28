@@ -60,7 +60,7 @@
         "subheading": "Sweatshirts. Graphic tees.",
         "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
         "button_text": "Shop All",
-        "button_link": "/#apparel"
+        "button_link": "/#Graphic Tees"
       }
     },
     "trust_marquee": {
@@ -129,7 +129,7 @@
         "heading": "Graphic & custom tees",
         "description": "Stand out with bold designs and custom prints. Your style, your statement.",
         "show_view_all": false,
-        "view_all_text": "View all"
+        "view_all_text": "/#Graphic Tees"
       }
     },
     "hoodies": {
@@ -142,7 +142,7 @@
         "heading": "Hoodies",
         "description": "Cozy, comfortable, and on-trend. Find your next favorite hoodie.",
         "show_view_all": false,
-        "view_all_text": "View all"
+        "view_all_text": "View all /#"
       }
     },
     "sweatshirts": {
