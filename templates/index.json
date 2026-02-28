@@ -44,7 +44,7 @@
           "type": "nav_link",
           "settings": {
             "text": "Shop All",
-            "url": "/collections/all"
+            "url": "/#apparel"
           }
         }
       },
@@ -76,7 +76,7 @@
         "subheading": "Sweatshirts. Graphic tees.",
         "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
         "button_text": "Shop All",
-        "button_link": "shopify://collections/hoodies"
+        "button_link": "/#apparel"
       }
     },
     "trust_marquee": {
