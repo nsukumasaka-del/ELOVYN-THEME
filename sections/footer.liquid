@@ -25,25 +25,15 @@
             {%- if settings.social_youtube_link != blank -%}<a href="{{ settings.social_youtube_link }}" class="footer-modern__social-link" aria-label="YouTube">YouTube</a>{%- endif -%}
           </div>
         {%- endif -%}
-        {%- if section.settings.facebook_link != blank or section.settings.instagram_link != blank or section.settings.twitter_link != blank or section.settings.tiktok_link != blank or section.settings.youtube_link != blank -%}
-          <div class="footer-social">
-            {%- if section.settings.facebook_link != blank -%}
-              <a href="{{ section.settings.facebook_link }}" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <div class="footer-social">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'social_link' and block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" target="_blank" rel="noopener noreferrer" {{ block.shopify_attributes }}>
+                {%- if block.settings.platform == 'twitter' -%}X{%- else -%}{{ block.settings.platform | capitalize }}{%- endif -%}
+              </a>
             {%- endif -%}
-            {%- if section.settings.instagram_link != blank -%}
-              <a href="{{ section.settings.instagram_link }}" target="_blank" rel="noopener noreferrer">Instagram</a>
-            {%- endif -%}
-            {%- if section.settings.twitter_link != blank -%}
-              <a href="{{ section.settings.twitter_link }}" target="_blank" rel="noopener noreferrer">X</a>
-            {%- endif -%}
-            {%- if section.settings.tiktok_link != blank -%}
-              <a href="{{ section.settings.tiktok_link }}" target="_blank" rel="noopener noreferrer">TikTok</a>
-            {%- endif -%}
-            {%- if section.settings.youtube_link != blank -%}
-              <a href="{{ section.settings.youtube_link }}" target="_blank" rel="noopener noreferrer">YouTube</a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
+          {%- endfor -%}
+        </div>
       </div>
 
       <div class="footer-modern__links">
@@ -227,9 +217,6 @@
   .footer-modern__legal { display: flex; gap: 1.25rem; }
   .footer-modern__legal-link { font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.2s; }
   .footer-modern__legal-link:hover { color: rgba(255, 255, 255, 0.85); }
-  .footer-social { margin-top: 20px; }
-  .footer-social a { margin-right: 15px; text-decoration: none; color: inherit; font-weight: 500; }
-  .footer-social a:hover { opacity: 0.7; }
 </style>
 
 {% schema %}
@@ -258,31 +245,6 @@
       "id": "show_social_icons",
       "label": "Show social links",
       "default": true
-    },
-    {
-      "type": "url",
-      "id": "facebook_link",
-      "label": "Facebook URL"
-    },
-    {
-      "type": "url",
-      "id": "instagram_link",
-      "label": "Instagram URL"
-    },
-    {
-      "type": "url",
-      "id": "twitter_link",
-      "label": "Twitter (X) URL"
-    },
-    {
-      "type": "url",
-      "id": "tiktok_link",
-      "label": "TikTok URL"
-    },
-    {
-      "type": "url",
-      "id": "youtube_link",
-      "label": "YouTube URL"
     },
     {
       "type": "url",
@@ -384,6 +346,32 @@
       "default": true
     }
   ],
-  "blocks": []
+  "blocks": [
+    {
+      "type": "social_link",
+      "name": "Social Media Link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Platform",
+          "options": [
+            { "value": "facebook", "label": "Facebook" },
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "twitter", "label": "X (Twitter)" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "youtube", "label": "YouTube" },
+            { "value": "linkedin", "label": "LinkedIn" }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Social Media URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10
 }
 {% endschema %}
