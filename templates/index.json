@@ -12,18 +12,11 @@
     "site_header_P8YKmT": {
       "type": "site-header",
       "blocks": {
-        "nav_link_YGq8n4": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/#Hoodies"
-          }
-        },
         "nav_link_6wPngE": {
           "type": "nav_link",
           "settings": {
             "text": "Hoodies",
-            "url": "shopify://collections/hoodies"
+            "url": "/#Hoodies"
           }
         },
         "nav_link_4L3mWe": {
@@ -49,7 +42,6 @@
         }
       },
       "block_order": [
-        "nav_link_YGq8n4",
         "nav_link_6wPngE",
         "nav_link_4L3mWe",
         "nav_link_idKVqf",
