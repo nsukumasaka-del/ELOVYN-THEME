@@ -12,48 +12,32 @@
     "site_header_P8YKmT": {
       "type": "site-header",
       "blocks": {
-        "nav_link_YGq8n4": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/"
-          }
-        },
         "nav_link_6wPngE": {
           "type": "nav_link",
           "settings": {
             "text": "Hoodies",
-            "url": "shopify://collections/hoodies"
+            "url": "/#Hoodies"
           }
         },
         "nav_link_4L3mWe": {
           "type": "nav_link",
           "settings": {
             "text": "Sweatshirts",
-            "url": "/collections/sweatshirts"
+            "url": "/#Sweatshirt"
           }
         },
         "nav_link_idKVqf": {
           "type": "nav_link",
           "settings": {
             "text": "Graphic Tees",
-            "url": "/collections/graphic-tees"
-          }
-        },
-        "nav_link_PAhjc6": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Shop All",
-            "url": "/#apparel"
+            "url": "/#Graphic Tees"
           }
         }
       },
       "block_order": [
-        "nav_link_YGq8n4",
         "nav_link_6wPngE",
         "nav_link_4L3mWe",
-        "nav_link_idKVqf",
-        "nav_link_PAhjc6"
+        "nav_link_idKVqf"
       ],
       "name": "Header",
       "settings": {
@@ -139,7 +123,7 @@
       "type": "clothing-showcase",
       "name": "Custom tees",
       "settings": {
-        "section_id": "apparel",
+        "section_id": "Graphic Tees",
         "collection": "frontpage",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
@@ -152,7 +136,7 @@
       "type": "clothing-showcase",
       "name": "Hoodies",
       "settings": {
-        "section_id": "apparel",
+        "section_id": "Hoodies",
         "collection": "hoodies",
         "products_to_show": 8,
         "heading": "Hoodies",
@@ -165,7 +149,7 @@
       "type": "clothing-showcase",
       "name": "Sweatshirts",
       "settings": {
-        "section_id": "apparel",
+        "section_id": "Sweatshirt",
         "collection": "sweatshirts",
         "products_to_show": 4,
         "heading": "Sweatshirts",
