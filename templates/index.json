@@ -12,6 +12,13 @@
     "site_header_P8YKmT": {
       "type": "site-header",
       "blocks": {
+        "nav_link_YGq8n4": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Hoodies",
+            "url": "/"
+          }
+        },
         "nav_link_6wPngE": {
           "type": "nav_link",
           "settings": {
@@ -42,6 +49,7 @@
         }
       },
       "block_order": [
+        "nav_link_YGq8n4",
         "nav_link_6wPngE",
         "nav_link_4L3mWe",
         "nav_link_idKVqf",
@@ -60,8 +68,8 @@
       "settings": {
         "hero_image": "shopify://shop_images/hoodie_116f9fce-e62a-4d6d-ad89-d15d1e57ef26.png",
         "hero_height": 100,
-        "hero_zoom": 105,
-        "hero_focal_point": "top left",
+        "hero_zoom": 100,
+        "hero_focal_point": "top right",
         "hero_zoom_mobile": 120,
         "hero_focal_point_mobile": "bottom center",
         "heading": "Hoodies.",
