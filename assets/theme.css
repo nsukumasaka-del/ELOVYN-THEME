@@ -846,18 +846,67 @@ body.template-product #layout-header-wrapper,
 .template-product #layout-header-wrapper {
   background: transparent !important;
 }
-/* Prevent overlap with fixed/sticky header – use --header-height if theme sets it */
+/* Prevent overlap with fixed/sticky header – use --header-height; set per breakpoint so nav bar fits */
 .template-product main,
 .template-product .content-for-layout,
 .template-cart main,
 .template-cart .content-for-layout {
   padding-top: var(--header-height, 100px);
 }
+/* Mobile: smaller header height so content starts right under nav bar; avoids overlap */
+@media (max-width: 480px) {
+  body.template-cart,
+  body.template-product {
+    --header-height: 56px;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  body.template-cart,
+  body.template-product {
+    --header-height: 64px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  body.template-cart,
+  body.template-product {
+    --header-height: 80px;
+  }
+}
 
 /* ========== Homepage: transparent header on all viewports (desktop, tablet, mobile) ========== */
 .template-index .layout-header-wrapper,
 .template-index #layout-header-wrapper {
   background: transparent !important;
+}
+/* Homepage: no padding on main so hero can extend to top; hero sits under the header */
+.template-index main.content-for-layout,
+.template-index #MainContent {
+  padding-top: 0 !important;
+}
+/* Mobile: pull hero up so the hero image appears under the transparent header */
+@media (max-width: 768px) {
+  .template-index .hero-section {
+    margin-top: -4rem;
+    padding-top: 4rem;
+    min-height: calc(80vh + 4rem);
+  }
+  .template-index .hero-section .hero-bg,
+  .template-index .hero-section .absolute.inset-0 {
+    top: -4rem;
+    height: calc(100% + 4rem);
+  }
+}
+@media (max-width: 749px) {
+  .template-index .hero-section {
+    margin-top: -4rem;
+    padding-top: 4rem;
+    min-height: calc(80vh + 4rem);
+  }
+  .template-index .hero-section .hero-bg,
+  .template-index .hero-section .absolute.inset-0 {
+    top: -4rem;
+    height: calc(100% + 4rem);
+  }
 }
 #elovyn-header-wrap.header--transparent {
   background: transparent !important;
@@ -1177,6 +1226,82 @@ body.template-product #elovyn-header-wrap,
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+/* Cart + Product: contain nav bar so it never overflows viewport */
+body.template-cart #elovyn-header-wrap .elovyn-header-inner,
+body.template-product #elovyn-header-wrap .elovyn-header-inner,
+.template-product #elovyn-header-wrap .elovyn-header-inner {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+body.template-cart #elovyn-header-wrap .elovyn-logo-link,
+body.template-product #elovyn-header-wrap .elovyn-logo-link,
+.template-product #elovyn-header-wrap .elovyn-logo-link {
+  flex-shrink: 1;
+  min-width: 0;
+}
+body.template-cart #elovyn-header-wrap .elovyn-header-right,
+body.template-product #elovyn-header-wrap .elovyn-header-right,
+.template-product #elovyn-header-wrap .elovyn-header-right {
+  flex-shrink: 0;
+}
+/* Cart + Product: nav bar fits all ratios – no overlap on mobile/tablet */
+@media (max-width: 480px) {
+  body.template-cart #elovyn-header-wrap .elovyn-header-inner,
+  body.template-product #elovyn-header-wrap .elovyn-header-inner,
+  .template-product #elovyn-header-wrap .elovyn-header-inner {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    gap: 0.25rem;
+    min-height: 56px;
+    height: auto;
+  }
+  body.template-cart #elovyn-header-wrap .elovyn-logo-link,
+  body.template-product #elovyn-header-wrap .elovyn-logo-link,
+  .template-product #elovyn-header-wrap .elovyn-logo-link {
+    min-width: 0;
+    max-width: 100px;
+  }
+  body.template-cart #elovyn-header-wrap .elovyn-logo-img,
+  body.template-product #elovyn-header-wrap .elovyn-logo-img,
+  .template-product #elovyn-header-wrap .elovyn-logo-img {
+    max-height: 2rem;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  body.template-cart #elovyn-header-wrap .elovyn-header-right,
+  body.template-product #elovyn-header-wrap .elovyn-header-right,
+  .template-product #elovyn-header-wrap .elovyn-header-right {
+    gap: 0.25rem;
+  }
+  body.template-cart #elovyn-header-wrap .elovyn-header-right a,
+  body.template-cart #elovyn-header-wrap .elovyn-header-right button,
+  body.template-product #elovyn-header-wrap .elovyn-header-right a,
+  body.template-product #elovyn-header-wrap .elovyn-header-right button,
+  .template-product #elovyn-header-wrap .elovyn-header-right a,
+  .template-product #elovyn-header-wrap .elovyn-header-right button {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.35rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  body.template-cart #elovyn-header-wrap .elovyn-header-inner,
+  body.template-product #elovyn-header-wrap .elovyn-header-inner,
+  .template-product #elovyn-header-wrap .elovyn-header-inner {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    gap: 0.5rem;
+    min-height: 64px;
+  }
+  body.template-cart #elovyn-header-wrap .elovyn-logo-img,
+  body.template-product #elovyn-header-wrap .elovyn-logo-img,
+  .template-product #elovyn-header-wrap .elovyn-logo-img {
+    max-height: 2.5rem;
+  }
 }
 body.template-cart #elovyn-header-wrap.scrolled,
 body.template-product #elovyn-header-wrap.scrolled,
