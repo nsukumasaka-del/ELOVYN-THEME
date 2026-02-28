@@ -13,31 +13,25 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "blocks": {
-        "link_list_NdVngc": {
-          "type": "link_list",
-          "settings": {
-            "heading": "",
-            "menu": ""
-          }
-        },
-        "link_list_3C6Ven": {
-          "type": "link_list",
-          "settings": {
-            "heading": "WhatsApp",
-            "menu": ""
-          }
-        }
-      },
-      "block_order": [
-        "link_list_NdVngc",
-        "link_list_3C6Ven"
-      ],
       "settings": {
+        "footer_bg_color": "#6c5858",
         "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
+        "logo_width": 200,
         "description": "Hoodies, sweatshirts & graphic tees. Premium comfort and style.",
         "show_social_icons": true,
-        "copyright_name": ""
+        "contact_page_url": "",
+        "privacy_url": "",
+        "terms_url": "",
+        "copyright_name": "",
+        "copyright_text": "© __year__ __name__. All rights reserved.",
+        "show_newsletter": true,
+        "newsletter_heading": "Stay in the loop",
+        "newsletter_subtext": "Get updates and offers.",
+        "newsletter_placeholder": "Your email",
+        "newsletter_button": "Sign up",
+        "newsletter_success": "Thanks for signing up.",
+        "show_disclosure": true,
+        "disclosure_text": "As an Amazon Associate I earn from qualifying purchases."
       }
     }
   },
