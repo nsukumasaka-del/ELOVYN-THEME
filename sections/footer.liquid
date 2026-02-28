@@ -26,6 +26,38 @@
             <a href="{% if settings.social_youtube_link != blank %}{{ settings.social_youtube_link }}{% else %}#{% endif %}" class="text-sm text-foreground/50 hover:text-foreground transition-colors">YouTube</a>
           </div>
         {%- endif -%}
+
+        {%- comment -%} Gmail / Email sign up – uses Shopify contact form; subscribers appear in Admin > Contacts {%- endcomment -%}
+        {%- if section.settings.show_newsletter -%}
+          <div class="newsletter-signup mt-8">
+            <h4 class="text-sm font-semibold text-foreground mb-2">{{ section.settings.newsletter_heading | default: 'Stay in the loop' }}</h4>
+            <p class="text-sm text-foreground/50 mb-3 max-w-xs">{{ section.settings.newsletter_subtext | default: 'Sign up with your Gmail or any email for updates and offers.' }}</p>
+            {%- form 'contact', id: 'footer-newsletter-form', class: 'newsletter-form flex flex-col sm:flex-row gap-2 max-w-sm' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              {%- if form.errors -%}
+                <div class="newsletter-form-errors text-sm text-red-500 mb-2" role="alert">
+                  {{ form.errors | default_errors }}
+                </div>
+              {%- endif -%}
+              <input
+                type="email"
+                name="contact[email]"
+                id="FooterNewsletterEmail"
+                value="{{ form.email }}"
+                placeholder="{{ section.settings.newsletter_placeholder | default: 'your@email.com' }}"
+                aria-label="{{ section.settings.newsletter_heading | default: 'Email' }}"
+                required
+                class="footer-newsletter-input flex-1 min-w-0 px-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm"
+              >
+              <button type="submit" class="footer-newsletter-submit px-5 py-3 rounded-xl bg-accent text-accent-foreground font-medium text-sm whitespace-nowrap hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background transition-opacity">
+                {{ section.settings.newsletter_button | default: 'Sign up' }}
+              </button>
+            {%- endform -%}
+            {%- if form.posted_successfully? -%}
+              <p class="text-sm text-green-600 mt-2" id="newsletter-success">{{ section.settings.newsletter_success | default: "Thanks for signing up." }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       </div>
 
       {%- comment -%} Link columns - default static content matches React; override with menus when set {%- endcomment -%}
@@ -102,6 +134,12 @@
 
 <style>
   .space-y-3 > * + * { margin-top: 0.75rem; }
+  .newsletter-form { flex-wrap: wrap; }
+  .newsletter-form-errors { width: 100%; flex: 1 1 100%; }
+  .newsletter-signup .footer-newsletter-input { width: 100%; }
+  @media (min-width: 640px) {
+    .newsletter-signup .footer-newsletter-input { width: auto; min-width: 0; }
+  }
 </style>
 
 {% schema %}
@@ -130,6 +168,46 @@
       "id": "copyright_name",
       "label": "Copyright name",
       "default": ""
+    },
+    {
+      "type": "header",
+      "content": "Email / Gmail sign up"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show email sign up",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_subtext",
+      "label": "Subtext",
+      "default": "Sign up with your Gmail or any email for updates and offers."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "your@email.com"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button",
+      "label": "Button text",
+      "default": "Sign up"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_success",
+      "label": "Success message",
+      "default": "Thanks for signing up."
     }
   ],
   "blocks": [
