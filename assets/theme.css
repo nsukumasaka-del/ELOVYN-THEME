@@ -850,25 +850,35 @@ body.template-product #layout-header-wrapper,
 .template-product main,
 .template-product .content-for-layout,
 .template-cart main,
-.template-cart .content-for-layout {
+.template-cart .content-for-layout,
+.template-search main,
+.template-search .content-for-layout {
   padding-top: var(--header-height, 100px);
 }
 /* Mobile: smaller header height so content starts right under nav bar; avoids overlap */
 @media (max-width: 480px) {
   body.template-cart,
-  body.template-product {
+  body.template-product,
+  body.template-search {
     --header-height: 56px;
   }
 }
 @media (min-width: 481px) and (max-width: 768px) {
   body.template-cart,
-  body.template-product {
+  body.template-product,
+  body.template-search {
     --header-height: 64px;
   }
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   body.template-cart,
-  body.template-product {
+  body.template-product,
+  body.template-search {
+    --header-height: 80px;
+  }
+}
+@media (min-width: 1025px) {
+  body.template-search {
     --header-height: 80px;
   }
 }
