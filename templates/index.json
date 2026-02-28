@@ -131,7 +131,7 @@
       "type": "clothing-showcase",
       "name": "Custom tees",
       "settings": {
-        "section_id": "apparel",
+        "section_id": "Tees",
         "collection": "frontpage",
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
