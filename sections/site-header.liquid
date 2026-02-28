@@ -104,15 +104,20 @@
       width: calc({{ section.settings.logo_width | default: 150 }}px * 0.7);
     }
   }
-  /* Nav bar – same features on desktop, tablet, and mobile (visible on all screen sizes) */
+  /* Desktop nav bar - visible from 1024px, horizontal row */
   #elovyn-header-wrap .elovyn-nav {
-    display: flex;
+    display: none;
     align-items: center;
     flex: 1;
     justify-content: center;
     max-width: 600px;
   }
-  /* Horizontal navigation list – row on larger screens */
+  @media (min-width: 1024px) {
+    #elovyn-header-wrap .elovyn-nav {
+      display: flex !important;
+    }
+  }
+  /* Horizontal navigation list */
   #elovyn-header-wrap .site-nav .nav-list,
   #elovyn-header-wrap .elovyn-nav .nav-list {
     display: flex;
@@ -148,38 +153,11 @@
   #elovyn-header-wrap .site-nav .nav-link:hover {
     opacity: 0.7;
   }
-  /* Tablet: slightly smaller gap */
+  /* Mobile: desktop nav list stays horizontal when visible; mobile menu (#elovyn-mobile-menu) stays stacked */
   @media (max-width: 1023px) {
     #elovyn-header-wrap .elovyn-nav .nav-list {
+      flex-direction: row;
       gap: 15px;
-    }
-  }
-  /* Mobile: stack nav links vertically, same features visible */
-  @media (max-width: 749px) {
-    #elovyn-header-wrap .elovyn-header-inner {
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.5rem;
-      padding-bottom: 0.5rem;
-      min-height: 4rem;
-      height: auto;
-    }
-    #elovyn-header-wrap .elovyn-nav {
-      order: 3;
-      width: 100%;
-      max-width: none;
-      justify-content: center;
-      flex: 1 1 100%;
-    }
-    #elovyn-header-wrap .elovyn-nav .nav-list {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    #elovyn-header-wrap .elovyn-nav .nav-link,
-    #elovyn-header-wrap .elovyn-nav a {
-      font-size: 0.8125rem;
-      white-space: normal;
     }
   }
   /* Right side: icons + CTA + hamburger - visible on all screens */
@@ -248,9 +226,15 @@
     border-color: rgba(255, 255, 255, 0.6);
     color: #fff;
   }
-  /* Hamburger hidden – same nav shown on all screen sizes, no separate mobile menu */
+  /* Hamburger - visible on mobile/tablet, hidden on desktop */
   #elovyn-header-wrap .elovyn-mobile-btn {
-    display: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    #elovyn-header-wrap .elovyn-mobile-btn { display: none !important; }
   }
   #elovyn-header-wrap .elovyn-mobile-btn .icon-close {
     display: none;
@@ -417,7 +401,7 @@
   }
 </style>
 
-<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% endif %}">
+<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}">
   <header class="elovyn-header site-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo: section settings first, then Theme settings > General (store logo), then asset {%- endcomment -%}
