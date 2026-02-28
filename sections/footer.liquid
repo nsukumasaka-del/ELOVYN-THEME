@@ -37,32 +37,19 @@
       </div>
 
       <div class="footer-modern__links">
-        <div class="footer-modern__col">
-          <h4 class="footer-modern__col-heading">Shop</h4>
-          <ul class="footer-modern__list">
-            <li><a href="/collections/hoodies" class="footer-modern__link">Hoodies</a></li>
-            <li><a href="/collections/sweatshirts" class="footer-modern__link">Sweatshirts</a></li>
-            <li><a href="/collections/graphic-tees" class="footer-modern__link">Graphic Tees</a></li>
-            <li><a href="/#apparel" class="footer-modern__link">Shop All</a></li>
-          </ul>
-        </div>
-        <div class="footer-modern__col">
-          <h4 class="footer-modern__col-heading">Help</h4>
-          <ul class="footer-modern__list">
-            <li><a href="{{ section.settings.contact_page_url | default: '/pages/contact' }}" class="footer-modern__link">Contact us</a></li>
-            <li><a href="{{ section.settings.faq_url | default: '#' }}" class="footer-modern__link">FAQ</a></li>
-            <li><a href="{{ section.settings.returns_url | default: '#' }}" class="footer-modern__link">Returns</a></li>
-            <li><a href="{{ section.settings.shipping_url | default: '#' }}" class="footer-modern__link">Shipping</a></li>
-          </ul>
-        </div>
-        <div class="footer-modern__col">
-          <h4 class="footer-modern__col-heading">Company</h4>
-          <ul class="footer-modern__list">
-            <li><a href="{{ section.settings.about_url | default: '#' }}" class="footer-modern__link">About us</a></li>
-            <li><a href="{{ section.settings.careers_url | default: '#' }}" class="footer-modern__link">Careers</a></li>
-            <li><a href="{{ section.settings.press_url | default: '#' }}" class="footer-modern__link">Press</a></li>
-          </ul>
-        </div>
+        {%- assign current_col_open = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'link_column' -%}
+            {%- if current_col_open -%}</ul></div>{%- endif -%}
+            <div class="footer-modern__col" {{ block.shopify_attributes }}>
+              <h4 class="footer-modern__col-heading">{{ block.settings.heading | default: 'Links' }}</h4>
+              <ul class="footer-modern__list">
+            {%- assign current_col_open = true -%}
+          {%- elsif block.type == 'footer_link' and block.settings.url != blank -%}
+            <li {{ block.shopify_attributes }}><a href="{{ block.settings.url }}" class="footer-modern__link">{{ block.settings.label | default: 'Link' }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if current_col_open -%}</ul></div>{%- endif -%}
       </div>
     </div>
 
@@ -92,15 +79,18 @@
     {%- endif -%}
 
     {%- comment -%} Disclosure (e.g. Amazon) {%- endcomment -%}
-    {%- if section.settings.show_disclosure -%}
+    {%- if section.settings.show_disclosure and section.settings.disclosure_text != blank -%}
       <div class="footer-modern__disclosure">
-        <p class="footer-modern__disclosure-text">{{ 'general.amazon.disclosure' | t | default: 'As an Amazon Associate I earn from qualifying purchases.' }}</p>
+        <p class="footer-modern__disclosure-text">{{ section.settings.disclosure_text }}</p>
       </div>
     {%- endif -%}
 
     {%- comment -%} Bottom bar: copyright + legal {%- endcomment -%}
     <div class="footer-modern__bottom">
-      <p class="footer-modern__copy">© {{ 'now' | date: '%Y' }} {{ section.settings.copyright_name | default: shop.name }}. All rights reserved.</p>
+      {%- assign copy_year = 'now' | date: '%Y' -%}
+      {%- assign copy_name = section.settings.copyright_name | default: shop.name -%}
+      {%- assign copy_template = section.settings.copyright_text | default: "© {year} {name}. All rights reserved." -%}
+      <p class="footer-modern__copy">{{ copy_template | replace: '{year}', copy_year | replace: '{name}', copy_name }}</p>
       <nav class="footer-modern__legal" aria-label="Legal">
         <a href="{{ section.settings.privacy_url | default: '#' }}" class="footer-modern__legal-link">Privacy</a>
         <a href="{{ section.settings.terms_url | default: '#' }}" class="footer-modern__legal-link">Terms</a>
@@ -251,37 +241,7 @@
       "id": "contact_page_url",
       "label": "Contact us page",
       "default": "/pages/contact",
-      "info": "Link for Contact us. Create a page with handle 'contact' and use the Contact template."
-    },
-    {
-      "type": "url",
-      "id": "faq_url",
-      "label": "FAQ link"
-    },
-    {
-      "type": "url",
-      "id": "returns_url",
-      "label": "Returns link"
-    },
-    {
-      "type": "url",
-      "id": "shipping_url",
-      "label": "Shipping link"
-    },
-    {
-      "type": "url",
-      "id": "about_url",
-      "label": "About us link"
-    },
-    {
-      "type": "url",
-      "id": "careers_url",
-      "label": "Careers link"
-    },
-    {
-      "type": "url",
-      "id": "press_url",
-      "label": "Press link"
+      "info": "Used in the bottom bar. For link columns, add a Footer link block."
     },
     {
       "type": "url",
@@ -297,7 +257,15 @@
       "type": "text",
       "id": "copyright_name",
       "label": "Copyright name",
-      "default": ""
+      "default": "",
+      "info": "Used in the copyright line if you use {name} in the template below."
+    },
+    {
+      "type": "textarea",
+      "id": "copyright_text",
+      "label": "Copyright line",
+      "default": "© {year} {name}. All rights reserved.",
+      "info": "Use {year} for current year, {name} for copyright name."
     },
     {
       "type": "header",
@@ -344,6 +312,12 @@
       "id": "show_disclosure",
       "label": "Show disclosure (e.g. Amazon)",
       "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "disclosure_text",
+      "label": "Disclosure text",
+      "default": "As an Amazon Associate I earn from qualifying purchases."
     }
   ],
   "blocks": [
@@ -370,8 +344,54 @@
           "label": "Social Media URL"
         }
       ]
+    },
+    {
+      "type": "link_column",
+      "name": "Link column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column heading",
+          "default": "Links"
+        }
+      ]
+    },
+    {
+      "type": "footer_link",
+      "name": "Footer link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link URL"
+        }
+      ]
     }
   ],
-  "max_blocks": 10
+  "max_blocks": 30,
+  "default": {
+    "blocks": [
+      { "type": "link_column", "settings": { "heading": "Shop" } },
+      { "type": "footer_link", "settings": { "label": "Hoodies", "url": "/collections/hoodies" } },
+      { "type": "footer_link", "settings": { "label": "Sweatshirts", "url": "/collections/sweatshirts" } },
+      { "type": "footer_link", "settings": { "label": "Graphic Tees", "url": "/collections/graphic-tees" } },
+      { "type": "footer_link", "settings": { "label": "Shop All", "url": "/#apparel" } },
+      { "type": "link_column", "settings": { "heading": "Help" } },
+      { "type": "footer_link", "settings": { "label": "Contact us", "url": "/pages/contact" } },
+      { "type": "footer_link", "settings": { "label": "FAQ", "url": "#" } },
+      { "type": "footer_link", "settings": { "label": "Returns", "url": "#" } },
+      { "type": "footer_link", "settings": { "label": "Shipping", "url": "#" } },
+      { "type": "link_column", "settings": { "heading": "Company" } },
+      { "type": "footer_link", "settings": { "label": "About us", "url": "#" } },
+      { "type": "footer_link", "settings": { "label": "Careers", "url": "#" } },
+      { "type": "footer_link", "settings": { "label": "Press", "url": "#" } }
+    ]
+  }
 }
 {% endschema %}
