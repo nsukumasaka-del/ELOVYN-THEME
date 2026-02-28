@@ -128,7 +128,7 @@
         "products_to_show": 8,
         "heading": "Graphic & custom tees",
         "description": "Stand out with bold designs and custom prints. Your style, your statement.",
-        "show_view_all": true,
+        "show_view_all": false,
         "view_all_text": "View all"
       }
     },
