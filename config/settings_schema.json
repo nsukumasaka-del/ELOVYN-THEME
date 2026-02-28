@@ -8,6 +8,35 @@
     "theme_support_url": ""
   },
   {
+    "name": "General",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Set your store logo and the icon that appears in the browser tab (favicon)."
+      },
+      {
+        "type": "header",
+        "content": "Store logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "header_logo",
+        "label": "Logo image",
+        "info": "Used in the header and as the browser tab icon if no favicon is set below. Recommended: square or horizontal image, at least 200px wide."
+      },
+      {
+        "type": "header",
+        "content": "Browser tab icon (favicon)"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Icon shown in browser tabs and bookmarks. Recommended: square image, 32×32 px or larger. Leave blank to use your store logo above."
+      }
+    ]
+  },
+  {
     "name": "Header",
     "settings": [
       {
@@ -17,12 +46,6 @@
       {
         "type": "header",
         "content": "Logo"
-      },
-      {
-        "type": "image_picker",
-        "id": "header_logo",
-        "label": "Logo image",
-        "info": "Upload your logo. Leave blank to show your store name as text."
       },
       {
         "type": "text",
@@ -172,22 +195,13 @@
     ]
   },
   {
-    "name": "Favicon",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "Favicon image"
-      }
-    ]
-  },
-  {
     "name": "Sharing",
     "settings": [
       {
         "type": "image_picker",
         "id": "share_image",
-        "label": "Default share image"
+        "label": "Default share image",
+        "info": "Used when sharing your store on social media when a page doesn't have its own image."
       }
     ]
   }
