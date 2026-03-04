@@ -53,7 +53,7 @@
         "hero_image": "shopify://shop_images/hoodie_116f9fce-e62a-4d6d-ad89-d15d1e57ef26.png",
         "hero_height": 100,
         "hero_zoom": 120,
-        "hero_focal_point": "center",
+        "hero_focal_point": "top right",
         "hero_zoom_mobile": 120,
         "hero_focal_point_mobile": "center left",
         "heading": "Hoodies.",
