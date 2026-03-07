@@ -576,7 +576,11 @@
       if (mobileMenu.classList.contains('open')) closeMenu();
       else openMenu();
     }
-    mobileBtn.addEventListener('click', toggleMenu);
+    mobileBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    }, true);
     if (backdrop) backdrop.addEventListener('click', closeMenu);
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();

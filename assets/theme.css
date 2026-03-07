@@ -1205,6 +1205,23 @@ body.template-cart .content-for-layout {
   background: #ffffff;
 }
 
+/* Step 3: Header and menu drawer always above page content so mobile menu works on all pages */
+.layout-header-wrapper,
+#layout-header-wrapper {
+  position: relative;
+  z-index: 99999;
+}
+.site-header,
+.elovyn-header.site-header {
+  position: relative;
+  z-index: 1000;
+}
+.menu-drawer,
+#elovyn-mobile-menu.menu-drawer {
+  position: fixed;
+  z-index: 9999;
+}
+/* Step 5: Do not hide mobile menu on product/collection/cart (no display:none on these templates) */
 /* Product, Collection, Cart: keep main content stacking below header so mobile menu and dropdown work */
 .template-product main,
 .template-product .content-for-layout,
