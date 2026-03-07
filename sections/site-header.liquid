@@ -228,6 +228,8 @@
   }
   /* Hamburger - visible on mobile/tablet, hidden on desktop */
   #elovyn-header-wrap .elovyn-mobile-btn {
+    position: relative;
+    z-index: 100001;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -512,7 +514,7 @@
           {% render 'icon-shopping-bag', width: 20, height: 20 %}
           <span class="elovyn-cart-badge{% if cart.item_count == 0 %} elovyn-cart-badge--empty{% endif %}" data-cart-count aria-hidden="{% if cart.item_count == 0 %}true{% else %}false{% endif %}">{{ cart.item_count }}</span>
         </a>
-        <button type="button" class="elovyn-mobile-btn" aria-label="Toggle menu" aria-expanded="false">
+        <button type="button" class="elovyn-mobile-btn" aria-controls="elovyn-mobile-menu" aria-label="Toggle menu" aria-expanded="false">
           <span class="icon-open">{% render 'icon-menu', width: 24, height: 24 %}</span>
           <span class="icon-close">{% render 'icon-x', width: 24, height: 24 %}</span>
         </button>
@@ -521,7 +523,7 @@
   </header>
 
   {%- comment -%} Mobile menu – backdrop (tap to close) + panel {%- endcomment -%}
-  <div id="elovyn-mobile-menu" aria-hidden="true">
+  <div id="elovyn-mobile-menu" class="menu-drawer" role="dialog" aria-modal="true" aria-label="Mobile menu" aria-hidden="true">
     <div class="elovyn-mobile-menu-backdrop" aria-hidden="true"></div>
     <div class="elovyn-mobile-menu-panel">
       <nav role="navigation" aria-label="Mobile menu">
@@ -550,11 +552,12 @@
 
 <script>
   (function() {
-    var wrap = document.getElementById('elovyn-header-wrap');
-    var mobileMenu = document.getElementById('elovyn-mobile-menu');
-    var mobileBtn = wrap && wrap.querySelector('.elovyn-mobile-btn');
-    var backdrop = mobileMenu && mobileMenu.querySelector('.elovyn-mobile-menu-backdrop');
-    if (!wrap || !mobileMenu || !mobileBtn) return;
+    function initMobileMenu() {
+      var wrap = document.getElementById('elovyn-header-wrap');
+      var mobileMenu = document.getElementById('elovyn-mobile-menu');
+      var mobileBtn = wrap && wrap.querySelector('.elovyn-mobile-btn');
+      var backdrop = mobileMenu && mobileMenu.querySelector('.elovyn-mobile-menu-backdrop');
+      if (!wrap || !mobileMenu || !mobileBtn) return;
     function openMenu() {
       mobileMenu.classList.add('open');
       mobileBtn.classList.add('active');
@@ -585,30 +588,36 @@
       wrap.classList.toggle('scrolled', window.pageYOffset > 50);
     });
 
-    /* Search drawer */
-    var searchToggle = wrap && wrap.querySelector('.header-search-toggle');
-    var searchDrawer = document.getElementById('SearchDrawer');
-    var searchClose = searchDrawer && searchDrawer.querySelector('.search-close');
-    var searchOverlay = searchDrawer && searchDrawer.querySelector('.search-overlay');
-    if (searchToggle && searchDrawer) {
-      searchToggle.addEventListener('click', function() {
-        searchDrawer.classList.add('active');
-        searchDrawer.setAttribute('aria-hidden', 'false');
-        var input = searchDrawer.querySelector('input[type="search"]');
-        if (input) { input.focus(); }
-      });
+      /* Search drawer */
+      var searchToggle = wrap && wrap.querySelector('.header-search-toggle');
+      var searchDrawer = document.getElementById('SearchDrawer');
+      var searchClose = searchDrawer && searchDrawer.querySelector('.search-close');
+      var searchOverlay = searchDrawer && searchDrawer.querySelector('.search-overlay');
+      if (searchToggle && searchDrawer) {
+        searchToggle.addEventListener('click', function() {
+          searchDrawer.classList.add('active');
+          searchDrawer.setAttribute('aria-hidden', 'false');
+          var input = searchDrawer.querySelector('input[type="search"]');
+          if (input) { input.focus(); }
+        });
+      }
+      if (searchClose) {
+        searchClose.addEventListener('click', function() {
+          searchDrawer.classList.remove('active');
+          searchDrawer.setAttribute('aria-hidden', 'true');
+        });
+      }
+      if (searchOverlay) {
+        searchOverlay.addEventListener('click', function() {
+          searchDrawer.classList.remove('active');
+          searchDrawer.setAttribute('aria-hidden', 'true');
+        });
+      }
     }
-    if (searchClose) {
-      searchClose.addEventListener('click', function() {
-        searchDrawer.classList.remove('active');
-        searchDrawer.setAttribute('aria-hidden', 'true');
-      });
-    }
-    if (searchOverlay) {
-      searchOverlay.addEventListener('click', function() {
-        searchDrawer.classList.remove('active');
-        searchDrawer.setAttribute('aria-hidden', 'true');
-      });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+      initMobileMenu();
     }
   })();
 </script>
