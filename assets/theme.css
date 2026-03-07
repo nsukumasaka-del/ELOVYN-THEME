@@ -1205,9 +1205,30 @@ body.template-cart .content-for-layout {
   background: #ffffff;
 }
 
-/* Cart page: ensure header wrapper and nav bar are always visible and on top */
+/* Product, Collection, Cart: keep main content stacking below header so mobile menu and dropdown work */
+.template-product main,
+.template-product .content-for-layout,
+.template-product #MainContent,
+.template-collection main,
+.template-collection .content-for-layout,
+.template-collection #MainContent,
+.template-cart main,
+.template-cart .content-for-layout,
+.template-cart #MainContent {
+  position: relative;
+  z-index: 1;
+}
+/* Cart, Product, Collection: ensure header wrapper and nav bar are always on top so mobile menu works */
 body.template-cart .layout-header-wrapper,
-body.template-cart #layout-header-wrapper {
+body.template-cart #layout-header-wrapper,
+body.template-product .layout-header-wrapper,
+body.template-product #layout-header-wrapper,
+.template-product .layout-header-wrapper,
+.template-product #layout-header-wrapper,
+body.template-collection .layout-header-wrapper,
+body.template-collection #layout-header-wrapper,
+.template-collection .layout-header-wrapper,
+.template-collection #layout-header-wrapper {
   display: block !important;
   visibility: visible !important;
   position: relative;
@@ -1216,7 +1237,11 @@ body.template-cart #layout-header-wrapper {
   overflow: visible !important;
   background: transparent !important;
 }
-body.template-cart #elovyn-header-wrap {
+body.template-cart #elovyn-header-wrap,
+body.template-product #elovyn-header-wrap,
+.template-product #elovyn-header-wrap,
+body.template-collection #elovyn-header-wrap,
+.template-collection #elovyn-header-wrap {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;

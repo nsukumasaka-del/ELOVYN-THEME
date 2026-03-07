@@ -241,11 +241,15 @@
   }
   #elovyn-header-wrap .elovyn-mobile-btn.active .icon-open { display: none; }
   #elovyn-header-wrap .elovyn-mobile-btn.active .icon-close { display: block !important; }
-  /* Mobile menu – modern overlay + panel, auto-close on outside tap */
+  /* Mobile menu – fixed overlay above all content; higher z-index so it works on product/collection/cart */
   #elovyn-mobile-menu {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     inset: 0;
-    z-index: 9998;
+    z-index: 100000;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -260,7 +264,11 @@
     opacity: 1;
   }
   #elovyn-mobile-menu .elovyn-mobile-menu-backdrop {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
