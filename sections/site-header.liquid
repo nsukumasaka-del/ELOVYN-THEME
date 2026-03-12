@@ -199,6 +199,32 @@
   #elovyn-header-wrap .elovyn-header-right button:focus {
     color: #fff;
   }
+  /* Currency selector in header */
+  #elovyn-header-wrap .header-currency-form {
+    margin-left: 0.25rem;
+  }
+  @media (min-width: 768px) {
+    #elovyn-header-wrap .header-currency-form {
+      margin-left: 0.5rem;
+    }
+  }
+  #elovyn-header-wrap .header-currency-select {
+    min-height: 32px;
+    padding: 0.15rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    color: #ffffff;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  #elovyn-header-wrap .header-currency-select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  #elovyn-header-wrap .header-currency-select option {
+    color: #000000;
+  }
   /* CTA button - visible on both mobile and desktop */
   #elovyn-header-wrap .elovyn-cta {
     display: inline-flex !important;
@@ -514,6 +540,20 @@
           {% render 'icon-shopping-bag', width: 20, height: 20 %}
           <span class="elovyn-cart-badge{% if cart.item_count == 0 %} elovyn-cart-badge--empty{% endif %}" data-cart-count aria-hidden="{% if cart.item_count == 0 %}true{% else %}false{% endif %}">{{ cart.item_count }}</span>
         </a>
+        {%- if localization.available_countries.size > 1 -%}
+          {%- form 'localization', id: 'HeaderCurrencyForm', class: 'header-currency-form' -%}
+            <label class="visually-hidden" for="HeaderCountrySelect">
+              {{ 'localization.country_label' | t | default: 'Select currency' }}
+            </label>
+            <select id="HeaderCountrySelect" name="country_code" class="header-currency-select" onchange="this.form.submit()">
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                  {{ country.currency.iso_code }} {{ country.currency.symbol }}
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        {%- endif -%}
         <button type="button" class="elovyn-mobile-btn" aria-controls="elovyn-mobile-menu" aria-label="Toggle menu" aria-expanded="false">
           <span class="icon-open">{% render 'icon-menu', width: 24, height: 24 %}</span>
           <span class="icon-close">{% render 'icon-x', width: 24, height: 24 %}</span>
