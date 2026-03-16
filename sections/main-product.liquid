@@ -91,6 +91,51 @@
           {{ product.description }}
         </div>
       {% endif %}
+
+      <div class="amazon-product-extra-info">
+        <div class="amazon-product-extra-item">
+          <h2 class="amazon-product-extra-heading">Materials</h2>
+          <p class="amazon-product-extra-text">
+            {% if product.metafields.custom.materials != blank %}
+              {{ product.metafields.custom.materials }}
+            {% else %}
+              Premium cotton blend designed for softness, durability, and everyday comfort.
+            {% endif %}
+          </p>
+        </div>
+        <div class="amazon-product-extra-item">
+          <h2 class="amazon-product-extra-heading">Size & fit</h2>
+          <p class="amazon-product-extra-text">
+            {% if product.metafields.custom.size_guide != blank %}
+              {{ product.metafields.custom.size_guide }}
+            {% else %}
+              Regular fit. If you prefer an oversized look, we recommend sizing up. Please refer to your usual hoodie or t‑shirt size.
+            {% endif %}
+          </p>
+        </div>
+        <div class="amazon-product-extra-item">
+          <h2 class="amazon-product-extra-heading">Care instructions</h2>
+          <p class="amazon-product-extra-text">
+            {% if product.metafields.custom.care_instructions != blank %}
+              {{ product.metafields.custom.care_instructions }}
+            {% else %}
+              Machine wash cold with similar colours. Do not bleach. Tumble dry low or hang to dry. Cool iron on reverse if needed. Do not iron print.
+            {% endif %}
+          </p>
+        </div>
+        <div class="amazon-product-extra-item">
+          <h2 class="amazon-product-extra-heading">Shipping & delivery</h2>
+          <p class="amazon-product-extra-text">
+            Processing time: 1–3 business days. Shipping time: 7–12 business days via courier delivery. Tracking information will be emailed once your order has shipped.
+          </p>
+        </div>
+        <div class="amazon-product-extra-item amazon-product-extra-trust">
+          <h2 class="amazon-product-extra-heading">Secure checkout</h2>
+          <p class="amazon-product-extra-text">
+            All payments are processed securely via trusted providers such as PayFast, PayPal, and Stripe. Your card details are encrypted and never stored on our servers.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
