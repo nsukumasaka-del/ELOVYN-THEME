@@ -1,0 +1,88 @@
+{% comment %}
+  Social proof testimonials section.
+{% endcomment %}
+
+<section class="testimonials-section py-16 md:py-24">
+  <div class="container mx-auto px-6">
+    <header class="text-center mb-10 md:mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-foreground">{{ section.settings.heading | default: "Loved by our customers" }}</h2>
+      <p class="text-foreground/65 mt-2">{{ section.settings.subheading | default: "Real feedback from shoppers who wear Elovyn daily." }}</p>
+    </header>
+    <div class="testimonials-grid">
+      {%- for block in section.blocks -%}
+        <article class="testimonial-card" {{ block.shopify_attributes }}>
+          <div class="testimonial-stars" aria-label="5 star review">★★★★★</div>
+          <p class="testimonial-quote">“{{ block.settings.quote | default: "Great quality and fit. Exactly what I wanted." }}”</p>
+          <p class="testimonial-name">{{ block.settings.name | default: "Verified buyer" }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .testimonials-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  .testimonial-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border) / 0.6);
+    border-radius: 1rem;
+    padding: 1.1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  .testimonial-stars {
+    color: #f59e0b;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .testimonial-quote {
+    color: hsl(var(--foreground) / 0.85);
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin: 0 0 0.65rem;
+  }
+  .testimonial-name {
+    margin: 0;
+    color: hsl(var(--foreground) / 0.6);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by our customers" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Real feedback from shoppers who wear Elovyn daily." }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "text", "id": "quote", "label": "Quote", "default": "The quality is incredible. Shipping was fast and the fit is perfect." },
+        { "type": "text", "id": "name", "label": "Name", "default": "A. Mokoena" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "quote": "The hoodie quality is premium and the fit is spot on.", "name": "K. Naidoo" } },
+        { "type": "testimonial", "settings": { "quote": "Best graphic tees I have bought online. Great value.", "name": "T. Jacobs" } },
+        { "type": "testimonial", "settings": { "quote": "Easy checkout and fast delivery. Will order again.", "name": "L. Dlamini" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

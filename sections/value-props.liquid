@@ -1,0 +1,101 @@
+{% comment %}
+  Value proposition strip - conversion-focused trust highlights.
+{% endcomment %}
+
+<section class="value-props-section">
+  <div class="container mx-auto px-6">
+    <div class="value-props-grid">
+      {%- for block in section.blocks -%}
+        <div class="value-prop-card" {{ block.shopify_attributes }}>
+          <div class="value-prop-icon">{{ block.settings.icon | default: "✓" }}</div>
+          <div class="value-prop-content">
+            <h3 class="value-prop-title">{{ block.settings.title | default: "Premium quality" }}</h3>
+            <p class="value-prop-text">{{ block.settings.text | default: "Crafted for comfort, style, and durability." }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .value-props-section {
+    padding: 2.5rem 0;
+    background: hsl(var(--background));
+  }
+  .value-props-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .value-props-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .value-props-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  .value-prop-card {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border-radius: 14px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  .value-prop-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--accent) / 0.2);
+    color: hsl(var(--accent));
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .value-prop-title {
+    margin: 0 0 0.2rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    color: hsl(var(--foreground));
+  }
+  .value-prop-text {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: hsl(var(--foreground) / 0.65);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Value propositions",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Value item",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon", "default": "✓" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Premium quality" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Crafted for comfort, style, and durability." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Value propositions",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "🚚", "title": "Fast shipping", "text": "Quick nationwide delivery with tracking updates." } },
+        { "type": "item", "settings": { "icon": "🧵", "title": "Premium materials", "text": "Comfort-first fabrics made for daily wear." } },
+        { "type": "item", "settings": { "icon": "↩", "title": "Easy returns", "text": "Simple 14-day return process on eligible items." } },
+        { "type": "item", "settings": { "icon": "🔒", "title": "Secure checkout", "text": "Trusted payments with PayFast, PayPal, and Stripe." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
