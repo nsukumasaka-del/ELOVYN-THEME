@@ -9,6 +9,12 @@
  */
 {
   "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "message": "FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY"
+      }
+    },
     "site_header_P8YKmT": {
       "type": "site-header",
       "blocks": {
@@ -51,6 +57,7 @@
       "type": "hero",
       "settings": {
         "hero_image": "shopify://shop_images/hoodie_116f9fce-e62a-4d6d-ad89-d15d1e57ef26.png",
+        "hero_image_url": "",
         "hero_height": 100,
         "hero_zoom": 120,
         "hero_focal_point": "top right",
@@ -60,8 +67,21 @@
         "subheading": "Sweatshirts. Graphic tees.",
         "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
         "button_text": "Shop Now",
-        "button_link": "/#Graphic Tees"
+        "button_link": "/collections/all",
+        "secondary_button_text": "Explore Collection",
+        "secondary_button_link": "/collections/all"
       }
+    },
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "icon": "🚚", "text": "Free Shipping Over R500" } },
+        "t2": { "type": "item", "settings": { "icon": "🔒", "text": "Secure Checkout" } },
+        "t3": { "type": "item", "settings": { "icon": "↩", "text": "Easy 14-Day Returns" } },
+        "t4": { "type": "item", "settings": { "icon": "★", "text": "Top Rated by Customers" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": {}
     },
     "trust_marquee": {
       "type": "press-marquee",
@@ -192,15 +212,28 @@
         "show_view_all": false,
         "view_all_text": "View all"
       }
+    },
+    "popup_newsletter": {
+      "type": "popup-newsletter",
+      "settings": {
+        "enable_popup": false,
+        "heading": "GET 15% OFF",
+        "subheading": "Subscribe for exclusive drops and your first order discount.",
+        "placeholder": "Enter your email",
+        "button_text": "SUBSCRIBE",
+        "privacy_text": "We respect your privacy. Unsubscribe anytime."
+      }
     }
   },
   "order": [
+    "announcement_bar",
     "site_header_P8YKmT",
     "hero",
+    "trust_bar",
     "trust_marquee",
     "sponsored_picks",
     "hoodies",
     "sweatshirts",
-    "graphic_tees"
+    "popup_newsletter"
   ]
 }
