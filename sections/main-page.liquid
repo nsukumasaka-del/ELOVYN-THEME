@@ -168,10 +168,14 @@
         }
         if (!id) id = 'cashout-section';
 
-        // ensure unique id per page
-        if (content.querySelectorAll('#' + CSS.escape(id)).length > 1) {
+        // ensure unique id per page without relying on CSS.escape support
+        var existingIds = {};
+        content.querySelectorAll('[id]').forEach(function(el) {
+          existingIds[el.id] = true;
+        });
+        if (existingIds[id]) {
           var i = 2;
-          while (content.querySelector('#' + CSS.escape(id + '-' + i))) i++;
+          while (existingIds[id + '-' + i]) i++;
           id = id + '-' + i;
         }
 
