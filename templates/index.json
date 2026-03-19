@@ -261,41 +261,6 @@
         "button_link": "/collections/all"
       }
     },
-    "graphic_tees": {
-      "type": "collection-grid-shop",
-      "blocks": {
-        "product_link_fttM7E": {
-          "type": "product_link",
-          "settings": {
-            "product": "coofandy-men-s-short-sleeve-button-down-summer-shirt",
-            "url": "https://amzn.to/4rJdpgG",
-            "button_text": "View on Amazon"
-          }
-        }
-      },
-      "block_order": [
-        "product_link_fttM7E"
-      ],
-      "name": "Sponsored",
-      "settings": {
-        "section_id": "Sponsored picks",
-        "collection": "tech",
-        "products_to_show": 8,
-        "heading": "Sponsored picks",
-        "description": "Handpicked favorites. Click through for the best deals on hoodies, sweatshirts, and graphic tees.",
-        "button_text": "View on Amazon",
-        "athletic_fit_tee_amazon_url": "https://amzn.to/4r0vRjF",
-        "coofandy_button_amazon_url": "",
-        "extra_link_1_contains": "",
-        "extra_link_1_url": "https://amzn.to/4r1xKwv",
-        "extra_link_2_contains": "",
-        "extra_link_2_url": "",
-        "extra_link_3_contains": "",
-        "extra_link_3_url": "",
-        "show_view_all": false,
-        "view_all_text": "View all"
-      }
-    },
     "popup_newsletter": {
       "type": "popup-newsletter",
       "settings": {
