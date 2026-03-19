@@ -15,6 +15,9 @@
     transition: background 0.5s, backdrop-filter 0.5s, border 0.5s;
     -webkit-tap-highlight-color: transparent;
   }
+  #elovyn-header-wrap.header-not-sticky {
+    position: relative;
+  }
   #elovyn-header-wrap.scrolled {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(24px);
@@ -471,7 +474,7 @@
   }
 </style>
 
-<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}">
+<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}{% unless section.settings.enable_sticky_header %} header-not-sticky{% endunless %}">
   <header class="elovyn-header site-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo: section settings first, then Theme settings > General (store logo), then asset {%- endcomment -%}
@@ -714,6 +717,12 @@
     {
       "type": "header",
       "content": "Navigation bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Enable sticky header",
+      "default": true
     },
     {
       "type": "paragraph",

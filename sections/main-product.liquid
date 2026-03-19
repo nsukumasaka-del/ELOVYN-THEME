@@ -146,14 +146,16 @@
   </div>
 </div>
 
-<div class="mobile-sticky-atc" id="MobileStickyAtc" aria-hidden="true">
-  <div class="mobile-sticky-atc__inner">
-    <div class="mobile-sticky-atc__price" id="MobileStickyPrice">{{ product.selected_or_first_available_variant.price | money }}</div>
-    <button type="button" class="mobile-sticky-atc__btn" id="MobileStickyAtcBtn" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-      {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
-    </button>
+{% if section.settings.enable_sticky_atc %}
+  <div class="mobile-sticky-atc" id="MobileStickyAtc" aria-hidden="true">
+    <div class="mobile-sticky-atc__inner">
+      <div class="mobile-sticky-atc__price" id="MobileStickyPrice">{{ product.selected_or_first_available_variant.price | money }}</div>
+      <button type="button" class="mobile-sticky-atc__btn" id="MobileStickyAtcBtn" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+        {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+      </button>
+    </div>
   </div>
-</div>
+{% endif %}
 
 <div id="cart-popup" class="cart-popup" aria-live="polite" role="status" hidden>
   <div class="cart-popup-content">
@@ -413,6 +415,13 @@
 {% schema %}
 {
   "name": "Product",
-  "settings": []
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_atc",
+      "label": "Enable sticky Add to Cart on mobile",
+      "default": true
+    }
+  ]
 }
 {% endschema %}

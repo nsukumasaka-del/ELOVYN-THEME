@@ -32,6 +32,11 @@
   --font-heading-weight: 700;
 }
 
+body {
+  --effective-bg: var(--brand-background-color, var(--color-background));
+  --effective-text: var(--brand-text-color, var(--color-text));
+}
+
 * {
   border-color: hsl(var(--border));
 }
@@ -40,6 +45,35 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.section-spacing {
+  padding-top: var(--brand-section-spacing, 24px);
+  padding-bottom: var(--brand-section-spacing, 24px);
+}
+
+button,
+.btn-hero,
+.button,
+[type="button"],
+[type="submit"] {
+  border-radius: var(--brand-button-radius, 10px);
+}
+
+body.theme-button-pill button,
+body.theme-button-pill .btn-hero,
+body.theme-button-pill .button,
+body.theme-button-pill [type="button"],
+body.theme-button-pill [type="submit"] {
+  border-radius: 999px;
+}
+
+body.theme-button-square button,
+body.theme-button-square .btn-hero,
+body.theme-button-square .button,
+body.theme-button-square [type="button"],
+body.theme-button-square [type="submit"] {
+  border-radius: 0;
 }
 
 h1, h2, h3, h4, h5, h6, .heading {

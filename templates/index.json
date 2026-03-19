@@ -83,6 +83,15 @@
       "block_order": ["t1", "t2", "t3", "t4"],
       "settings": {}
     },
+    "image_banner_flex": {
+      "type": "image-banner-flex",
+      "settings": {
+        "heading": "Streetwear built for daily impact",
+        "text": "Premium hoodies, sweatshirts, and graphic tees designed for comfort and style.",
+        "button_text": "Shop collection",
+        "button_link": "/collections/all"
+      }
+    },
     "trust_marquee": {
       "type": "press-marquee",
       "blocks": {
@@ -178,6 +187,80 @@
         "view_all_text": "View all"
       }
     },
+    "testimonials_home": {
+      "type": "testimonials",
+      "blocks": {
+        "t1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Great quality and fit. Shipping was smooth and support was fast.",
+            "name": "Verified Customer",
+            "meta": "South Africa"
+          }
+        },
+        "t2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The hoodie material feels premium and the print quality is excellent.",
+            "name": "Verified Customer",
+            "meta": "Cape Town"
+          }
+        },
+        "t3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Easy checkout and quick updates after I placed my order.",
+            "name": "Verified Customer",
+            "meta": "Johannesburg"
+          }
+        }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": {
+        "heading": "What customers say",
+        "subheading": "Trusted by shoppers who value quality streetwear."
+      }
+    },
+    "faq_home": {
+      "type": "faq-accordion",
+      "blocks": {
+        "f1": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "Processing time is 1–3 business days. Delivery usually takes 7–12 business days."
+          }
+        },
+        "f2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return window?",
+            "answer": "You can request a return within 14 days of receiving your order, provided items are unused and in original packaging."
+          }
+        },
+        "f3": {
+          "type": "faq",
+          "settings": {
+            "question": "Which payment options are supported?",
+            "answer": "Checkout supports trusted methods including PayFast, PayPal, and Stripe."
+          }
+        }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": {
+        "heading": "Frequently asked questions",
+        "subheading": "Quick answers before you buy."
+      }
+    },
+    "cta_home": {
+      "type": "cta-flex",
+      "settings": {
+        "heading": "Ready for your next fit?",
+        "text": "Shop premium hoodies, sweatshirts, and graphic tees now.",
+        "button_text": "Shop now",
+        "button_link": "/collections/all"
+      }
+    },
     "graphic_tees": {
       "type": "collection-grid-shop",
       "blocks": {
@@ -230,10 +313,14 @@
     "site_header_P8YKmT",
     "hero",
     "trust_bar",
+    "image_banner_flex",
     "trust_marquee",
     "sponsored_picks",
     "hoodies",
     "sweatshirts",
+    "testimonials_home",
+    "faq_home",
+    "cta_home",
     "popup_newsletter"
   ]
 }
