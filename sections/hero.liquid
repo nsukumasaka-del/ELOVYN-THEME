@@ -4,6 +4,11 @@
 {% endcomment %}
 
 <style>
+  .hero-cta-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
   .elovyn-hero-shop-btn {
     display: inline-flex;
     align-items: center;
@@ -25,6 +30,16 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
   }
+  .elovyn-hero-shop-btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: none;
+  }
+  .elovyn-hero-shop-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+  }
   @media (min-width: 768px) {
     .elovyn-hero-shop-btn { padding: 0.875rem 2rem; font-size: 0.9375rem; }
   }
@@ -38,6 +53,8 @@
   {%- comment -%} Background Image (zoom + focal point via CSS background) {%- endcomment -%}
   {%- if section.settings.hero_image != blank -%}
     {%- assign hero_bg_url = section.settings.hero_image | image_url: width: 1920 -%}
+  {%- elsif section.settings.hero_image_url != blank -%}
+    {%- assign hero_bg_url = section.settings.hero_image_url -%}
   {%- else -%}
     {%- assign hero_bg_url = 'hoodie.png' | asset_url -%}
   {%- endif -%}
@@ -71,13 +88,21 @@
       <p class="text-lg md:text-xl text-foreground/70 mb-8">
         {{ section.settings.description | default: "Find our latest products below." }}
       </p>
-      <div>
+      <div class="hero-cta-row">
         <a 
           href="{% if section.settings.button_link != blank %}{{ section.settings.button_link }}{% else %}/#apparel{% endif %}" 
           class="elovyn-hero-shop-btn"
         >
           {{ section.settings.button_text | default: "Shop Now" }}
         </a>
+        {%- if section.settings.secondary_button_text != blank -%}
+          <a
+            href="{% if section.settings.secondary_button_link != blank %}{{ section.settings.secondary_button_link }}{% else %}/collections/all{% endif %}"
+            class="elovyn-hero-shop-btn elovyn-hero-shop-btn--ghost"
+          >
+            {{ section.settings.secondary_button_text }}
+          </a>
+        {%- endif -%}
       </div>
     </div>
 
@@ -110,6 +135,12 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_url",
+      "label": "Hero image URL (optional)",
+      "info": "Optional external image URL. Used only when no Hero Image is selected."
     },
     {
       "type": "range",
@@ -213,6 +244,17 @@
       "type": "url",
       "id": "button_link",
       "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary button text",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
     }
   ],
   "blocks": [

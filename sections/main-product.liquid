@@ -84,6 +84,12 @@
             {% endif %}
           </button>
         </div>
+        <div class="amazon-product-payment-trust mb-6" aria-label="Secure payment methods">
+          <span class="trust-pill">Secure checkout</span>
+          <span class="trust-pill">PayFast</span>
+          <span class="trust-pill">PayPal</span>
+          <span class="trust-pill">Stripe</span>
+        </div>
       </form>
 
       {% if product.description != blank %}
@@ -140,6 +146,15 @@
   </div>
 </div>
 
+<div class="mobile-sticky-atc" id="MobileStickyAtc" aria-hidden="true">
+  <div class="mobile-sticky-atc__inner">
+    <div class="mobile-sticky-atc__price" id="MobileStickyPrice">{{ product.selected_or_first_available_variant.price | money }}</div>
+    <button type="button" class="mobile-sticky-atc__btn" id="MobileStickyAtcBtn" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+      {% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}
+    </button>
+  </div>
+</div>
+
 <div id="cart-popup" class="cart-popup" aria-live="polite" role="status" hidden>
   <div class="cart-popup-content">
     <p class="cart-popup-message">Product added to cart</p>
@@ -166,6 +181,9 @@
   }
   var variantIdInput = form.querySelector('[data-variant-id]');
   var addToCartBtn = form.querySelector('[data-add-to-cart]');
+  var stickyAtcBtn = document.getElementById('MobileStickyAtcBtn');
+  var stickyAtcPrice = document.getElementById('MobileStickyPrice');
+  var stickyAtcWrap = document.getElementById('MobileStickyAtc');
   var priceEl = document.querySelector('[data-product-price]');
   var variantData = {{ product.variants | json }};
   var variantPrices = {};
@@ -212,9 +230,14 @@
     if (!variant) return;
     if (variantIdInput) variantIdInput.value = variant.id;
     if (priceEl && variantPrices[variant.id]) priceEl.textContent = variantPrices[variant.id];
+    if (stickyAtcPrice && variantPrices[variant.id]) stickyAtcPrice.textContent = variantPrices[variant.id];
     if (addToCartBtn) {
       addToCartBtn.disabled = !variant.available;
       addToCartBtn.textContent = variant.available ? (window.variantStrings && window.variantStrings.addToCart ? window.variantStrings.addToCart : 'Add to cart') : (window.variantStrings && window.variantStrings.soldOut ? window.variantStrings.soldOut : 'Sold out');
+    }
+    if (stickyAtcBtn) {
+      stickyAtcBtn.disabled = !variant.available;
+      stickyAtcBtn.textContent = variant.available ? 'Add to cart' : 'Sold out';
     }
     setActiveOptionStyles();
   }
@@ -299,8 +322,93 @@
       this.classList.add('thumbnail-active');
     });
   });
+
+  if (stickyAtcBtn) {
+    stickyAtcBtn.addEventListener('click', function() {
+      if (addToCartBtn && !addToCartBtn.disabled) addToCartBtn.click();
+    });
+  }
+
+  function updateStickyAtcVisibility() {
+    if (!stickyAtcWrap || !addToCartBtn) return;
+    var rect = addToCartBtn.getBoundingClientRect();
+    var isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    if (isDesktop || (rect.top >= 0 && rect.bottom <= window.innerHeight)) {
+      stickyAtcWrap.classList.remove('show');
+      stickyAtcWrap.setAttribute('aria-hidden', 'true');
+    } else {
+      stickyAtcWrap.classList.add('show');
+      stickyAtcWrap.setAttribute('aria-hidden', 'false');
+    }
+  }
+  window.addEventListener('scroll', updateStickyAtcVisibility, { passive: true });
+  window.addEventListener('resize', updateStickyAtcVisibility);
+  updateStickyAtcVisibility();
 })();
 </script>
+
+<style>
+  .amazon-product-payment-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .amazon-product-payment-trust .trust-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #fff;
+    color: #111;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .mobile-sticky-atc {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+    background: rgba(255, 255, 255, 0.96);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    transform: translateY(110%);
+    transition: transform 0.22s ease;
+  }
+  .mobile-sticky-atc.show { transform: translateY(0); }
+  .mobile-sticky-atc__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .mobile-sticky-atc__price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111;
+  }
+  .mobile-sticky-atc__btn {
+    border: none;
+    border-radius: 0.65rem;
+    background: #111;
+    color: #fff;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 0.72rem 1rem;
+    min-width: 148px;
+  }
+  .mobile-sticky-atc__btn:disabled {
+    opacity: 0.55;
+  }
+  @media (min-width: 1024px) {
+    .mobile-sticky-atc { display: none; }
+  }
+</style>
 
 {% schema %}
 {

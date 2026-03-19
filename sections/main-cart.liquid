@@ -60,6 +60,12 @@
                 <span class="main-cart-total">{{ cart.total_price | money }}</span>
               </div>
               <p class="main-cart-note">Shipping and taxes calculated at checkout.</p>
+              <div class="main-cart-trust-list" aria-label="Secure checkout and payments">
+                <span class="main-cart-trust-item">Secure checkout</span>
+                <span class="main-cart-trust-item">PayFast</span>
+                <span class="main-cart-trust-item">PayPal</span>
+                <span class="main-cart-trust-item">Stripe</span>
+              </div>
               <div class="main-cart-buttons">
                 <button type="submit" name="checkout" class="main-cart-checkout-btn">
                   {{ 'sections.cart.checkout' | t }}
@@ -409,6 +415,23 @@
     color: rgba(0,0,0,0.55) !important;
     margin: 0 0 1rem 0;
     line-height: 1.4;
+  }
+  .main-cart-trust-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1rem 0;
+  }
+  .main-cart-trust-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #111;
   }
   @media (min-width: 375px) {
     .main-cart-note { margin-bottom: 1.25rem; }
