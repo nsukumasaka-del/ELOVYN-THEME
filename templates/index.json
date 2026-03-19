@@ -22,21 +22,21 @@
           "type": "nav_link",
           "settings": {
             "text": "Hoodies",
-            "url": "/#Hoodies"
+            "url": "/collections/hoodies"
           }
         },
         "nav_link_4L3mWe": {
           "type": "nav_link",
           "settings": {
             "text": "Sweatshirts",
-            "url": "/#Sweatshirt"
+            "url": "/collections/sweatshirts"
           }
         },
         "nav_link_idKVqf": {
           "type": "nav_link",
           "settings": {
             "text": "Graphic Tees",
-            "url": "/#Graphic Tees"
+            "url": "/collections/graphic-tees"
           }
         }
       },
@@ -56,17 +56,17 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "hero_image": "shopify://shop_images/hoodie_116f9fce-e62a-4d6d-ad89-d15d1e57ef26.png",
-        "hero_image_url": "",
+        "hero_image": "",
+        "hero_image_url": "https://images.unsplash.com/photo-1762575910569-46971cd69df3?auto=format&fit=crop&w=1920&q=80",
         "hero_height": 100,
-        "hero_zoom": 120,
-        "hero_focal_point": "top right",
-        "hero_zoom_mobile": 105,
-        "hero_focal_point_mobile": "center left",
-        "heading": "Hoodies.",
-        "subheading": "Sweatshirts. Graphic tees.",
-        "description": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees.",
-        "button_text": "Shop Now",
+        "hero_zoom": 105,
+        "hero_focal_point": "center",
+        "hero_zoom_mobile": 110,
+        "hero_focal_point_mobile": "center",
+        "heading": "Streetwear that speaks",
+        "subheading": "Hoodies. Sweatshirts. Graphic Tees.",
+        "description": "Premium comfort, bold cuts, and everyday statement pieces built for your style.",
+        "button_text": "Shop New Arrivals",
         "button_link": "/collections/all",
         "secondary_button_text": "Explore Collection",
         "secondary_button_link": "/collections/all"
@@ -148,43 +148,40 @@
       ],
       "settings": {}
     },
-    "sponsored_picks": {
-      "type": "clothing-showcase",
-      "name": "Custom tees",
+    "grid_hoodies": {
+      "type": "product-grid-flex",
       "settings": {
-        "section_id": "Graphic Tees",
-        "collection": "frontpage",
-        "products_to_show": 8,
-        "heading": "Graphic & custom tees",
-        "description": "Stand out with bold designs and custom prints. Your style, your statement.",
-        "show_view_all": false,
-        "view_all_text": "/#Graphic Tees"
-      }
-    },
-    "hoodies": {
-      "type": "clothing-showcase",
-      "name": "Hoodies",
-      "settings": {
-        "section_id": "Hoodies",
+        "heading": "Hoodies",
+        "subheading": "Heavyweight comfort and clean silhouettes.",
         "collection": "hoodies",
         "products_to_show": 8,
-        "heading": "Hoodies",
-        "description": "Cozy, comfortable, and on-trend. Find your next favorite hoodie.",
-        "show_view_all": false,
-        "view_all_text": "View all /#"
+        "button_text": "View product",
+        "show_view_all": true,
+        "view_all_text": "View all hoodies"
       }
     },
-    "sweatshirts": {
-      "type": "clothing-showcase",
-      "name": "Sweatshirts",
+    "grid_sweatshirts": {
+      "type": "product-grid-flex",
       "settings": {
-        "section_id": "Sweatshirt",
-        "collection": "sweatshirts",
-        "products_to_show": 4,
         "heading": "Sweatshirts",
-        "description": "Classic crewnecks and pullovers. Perfect for layering.",
+        "subheading": "Everyday layers with a premium feel.",
+        "collection": "sweatshirts",
+        "products_to_show": 8,
+        "button_text": "View product",
         "show_view_all": true,
-        "view_all_text": "View all"
+        "view_all_text": "View all sweatshirts"
+      }
+    },
+    "grid_graphic_tees": {
+      "type": "product-grid-flex",
+      "settings": {
+        "heading": "Graphic Tees",
+        "subheading": "Bold prints designed for self-expression.",
+        "collection": "frontpage",
+        "products_to_show": 8,
+        "button_text": "View product",
+        "show_view_all": true,
+        "view_all_text": "Shop all tees"
       }
     },
     "testimonials_home": {
@@ -279,10 +276,9 @@
     "hero",
     "trust_bar",
     "image_banner_flex",
-    "trust_marquee",
-    "sponsored_picks",
-    "hoodies",
-    "sweatshirts",
+    "grid_hoodies",
+    "grid_sweatshirts",
+    "grid_graphic_tees",
     "testimonials_home",
     "faq_home",
     "cta_home",
