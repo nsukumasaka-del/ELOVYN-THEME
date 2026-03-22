@@ -543,14 +543,22 @@
       "default": true
     },
     {
-      "type": "range",
+      "type": "select",
       "id": "rotation_ms",
-      "min": 3000,
-      "max": 12000,
-      "step": 500,
-      "unit": "ms",
       "label": "Time per slide",
-      "default": 5000
+      "default": "5000",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "3500", "label": "3.5 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "4500", "label": "4.5 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "5500", "label": "5.5 seconds" },
+        { "value": "6000", "label": "6 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "8000", "label": "8 seconds" },
+        { "value": "9000", "label": "9 seconds" }
+      ]
     },
     {
       "type": "checkbox",
