@@ -43,6 +43,7 @@
     }
   },
   "accessibility": {
+    "close": "Close",
     "skip_to_text": "Skip to content",
     "refresh_page": "Choosing a selection results in a full page refresh.",
     "link_messages": {
@@ -71,7 +72,16 @@
     "general": {
       "title": "Collections",
       "products": "products",
+      "products_count_suffix": "products",
       "no_matches": "No products in this collection."
+    },
+    "sorting": {
+      "title": "Sort"
+    },
+    "filters": {
+      "title": "Filters",
+      "from": "From",
+      "to": "To"
     }
   },
   "products": {
@@ -81,6 +91,9 @@
       "unavailable": "Unavailable",
       "value_unavailable": "{{ value }} is unavailable",
       "view_options": "View options",
+      "quick_add": "Quick add",
+      "choose_options": "Select size",
+      "view_full_details": "View product",
       "quantity": "Quantity"
     }
   },

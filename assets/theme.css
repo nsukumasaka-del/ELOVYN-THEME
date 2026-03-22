@@ -938,33 +938,50 @@ body.template-product #layout-header-wrapper,
 .template-cart main,
 .template-cart .content-for-layout,
 .template-search main,
-.template-search .content-for-layout {
+.template-search .content-for-layout,
+.template-collection main,
+.template-collection .content-for-layout,
+.template-collection #MainContent {
   padding-top: var(--header-height, 100px);
+}
+body.template-collection {
+  background: #ffffff !important;
+}
+body.template-collection .content-for-layout {
+  background: #ffffff;
+}
+body.template-collection .layout-header-wrapper,
+body.template-collection #layout-header-wrapper {
+  background: transparent !important;
 }
 /* Mobile: smaller header height so content starts right under nav bar; avoids overlap */
 @media (max-width: 480px) {
   body.template-cart,
   body.template-product,
-  body.template-search {
+  body.template-search,
+  body.template-collection {
     --header-height: 56px;
   }
 }
 @media (min-width: 481px) and (max-width: 768px) {
   body.template-cart,
   body.template-product,
-  body.template-search {
+  body.template-search,
+  body.template-collection {
     --header-height: 64px;
   }
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   body.template-cart,
   body.template-product,
-  body.template-search {
+  body.template-search,
+  body.template-collection {
     --header-height: 80px;
   }
 }
 @media (min-width: 1025px) {
-  body.template-search {
+  body.template-search,
+  body.template-collection {
     --header-height: 80px;
   }
 }

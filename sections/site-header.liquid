@@ -558,7 +558,7 @@
   }
 </style>
 
-<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}{% unless section.settings.enable_sticky_header %} header-not-sticky{% endunless %}">
+<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' or request.page_type == 'collection' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}{% unless section.settings.enable_sticky_header %} header-not-sticky{% endunless %}">
   <header class="elovyn-header site-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo: section settings first, then Theme settings > General (store logo), then asset {%- endcomment -%}

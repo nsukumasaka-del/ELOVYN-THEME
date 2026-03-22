@@ -1,0 +1,43 @@
+{
+  "layout": "theme",
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "products_per_page": 24
+      },
+      "blocks": {
+        "sc1": {
+          "type": "shortcut",
+          "settings": {
+            "label": "Hoodies",
+            "link": "/collections/hoodies"
+          }
+        },
+        "sc2": {
+          "type": "shortcut",
+          "settings": {
+            "label": "Sweatshirts",
+            "link": "/collections/sweatshirts"
+          }
+        },
+        "sc3": {
+          "type": "shortcut",
+          "settings": {
+            "label": "Graphic tees",
+            "link": "/collections/graphic-tees"
+          }
+        },
+        "sc4": {
+          "type": "shortcut",
+          "settings": {
+            "label": "Shop all",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["sc1", "sc2", "sc3", "sc4"]
+    }
+  },
+  "order": ["main"]
+}
