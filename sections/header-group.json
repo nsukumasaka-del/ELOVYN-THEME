@@ -5,7 +5,16 @@
     "announcement": {
       "type": "announcement-bar",
       "settings": {
-        "message": "FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY"
+        "message": "Free standard shipping on orders over $75",
+        "message_1": "12% Student Discount",
+        "message_2": "Free standard shipping on orders over $75",
+        "message_3": "Refer a friend to earn rewards on your next order",
+        "message_4": "Get 10% off your first order when you sign up to our emails",
+        "auto_rotate": true,
+        "rotation_ms": 5000,
+        "show_pause": true,
+        "background_color": "#0d0d0d",
+        "text_color": "#ffffff"
       }
     },
     "header": {

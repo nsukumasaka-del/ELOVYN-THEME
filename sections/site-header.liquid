@@ -3,14 +3,12 @@
   Rendered via {% section 'site-header' %} in layout so it always shows (Shopify reserves 'header' for section groups).
 {% endcomment %}
 <style>
-  /* Header: visible on both desktop and mobile/cellphone */
+  /* Nav sits inside #layout-header-wrapper (fixed stack: promo + nav). Do not position:fixed here — it hid the announcement bar. */
   #elovyn-header-wrap {
     display: block !important;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
+    position: relative;
+    width: 100%;
+    z-index: 2;
     background: transparent;
     transition: background 0.5s, backdrop-filter 0.5s, border 0.5s;
     -webkit-tap-highlight-color: transparent;
@@ -18,39 +16,40 @@
   #elovyn-header-wrap.header-not-sticky {
     position: relative;
   }
-  #elovyn-header-wrap.scrolled {
+  /* Homepage: glass bar on scroll */
+  #elovyn-header-wrap.header--transparent.scrolled {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
-  /* Product page: black header, white text & icons (same as cart) */
-  body.template-product #elovyn-header-wrap {
+  /* All other templates: solid bar (Gymshark-style) — fixes invisible white-on-white nav */
+  #elovyn-header-wrap.header--black {
     background-color: #000000 !important;
     background: #000000 !important;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
-  body.template-product #elovyn-header-wrap.scrolled {
+  #elovyn-header-wrap.header--black.scrolled {
     background-color: #000000 !important;
     background: #000000 !important;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
-  body.template-product #elovyn-header-wrap .elovyn-nav a,
-  body.template-product #elovyn-header-wrap .elovyn-header-right a,
-  body.template-product #elovyn-header-wrap .elovyn-header-right button,
-  body.template-product #elovyn-header-wrap .elovyn-logo-link {
+  #elovyn-header-wrap.header--black .elovyn-nav a,
+  #elovyn-header-wrap.header--black .elovyn-header-right a,
+  #elovyn-header-wrap.header--black .elovyn-header-right button,
+  #elovyn-header-wrap.header--black .elovyn-logo-link {
     color: #ffffff !important;
   }
-  body.template-product #elovyn-header-wrap svg,
-  body.template-product #elovyn-header-wrap .icon {
+  #elovyn-header-wrap.header--black svg,
+  #elovyn-header-wrap.header--black .icon {
     fill: #ffffff !important;
     color: #ffffff !important;
   }
-  body.template-product #elovyn-header-wrap .elovyn-logo-img {
+  #elovyn-header-wrap.header--black .elovyn-logo-img {
     filter: brightness(1.1);
   }
   #elovyn-header-wrap .elovyn-header-inner {
@@ -139,8 +138,10 @@
   #elovyn-header-wrap .elovyn-nav a {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
     transition: color 0.2s;
     white-space: nowrap;
   }
@@ -558,7 +559,7 @@
   }
 </style>
 
-<div id="elovyn-header-wrap" class="{% if request.page_type == 'product' or request.page_type == 'cart' or request.page_type == 'collection' %}header--black{% elsif request.page_type == 'index' %}header--transparent{% endif %}{% unless section.settings.enable_sticky_header %} header-not-sticky{% endunless %}">
+<div id="elovyn-header-wrap" class="{% if request.page_type == 'index' %}header--transparent{% else %}header--black{% endif %}{% unless section.settings.enable_sticky_header %} header-not-sticky{% endunless %}">
   <header class="elovyn-header site-header" role="banner">
     <div class="elovyn-header-inner">
       {%- comment -%} Logo: section settings first, then Theme settings > General (store logo), then asset {%- endcomment -%}
@@ -802,7 +803,7 @@
 {% schema %}
 {
   "name": "Site Header",
-  "tag": "header",
+  "tag": "div",
   "class": "section-header",
   "settings": [
     {

@@ -30,6 +30,8 @@
   --font-heading: 'Oswald', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-heading-weight: 700;
+  /* Promo strip above nav (announcement-bar.liquid); included in --header-height below */
+  --announcement-bar-height: 2.3125rem;
 }
 
 body {
@@ -932,17 +934,15 @@ body.template-product #layout-header-wrapper,
 .template-product #layout-header-wrapper {
   background: transparent !important;
 }
-/* Prevent overlap with fixed/sticky header – use --header-height; set per breakpoint so nav bar fits */
-.template-product main,
-.template-product .content-for-layout,
-.template-cart main,
-.template-cart .content-for-layout,
-.template-search main,
-.template-search .content-for-layout,
-.template-collection main,
-.template-collection .content-for-layout,
-.template-collection #MainContent {
-  padding-top: var(--header-height, 100px);
+/*
+ * Sticky header: promo + nav are fixed inside #layout-header-wrapper.
+ * Offset main content only when sticky (not when .header-not-sticky).
+ */
+#layout-header-wrapper:not(:has(.header-not-sticky)) ~ #MainContent {
+  padding-top: var(--header-height, 7.5rem);
+}
+body.template-index #layout-header-wrapper:not(:has(.header-not-sticky)) ~ #MainContent {
+  padding-top: 0 !important;
 }
 body.template-collection {
   background: #ffffff !important;
@@ -954,35 +954,20 @@ body.template-collection .layout-header-wrapper,
 body.template-collection #layout-header-wrapper {
   background: transparent !important;
 }
-/* Mobile: smaller header height so content starts right under nav bar; avoids overlap */
+/* Nav bar height + announcement strip (all templates; index main still uses padding-top: 0) */
 @media (max-width: 480px) {
-  body.template-cart,
-  body.template-product,
-  body.template-search,
-  body.template-collection {
-    --header-height: 56px;
+  body {
+    --header-height: calc(var(--announcement-bar-height, 2.3125rem) + 3.5rem);
   }
 }
 @media (min-width: 481px) and (max-width: 768px) {
-  body.template-cart,
-  body.template-product,
-  body.template-search,
-  body.template-collection {
-    --header-height: 64px;
+  body {
+    --header-height: calc(var(--announcement-bar-height, 2.3125rem) + 4rem);
   }
 }
-@media (min-width: 769px) and (max-width: 1024px) {
-  body.template-cart,
-  body.template-product,
-  body.template-search,
-  body.template-collection {
-    --header-height: 80px;
-  }
-}
-@media (min-width: 1025px) {
-  body.template-search,
-  body.template-collection {
-    --header-height: 80px;
+@media (min-width: 769px) {
+  body {
+    --header-height: calc(var(--announcement-bar-height, 2.3125rem) + 5rem);
   }
 }
 
@@ -1023,9 +1008,9 @@ body.template-collection #layout-header-wrapper {
 }
 #elovyn-header-wrap.header--transparent {
   background: transparent !important;
-  position: fixed;
+  position: relative;
   width: 100%;
-  z-index: 9999;
+  z-index: 2;
 }
 #elovyn-header-wrap.header--transparent.scrolled {
   background: rgba(0, 0, 0, 0.9) !important;
@@ -1308,11 +1293,28 @@ body.template-cart .content-for-layout {
   background: #ffffff;
 }
 
-/* Step 3: Header and menu drawer always above page content so mobile menu works on all pages */
+/* Step 3: Header group = announcement + site-header stacked (Gymshark-style). Fixed wrapper so promo is never covered. */
 .layout-header-wrapper,
 #layout-header-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+#layout-header-wrapper:not(:has(.header-not-sticky)) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+}
+#layout-header-wrapper:has(.header-not-sticky) {
   position: relative;
   z-index: 99999;
+}
+#layout-header-wrapper > * {
+  flex: 0 0 auto;
+  width: 100%;
 }
 .site-header,
 .elovyn-header.site-header {
@@ -1338,7 +1340,7 @@ body.template-cart .content-for-layout {
   position: relative;
   z-index: 1;
 }
-/* Cart, Product, Collection: ensure header wrapper and nav bar are always on top so mobile menu works */
+/* Cart, Product, Collection: keep stacked header visible (wrapper fixed flex column — do not reset to position:relative) */
 body.template-cart .layout-header-wrapper,
 body.template-cart #layout-header-wrapper,
 body.template-product .layout-header-wrapper,
@@ -1349,24 +1351,36 @@ body.template-collection .layout-header-wrapper,
 body.template-collection #layout-header-wrapper,
 .template-collection .layout-header-wrapper,
 .template-collection #layout-header-wrapper {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
   visibility: visible !important;
-  position: relative;
-  z-index: 99999;
   height: auto !important;
   overflow: visible !important;
   background: transparent !important;
 }
-body.template-cart #elovyn-header-wrap,
-body.template-product #elovyn-header-wrap,
-.template-product #elovyn-header-wrap,
-body.template-collection #elovyn-header-wrap,
-.template-collection #elovyn-header-wrap {
+body.template-cart #layout-header-wrapper:not(:has(.header-not-sticky)),
+body.template-product #layout-header-wrapper:not(:has(.header-not-sticky)),
+.template-product #layout-header-wrapper:not(:has(.header-not-sticky)),
+body.template-collection #layout-header-wrapper:not(:has(.header-not-sticky)),
+.template-collection #layout-header-wrapper:not(:has(.header-not-sticky)) {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 99999 !important;
+}
+/* Inner nav must stay in document flow under announcement (was position:fixed and hid promo bar) */
+body.template-cart #elovyn-header-wrap,
+body.template-product #elovyn-header-wrap,
+.template-product #elovyn-header-wrap,
+body.template-collection #elovyn-header-wrap,
+.template-collection #elovyn-header-wrap {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  z-index: 2 !important;
 }
 
 /* ===== Cart + Product: same header – black background, white text & icons ===== */

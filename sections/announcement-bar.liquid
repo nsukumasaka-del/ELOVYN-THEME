@@ -1,41 +1,415 @@
-<section class="announcement-bar-section" role="region" aria-label="Store announcement">
-  <div class="announcement-bar__content">
-    <p class="announcement-bar__message">
-      {{ section.settings.message | default: 'FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY' }}
-    </p>
+{%- comment -%}
+  Gymshark-style promo strip: rotating messages, pause control, sits above main nav in header-group.
+{%- endcomment -%}
+{%- liquid
+  assign m1 = section.settings.message_1 | strip
+  assign m2 = section.settings.message_2 | strip
+  assign m3 = section.settings.message_3 | strip
+  assign m4 = section.settings.message_4 | strip
+  assign link1 = section.settings.link_1_url
+  assign link2 = section.settings.link_2_url
+  assign link3 = section.settings.link_3_url
+  assign link4 = section.settings.link_4_url
+  assign count = 0
+  if m1 != blank
+    assign count = count | plus: 1
+  endif
+  if m2 != blank
+    assign count = count | plus: 1
+  endif
+  if m3 != blank
+    assign count = count | plus: 1
+  endif
+  if m4 != blank
+    assign count = count | plus: 1
+  endif
+  if count == 0
+    assign m1 = section.settings.message | default: 'Free standard shipping on orders over $75'
+    assign count = 1
+  endif
+-%}
+<section
+  class="announcement-bar-section"
+  role="region"
+  aria-label="Store announcements"
+  data-announcement-rotate="{% if section.settings.auto_rotate %}true{% else %}false{% endif %}"
+  data-announcement-interval="{{ section.settings.rotation_ms }}"
+  data-announcement-count="{{ count }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="announcement-bar__inner">
+    {%- if section.settings.show_pause and count > 1 -%}
+      <button
+        type="button"
+        class="announcement-bar__pause"
+        aria-pressed="false"
+        aria-label="Pause announcements"
+        data-announcement-pause
+      >
+        <span class="announcement-bar__pause-icon" aria-hidden="true">‖</span>
+      </button>
+    {%- endif -%}
+
+    <div class="announcement-bar__viewport" {% if count > 1 %}data-announcement-viewport{% endif %}>
+      <div class="announcement-bar__track" data-announcement-track>
+        {%- if m1 != blank -%}
+          <div class="announcement-bar__slide" data-announcement-slide>
+            {%- if link1 != blank -%}
+              <a href="{{ link1 }}" class="announcement-bar__message announcement-bar__message--link">{{ m1 }}</a>
+            {%- else -%}
+              <p class="announcement-bar__message">{{ m1 }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if m2 != blank -%}
+          <div class="announcement-bar__slide" data-announcement-slide hidden>
+            {%- if link2 != blank -%}
+              <a href="{{ link2 }}" class="announcement-bar__message announcement-bar__message--link">{{ m2 }}</a>
+            {%- else -%}
+              <p class="announcement-bar__message">{{ m2 }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if m3 != blank -%}
+          <div class="announcement-bar__slide" data-announcement-slide hidden>
+            {%- if link3 != blank -%}
+              <a href="{{ link3 }}" class="announcement-bar__message announcement-bar__message--link">{{ m3 }}</a>
+            {%- else -%}
+              <p class="announcement-bar__message">{{ m3 }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if m4 != blank -%}
+          <div class="announcement-bar__slide" data-announcement-slide hidden>
+            {%- if link4 != blank -%}
+              <a href="{{ link4 }}" class="announcement-bar__message announcement-bar__message--link">{{ m4 }}</a>
+            {%- else -%}
+              <p class="announcement-bar__message">{{ m4 }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if count > 1 -%}
+      <div class="announcement-bar__dots" role="tablist" aria-label="Promo slides" data-announcement-dots></div>
+    {%- endif -%}
   </div>
 </section>
 
 <style>
   .announcement-bar-section {
-    background: var(--color-accent, #FF3333);
-    color: #fff;
+    --announcement-h: 2.3125rem;
+    background: {{ section.settings.background_color | default: '#0d0d0d' }};
+    color: {{ section.settings.text_color | default: '#ffffff' }};
     text-align: center;
-    padding: 0.5rem 1rem;
     position: relative;
-    z-index: 100001;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: var(--announcement-h);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .announcement-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: var(--announcement-h);
+    padding: 0.35rem 0.75rem;
+    max-width: 100%;
+  }
+  .announcement-bar__pause {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.85;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    letter-spacing: -0.05em;
+  }
+  .announcement-bar__pause:hover,
+  .announcement-bar__pause:focus-visible {
+    opacity: 1;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  .announcement-bar__viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .announcement-bar__track {
+    position: relative;
+    min-height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .announcement-bar__slide {
+    width: 100%;
+    text-align: center;
+    animation: announcement-fade-in 0.35s ease;
+  }
+  .announcement-bar__slide[hidden] {
+    display: none !important;
+  }
+  @keyframes announcement-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   .announcement-bar__message {
     margin: 0;
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.6875rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    color: inherit;
+  }
+  .announcement-bar__message--link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+  }
+  .announcement-bar__message--link:hover {
+    text-decoration: underline;
+  }
+  .announcement-bar__dots {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    align-items: center;
+  }
+  .announcement-bar__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    padding: 0;
+    border: none;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+  }
+  .announcement-bar__dot[aria-selected='true'] {
+    background: #fff;
   }
   @media (max-width: 640px) {
-    .announcement-bar__message { font-size: 0.68rem; letter-spacing: 0.07em; }
+    .announcement-bar__message {
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+    }
+    .announcement-bar__inner {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 </style>
+
+<script>
+  (function () {
+    var root = document.querySelector('.announcement-bar-section[data-announcement-count]');
+    if (!root || root.dataset.announcementCount === '1') return;
+    var rotate = root.dataset.announcementRotate === 'true';
+    var interval = parseInt(root.dataset.announcementInterval, 10) || 5000;
+    var slides = root.querySelectorAll('[data-announcement-slide]');
+    var dotsWrap = root.querySelector('[data-announcement-dots]');
+    var pauseBtn = root.querySelector('[data-announcement-pause]');
+    if (slides.length < 2) return;
+
+    var i = 0;
+    var timer = null;
+    var paused = false;
+
+    function show(idx) {
+      slides.forEach(function (s, j) {
+        if (j === idx) {
+          s.removeAttribute('hidden');
+        } else {
+          s.setAttribute('hidden', '');
+        }
+      });
+      if (dotsWrap) {
+        var dots = dotsWrap.querySelectorAll('.announcement-bar__dot');
+        dots.forEach(function (d, j) {
+          d.setAttribute('aria-selected', j === idx ? 'true' : 'false');
+        });
+      }
+      i = idx;
+    }
+
+    function next() {
+      show((i + 1) % slides.length);
+    }
+
+    function start() {
+      if (!rotate || paused) return;
+      stop();
+      timer = setInterval(next, interval);
+    }
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    if (dotsWrap) {
+      slides.forEach(function (_, j) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'announcement-bar__dot';
+        b.setAttribute('role', 'tab');
+        b.setAttribute('aria-label', 'Slide ' + (j + 1));
+        b.addEventListener('click', function () {
+          show(j);
+          start();
+        });
+        dotsWrap.appendChild(b);
+      });
+      show(0);
+    }
+
+    if (pauseBtn) {
+      pauseBtn.addEventListener('click', function () {
+        paused = !paused;
+        pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        pauseBtn.setAttribute(
+          'aria-label',
+          paused ? 'Play announcements' : 'Pause announcements'
+        );
+        if (paused) stop();
+        else start();
+      });
+    }
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', function () {
+      if (!paused) start();
+    });
+
+    start();
+  })();
+</script>
 
 {% schema %}
 {
   "name": "Announcement bar",
+  "class": "announcement-bar-group",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Gymshark-style rotating promo strip. Shown above the main header. Add multiple lines to rotate."
+    },
     {
       "type": "text",
       "id": "message",
-      "label": "Message",
-      "default": "FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY"
+      "label": "Fallback single message",
+      "default": "Free standard shipping on orders over $75",
+      "info": "Used if all promo lines below are empty."
+    },
+    {
+      "type": "header",
+      "content": "Promo lines (rotate when more than one is filled)"
+    },
+    {
+      "type": "text",
+      "id": "message_1",
+      "label": "Promo 1",
+      "default": "12% Student Discount"
+    },
+    {
+      "type": "text",
+      "id": "link_1_url",
+      "label": "Promo 1 link (optional)",
+      "info": "Relative or full URL"
+    },
+    {
+      "type": "text",
+      "id": "message_2",
+      "label": "Promo 2",
+      "default": "Free standard shipping on orders over $75"
+    },
+    {
+      "type": "text",
+      "id": "link_2_url",
+      "label": "Promo 2 link (optional)",
+      "info": "Relative or full URL"
+    },
+    {
+      "type": "text",
+      "id": "message_3",
+      "label": "Promo 3",
+      "default": "Refer a friend — earn rewards"
+    },
+    {
+      "type": "text",
+      "id": "link_3_url",
+      "label": "Promo 3 link (optional)",
+      "info": "Relative or full URL"
+    },
+    {
+      "type": "text",
+      "id": "message_4",
+      "label": "Promo 4",
+      "default": "10% off your first order when you sign up"
+    },
+    {
+      "type": "text",
+      "id": "link_4_url",
+      "label": "Promo 4 link (optional)",
+      "info": "Relative or full URL"
+    },
+    {
+      "type": "header",
+      "content": "Rotation"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate promos",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rotation_ms",
+      "min": 3000,
+      "max": 12000,
+      "step": 500,
+      "unit": "ms",
+      "label": "Time per slide",
+      "default": 5000
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pause",
+      "label": "Show pause button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#0d0d0d"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
     }
   ],
   "presets": [
