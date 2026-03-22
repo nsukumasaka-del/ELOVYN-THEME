@@ -4,10 +4,16 @@
 {% endcomment %}
 {%- assign logo_w = section.settings.logo_width | default: 180 -%}
 <style>
+  /* Single source for header row + notification bar (sibling sections read from wrapper) */
+  #layout-header-wrapper {
+    --header-stack-bg: #ffffff;
+    --header-stack-fg: #0a0a0a;
+    --header-stack-border: #e8e8e8;
+  }
   #elovyn-header-wrap.store-header {
-    --store-header-fg: #0a0a0a;
-    --store-header-bg: #ffffff;
-    --store-header-border: #e8e8e8;
+    --store-header-fg: var(--header-stack-fg);
+    --store-header-bg: var(--header-stack-bg);
+    --store-header-border: var(--header-stack-border);
     --store-header-muted: rgba(10, 10, 10, 0.55);
     display: block !important;
     position: relative;

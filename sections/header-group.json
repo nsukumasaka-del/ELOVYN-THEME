@@ -14,8 +14,7 @@
         "rotation_ms": 5000,
         "show_pause": true,
         "show_close": true,
-        "background_color": "#ffffff",
-        "text_color": "#0a0a0a"
+        "collapse_on_scroll": true
       }
     },
     "header": {
