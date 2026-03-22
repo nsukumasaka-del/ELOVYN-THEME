@@ -1,6 +1,15 @@
 {%- comment -%}
-  Gymshark-style promo strip: rotating messages, pause control, sits above main nav in header-group.
+  Top promo strip: black bar, white type, optional rotation & close (session-persisted).
 {%- endcomment -%}
+{%- if section.settings.show_close -%}
+  <script>
+    try {
+      if (sessionStorage.getItem('announcement_bar_dismissed') === '1') {
+        document.documentElement.classList.add('announcement-bar--dismissed');
+      }
+    } catch (e) {}
+  </script>
+{%- endif -%}
 {%- liquid
   assign m1 = section.settings.message_1 | strip
   assign m2 = section.settings.message_2 | strip
@@ -38,6 +47,16 @@
   {{ section.shopify_attributes }}
 >
   <div class="announcement-bar__inner">
+    {%- if section.settings.show_close -%}
+      <button
+        type="button"
+        class="announcement-bar__close"
+        aria-label="Close announcement"
+        data-announcement-close
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    {%- endif -%}
     {%- if section.settings.show_pause and count > 1 -%}
       <button
         type="button"
@@ -98,9 +117,12 @@
 </section>
 
 <style>
+  html.announcement-bar--dismissed .announcement-bar-section {
+    display: none !important;
+  }
   .announcement-bar-section {
-    --announcement-h: 2.3125rem;
-    background: {{ section.settings.background_color | default: '#0d0d0d' }};
+    --announcement-h: 2.25rem;
+    background: {{ section.settings.background_color | default: '#000000' }};
     color: {{ section.settings.text_color | default: '#ffffff' }};
     text-align: center;
     position: relative;
@@ -116,8 +138,35 @@
     justify-content: center;
     gap: 0.5rem;
     min-height: var(--announcement-h);
-    padding: 0.35rem 0.75rem;
+    padding: 0.3rem 2.25rem;
     max-width: 100%;
+    position: relative;
+  }
+  .announcement-bar__close {
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.75;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .announcement-bar__close:hover,
+  .announcement-bar__close:focus-visible {
+    opacity: 1;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
   .announcement-bar__pause {
     flex-shrink: 0;
@@ -219,6 +268,15 @@
 
 <script>
   (function () {
+    var closeBtn = document.querySelector('[data-announcement-close]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        try {
+          sessionStorage.setItem('announcement_bar_dismissed', '1');
+        } catch (e) {}
+        document.documentElement.classList.add('announcement-bar--dismissed');
+      });
+    }
     var root = document.querySelector('.announcement-bar-section[data-announcement-count]');
     if (!root || root.dataset.announcementCount === '1') return;
     var rotate = root.dataset.announcementRotate === 'true';
@@ -396,6 +454,13 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "Show close (X) button",
+      "default": true,
+      "info": "Hides the bar for this browser session when closed."
+    },
+    {
       "type": "header",
       "content": "Colors"
     },
@@ -403,7 +468,7 @@
       "type": "color",
       "id": "background_color",
       "label": "Background",
-      "default": "#0d0d0d"
+      "default": "#000000"
     },
     {
       "type": "color",

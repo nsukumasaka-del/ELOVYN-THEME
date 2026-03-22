@@ -8,12 +8,13 @@
         "message": "Free standard shipping on orders over $75",
         "message_1": "12% Student Discount",
         "message_2": "Free standard shipping on orders over $75",
-        "message_3": "Refer a friend to earn rewards on your next order",
-        "message_4": "Get 10% off your first order when you sign up to our emails",
+        "message_3": "Refer a friend — earn rewards on your next order",
+        "message_4": "Get 10% off your first order when you sign up",
         "auto_rotate": true,
         "rotation_ms": 5000,
         "show_pause": true,
-        "background_color": "#0d0d0d",
+        "show_close": true,
+        "background_color": "#000000",
         "text_color": "#ffffff"
       }
     },
@@ -21,12 +22,20 @@
       "type": "site-header",
       "settings": {
         "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
-        "logo_width": 95,
-        "logo_alt": "ELOVYN",
+        "logo_width": 200,
+        "logo_alt": "Store",
         "logo_link": "/",
-        "enable_sticky_header": true
+        "enable_sticky_header": true,
+        "shrink_on_scroll": true
       },
       "blocks": {
+        "nav_shop": {
+          "type": "nav_link",
+          "settings": {
+            "text": "Shop",
+            "url": "/collections/all"
+          }
+        },
         "nav_men": {
           "type": "nav_link",
           "settings": {
@@ -38,13 +47,6 @@
           "type": "nav_link",
           "settings": {
             "text": "Women",
-            "url": "/collections/all"
-          }
-        },
-        "nav_new": {
-          "type": "nav_link",
-          "settings": {
-            "text": "New releases",
             "url": "/collections/all"
           }
         },
@@ -63,7 +65,7 @@
           }
         }
       },
-      "block_order": ["nav_men", "nav_women", "nav_new", "nav_collections"]
+      "block_order": ["nav_shop", "nav_men", "nav_women", "nav_collections"]
     }
   },
   "order": ["announcement", "header"]

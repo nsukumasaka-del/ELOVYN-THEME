@@ -90,11 +90,10 @@
     </a>
 
     {% comment %}
-      GLOBAL HEADER – single source for navigation. Loads on ALL pages (homepage, collections, product, cart).
-      Do NOT add {% section 'header' %} or {% section 'site-header' %} anywhere else.
-      Do NOT wrap in conditionals. Configure via Theme Editor → Header (site-header).
+      HEADER (OS 2.0): `header-group.json` loads announcement-bar + site-header. This is the correct pattern — do not add {% section 'site-header' %} here or you will duplicate the header.
+      Configure: Theme editor → Header group.
     {% endcomment %}
-    <div class="layout-header-wrapper" id="layout-header-wrapper">
+    <div class="layout-header-wrapper" id="layout-header-wrapper" data-header-mount>
       {% sections 'header-group' %}
     </div>
 
