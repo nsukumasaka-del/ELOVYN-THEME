@@ -1,7 +1,7 @@
 {% comment %}
-  Hero section with background image and call-to-action.
-  Shop Now button uses white modern style (replaced from nav bar).
+  Full-width hero — minimal, bold sans, strong overlay (Gymshark-style retail).
 {% endcomment %}
+{%- assign hero_overlay = section.settings.overlay_darkness | default: 45 | times: 1.0 | divided_by: 100.0 -%}
 
 <style>
   .hero-cta-row {
@@ -13,35 +13,44 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: #111;
+    min-height: 52px;
+    padding: 0 2rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0a0a0a;
     background: #fff;
     border: none;
-    border-radius: 9999px;
+    border-radius: 0;
     text-decoration: none;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
   .elovyn-hero-shop-btn:hover {
-    background: #f8f8f8;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: #f0f0f0;
     transform: translateY(-1px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   }
   .elovyn-hero-shop-btn--ghost {
     background: transparent;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.85);
     box-shadow: none;
   }
   .elovyn-hero-shop-btn--ghost:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
     box-shadow: none;
   }
   @media (min-width: 768px) {
-    .elovyn-hero-shop-btn { padding: 0.875rem 2rem; font-size: 0.9375rem; }
+    .elovyn-hero-shop-btn { min-height: 56px; padding: 0 2.25rem; font-size: 0.8125rem; }
+  }
+  .hero-section .hero-heading {
+    font-family: var(--font-heading-family, system-ui, sans-serif);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    text-transform: uppercase;
+    font-style: normal;
   }
 </style>
 
@@ -74,20 +83,25 @@
       }
     }
   </style>
-  <div class="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" aria-hidden="true"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" aria-hidden="true"></div>
+  <div class="absolute inset-0 hero-section__scrim" style="background: rgb(0 0 0 / {{ hero_overlay }});" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/25 pointer-events-none" aria-hidden="true"></div>
 
   {%- comment -%} Content {%- endcomment -%}
   <div class="relative z-10 h-full flex flex-col justify-center container mx-auto px-6">
-    <div class="max-w-2xl">
-      <h3 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight text-foreground mb-6 font-playfair italic text-shadow">
-        {{ section.settings.heading | default: "Hoodies." }}
-        <br>
-        {{ section.settings.subheading | default: "Timeless feel." }}
-      </h3>
-      <p class="text-lg md:text-xl text-foreground/70 mb-8">
-        {{ section.settings.description | default: "Find our latest products below." }}
-      </p>
+    <div class="max-w-3xl">
+      <h1 class="hero-heading text-4xl md:text-6xl lg:text-8xl text-white mb-4 md:mb-6 text-shadow">
+        {%- if section.settings.combine_headings -%}
+          {{ section.settings.heading | default: 'Train.' }} {{ section.settings.subheading | default: 'Live.' }}
+        {%- else -%}
+          <span class="block">{{ section.settings.heading | default: 'Train.' }}</span>
+          <span class="block">{{ section.settings.subheading | default: 'Live.' }}</span>
+        {%- endif -%}
+      </h1>
+      {%- if section.settings.description != blank -%}
+        <p class="text-base md:text-lg text-white/85 mb-8 max-w-md leading-relaxed font-medium">
+          {{ section.settings.description }}
+        </p>
+      {%- endif -%}
       <div class="hero-cta-row">
         <a 
           href="{% if section.settings.button_link != blank %}{{ section.settings.button_link }}{% else %}/#apparel{% endif %}" 
@@ -106,24 +120,27 @@
       </div>
     </div>
 
-    {%- comment -%} Bottom Features Bar {%- endcomment -%}
-    <div class="absolute bottom-8 left-6 right-6">
-      <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 border-t border-foreground/10">
-          {%- for block in section.blocks -%}
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                <span class="text-sm font-bold text-accent">{{ block.settings.icon }}</span>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-foreground">{{ block.settings.title }}</p>
-                <p class="text-xs text-foreground/50">{{ block.settings.subtitle }}</p>
-              </div>
-            </div>
-          {%- endfor -%}
+    {%- if section.settings.show_feature_bar -%}
+      <div class="absolute bottom-8 left-6 right-6">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 border-t border-white/15">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'feature' -%}
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <span class="text-sm font-bold text-white">{{ block.settings.icon }}</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">{{ block.settings.title }}</p>
+                    <p class="text-xs text-white/55">{{ block.settings.subtitle }}</p>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
         </div>
       </div>
-    </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -150,7 +167,7 @@
       "max": 100,
       "step": 5,
       "unit": "vh",
-      "default": 80
+      "default": 100
     },
     {
       "type": "range",
@@ -211,6 +228,28 @@
       ],
       "default": "center",
       "info": "Leave as Center to match desktop."
+    },
+    {
+      "type": "range",
+      "id": "overlay_darkness",
+      "label": "Dark overlay strength",
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "default": 45,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "combine_headings",
+      "label": "Combine heading + subheading on one line",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_feature_bar",
+      "label": "Show bottom feature bar",
+      "default": false
     },
     {
       "type": "header",

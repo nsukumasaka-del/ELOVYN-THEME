@@ -1079,7 +1079,7 @@ body.template-product #layout-header-wrapper,
   background: #fff;
 }
 .amazon-product-gallery .amazon-product-thumbs button:focus {
-  outline: 2px solid #f59e0b;
+  outline: 2px solid #111111;
   outline-offset: 2px;
 }
 
@@ -1214,10 +1214,10 @@ body.template-product #layout-header-wrapper,
   box-shadow: 0 0 0 2px #111111;
 }
 
-/* Selected variant option – amber on product page */
+/* Selected variant option – minimal black (overridable by section inline styles) */
 .amazon-product-wrapper .option-value-label:has(.option-radio:checked) .option-value-span {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  border-color: #111111;
+  box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.2);
 }
 
 @media (max-width: 768px) {

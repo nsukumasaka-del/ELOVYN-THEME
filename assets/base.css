@@ -9,6 +9,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Minimal design tokens (Gymshark-style retail: black / white / neutrals) */
+:root {
+  --color-page-bg: #000000;
+  --color-page-text: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-text: #111111;
+  --color-border-subtle: rgba(255, 255, 255, 0.12);
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #000000;

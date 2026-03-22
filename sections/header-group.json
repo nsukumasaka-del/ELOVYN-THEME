@@ -2,41 +2,60 @@
   "type": "header",
   "name": "Header",
   "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "message": "FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY"
+      }
+    },
     "header": {
       "type": "site-header",
-      "settings": {},
+      "settings": {
+        "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
+        "logo_width": 95,
+        "logo_alt": "ELOVYN",
+        "logo_link": "/",
+        "enable_sticky_header": true
+      },
       "blocks": {
-        "nav_clothes": {
+        "nav_men": {
           "type": "nav_link",
           "settings": {
-            "label": "Clothes",
-            "url": "#clothing"
+            "text": "Men",
+            "url": "/collections/all"
           }
         },
-        "nav_hair": {
+        "nav_women": {
           "type": "nav_link",
           "settings": {
-            "label": "Hair Products",
-            "url": "#bikes"
+            "text": "Women",
+            "url": "/collections/all"
           }
         },
-        "nav_accessories": {
+        "nav_new": {
           "type": "nav_link",
           "settings": {
-            "label": "Accessories",
-            "url": "#features"
+            "text": "New releases",
+            "url": "/collections/all"
           }
         },
-        "nav_connect": {
-          "type": "nav_link",
+        "nav_collections": {
+          "type": "nav_dropdown",
           "settings": {
-            "label": "Connect",
-            "url": "#community"
+            "title": "Collections",
+            "link_1_text": "Hoodies",
+            "link_1_url": "/collections/hoodies",
+            "link_2_text": "Sweatshirts",
+            "link_2_url": "/collections/sweatshirts",
+            "link_3_text": "Graphic tees",
+            "link_3_url": "/collections/graphic-tees",
+            "link_4_text": "Shop all",
+            "link_4_url": "/collections/all"
           }
         }
       },
-      "block_order": ["nav_clothes", "nav_hair", "nav_accessories", "nav_connect"]
+      "block_order": ["nav_men", "nav_women", "nav_new", "nav_collections"]
     }
   },
-  "order": ["header"]
+  "order": ["announcement", "header"]
 }

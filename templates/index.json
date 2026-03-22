@@ -9,50 +9,6 @@
  */
 {
   "sections": {
-    "announcement_bar": {
-      "type": "announcement-bar",
-      "settings": {
-        "message": "FREE SHIPPING ON ORDERS OVER R500 | NEW DROPS EVERY FRIDAY"
-      }
-    },
-    "site_header_P8YKmT": {
-      "type": "site-header",
-      "blocks": {
-        "nav_link_6wPngE": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Hoodies",
-            "url": "/collections/hoodies"
-          }
-        },
-        "nav_link_4L3mWe": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Sweatshirts",
-            "url": "/collections/sweatshirts"
-          }
-        },
-        "nav_link_idKVqf": {
-          "type": "nav_link",
-          "settings": {
-            "text": "Graphic Tees",
-            "url": "/collections/graphic-tees"
-          }
-        }
-      },
-      "block_order": [
-        "nav_link_6wPngE",
-        "nav_link_4L3mWe",
-        "nav_link_idKVqf"
-      ],
-      "name": "Header",
-      "settings": {
-        "logo": "shopify://shop_images/ELOVYN_THE_FINAL_808b57cd-f8d2-4f9e-abea-8da785beaf8f.png",
-        "logo_width": 95,
-        "logo_alt": "ELOVYN",
-        "logo_link": "/"
-      }
-    },
     "hero": {
       "type": "hero",
       "settings": {
@@ -63,12 +19,15 @@
         "hero_focal_point": "center",
         "hero_zoom_mobile": 110,
         "hero_focal_point_mobile": "center",
-        "heading": "Streetwear that speaks",
-        "subheading": "Hoodies. Sweatshirts. Graphic Tees.",
-        "description": "Premium comfort, bold cuts, and everyday statement pieces built for your style.",
-        "button_text": "Shop New Arrivals",
+        "overlay_darkness": 50,
+        "combine_headings": false,
+        "show_feature_bar": false,
+        "heading": "Built different.",
+        "subheading": "Worn daily.",
+        "description": "Premium hoodies, sweatshirts, and graphic tees — minimal design, maximum comfort.",
+        "button_text": "Shop now",
         "button_link": "/collections/all",
-        "secondary_button_text": "Explore Collection",
+        "secondary_button_text": "New releases",
         "secondary_button_link": "/collections/all"
       }
     },
@@ -83,70 +42,65 @@
       "block_order": ["t1", "t2", "t3", "t4"],
       "settings": {}
     },
-    "image_banner_flex": {
-      "type": "image-banner-flex",
-      "settings": {
-        "heading": "Streetwear built for daily impact",
-        "text": "Premium hoodies, sweatshirts, and graphic tees designed for comfort and style.",
-        "button_text": "Shop collection",
-        "button_link": "/collections/all"
-      }
-    },
-    "trust_marquee": {
-      "type": "press-marquee",
+    "category_split_home": {
+      "type": "category-split",
       "blocks": {
-        "t1": {
-          "type": "press_item",
+        "cat_m": {
+          "type": "category_panel",
           "settings": {
-            "press_name": "PREMIUM COMFORT",
-            "quote": "Designed for everyday wear"
+            "kicker": "Men",
+            "heading": "Train essentials",
+            "button_text": "Shop now",
+            "link": "/collections/all"
           }
         },
-        "t2": {
-          "type": "press_item",
+        "cat_w": {
+          "type": "category_panel",
           "settings": {
-            "press_name": "STREETWEAR",
-            "quote": "Style that stands out"
-          }
-        },
-        "t3": {
-          "type": "press_item",
-          "settings": {
-            "press_name": "CUSTOM TEES",
-            "quote": "Express yourself"
-          }
-        },
-        "t4": {
-          "type": "press_item",
-          "settings": {
-            "press_name": "CURATED",
-            "quote": "Handpicked for you"
-          }
-        },
-        "t5": {
-          "type": "press_item",
-          "settings": {
-            "press_name": "FAST SHIPPING",
-            "quote": "Delivered to your door"
-          }
-        },
-        "t6": {
-          "type": "press_item",
-          "settings": {
-            "press_name": "BEST SELLERS",
-            "quote": "Loved by thousands"
+            "kicker": "Women",
+            "heading": "Everyday layers",
+            "button_text": "Shop now",
+            "link": "/collections/all"
           }
         }
       },
-      "block_order": [
-        "t1",
-        "t2",
-        "t3",
-        "t4",
-        "t5",
-        "t6"
-      ],
-      "settings": {}
+      "block_order": ["cat_m", "cat_w"],
+      "settings": { "overlay_strength": 40 }
+    },
+    "featured_new_releases": {
+      "type": "product-grid-flex",
+      "settings": {
+        "heading": "New releases",
+        "subheading": "Latest drops — grab yours before they’re gone.",
+        "collection": "all",
+        "products_to_show": 8,
+        "layout": "horizontal",
+        "enable_quick_add": true,
+        "quick_add_label": "Quick add",
+        "quick_add_done_label": "Added",
+        "choose_options_label": "Choose options",
+        "button_text": "View product",
+        "show_view_all": true,
+        "view_all_text": "Shop all"
+      }
+    },
+    "image_banner_flex": {
+      "type": "image-banner-flex",
+      "settings": {
+        "heading": "Hoodies built to last",
+        "text": "Heavyweight fabrics and clean fits.",
+        "button_text": "Shop hoodies",
+        "button_link": "/collections/hoodies"
+      }
+    },
+    "image_banner_tees": {
+      "type": "image-banner-flex",
+      "settings": {
+        "heading": "Graphic tees",
+        "text": "Bold prints. Soft hand-feel.",
+        "button_text": "Shop tees",
+        "button_link": "/collections/graphic-tees"
+      }
     },
     "grid_hoodies": {
       "type": "product-grid-flex",
@@ -155,6 +109,8 @@
         "subheading": "Heavyweight comfort and clean silhouettes.",
         "collection": "hoodies",
         "products_to_show": 8,
+        "layout": "grid",
+        "enable_quick_add": true,
         "button_text": "View product",
         "show_view_all": true,
         "view_all_text": "View all hoodies"
@@ -167,6 +123,8 @@
         "subheading": "Everyday layers with a premium feel.",
         "collection": "sweatshirts",
         "products_to_show": 8,
+        "layout": "grid",
+        "enable_quick_add": true,
         "button_text": "View product",
         "show_view_all": true,
         "view_all_text": "View all sweatshirts"
@@ -179,10 +137,60 @@
         "subheading": "Bold prints designed for self-expression.",
         "collection": "frontpage",
         "products_to_show": 8,
+        "layout": "grid",
+        "enable_quick_add": true,
         "button_text": "View product",
         "show_view_all": true,
         "view_all_text": "Shop all tees"
       }
+    },
+    "shop_the_look_home": {
+      "type": "shop-the-look",
+      "blocks": {
+        "st1": { "type": "tile", "settings": { "caption": "Layer up" } },
+        "st2": { "type": "tile", "settings": { "caption": "Core fit" } },
+        "st3": { "type": "tile", "settings": { "caption": "Street" } },
+        "st4": { "type": "tile", "settings": { "caption": "Rest day" } },
+        "st5": { "type": "tile", "settings": { "caption": "Training" } },
+        "st6": { "type": "tile", "settings": { "caption": "Recovery" } }
+      },
+      "block_order": ["st1", "st2", "st3", "st4", "st5", "st6"],
+      "settings": {
+        "heading": "Shop the look",
+        "subheading": "Tag us — we feature real customers.",
+        "tile_cta_text": "Shop now"
+      }
+    },
+    "trust_marquee": {
+      "type": "press-marquee",
+      "blocks": {
+        "t1": {
+          "type": "press_item",
+          "settings": { "press_name": "PREMIUM COMFORT", "quote": "Designed for everyday wear" }
+        },
+        "t2": {
+          "type": "press_item",
+          "settings": { "press_name": "STREETWEAR", "quote": "Style that stands out" }
+        },
+        "t3": {
+          "type": "press_item",
+          "settings": { "press_name": "CUSTOM TEES", "quote": "Express yourself" }
+        },
+        "t4": {
+          "type": "press_item",
+          "settings": { "press_name": "CURATED", "quote": "Handpicked for you" }
+        },
+        "t5": {
+          "type": "press_item",
+          "settings": { "press_name": "FAST SHIPPING", "quote": "Delivered to your door" }
+        },
+        "t6": {
+          "type": "press_item",
+          "settings": { "press_name": "BEST SELLERS", "quote": "Loved by thousands" }
+        }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"],
+      "settings": {}
     },
     "testimonials_home": {
       "type": "testimonials",
@@ -252,8 +260,8 @@
     "cta_home": {
       "type": "cta-flex",
       "settings": {
-        "heading": "Ready for your next fit?",
-        "text": "Shop premium hoodies, sweatshirts, and graphic tees now.",
+        "heading": "Join the list",
+        "text": "Get early access to drops and exclusive offers.",
         "button_text": "Shop now",
         "button_link": "/collections/all"
       }
@@ -271,14 +279,17 @@
     }
   },
   "order": [
-    "announcement_bar",
-    "site_header_P8YKmT",
     "hero",
     "trust_bar",
+    "category_split_home",
+    "featured_new_releases",
     "image_banner_flex",
+    "image_banner_tees",
     "grid_hoodies",
     "grid_sweatshirts",
     "grid_graphic_tees",
+    "shop_the_look_home",
+    "trust_marquee",
     "testimonials_home",
     "faq_home",
     "cta_home",
