@@ -988,8 +988,7 @@ body.template-collection #layout-header-wrapper {
     padding-top: 4rem;
     min-height: calc(80vh + 4rem);
   }
-  .template-index .hero-section .hero-bg,
-  .template-index .hero-section .absolute.inset-0 {
+  .template-index .hero-section .hero-section__media.hero-bg {
     top: -4rem;
     height: calc(100% + 4rem);
   }
@@ -1000,8 +999,7 @@ body.template-collection #layout-header-wrapper {
     padding-top: 4rem;
     min-height: calc(80vh + 4rem);
   }
-  .template-index .hero-section .hero-bg,
-  .template-index .hero-section .absolute.inset-0 {
+  .template-index .hero-section .hero-section__media.hero-bg {
     top: -4rem;
     height: calc(100% + 4rem);
   }
