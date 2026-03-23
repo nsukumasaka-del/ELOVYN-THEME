@@ -61,6 +61,11 @@
       <div class="amazon-product-price" data-product-price>
         {{ product.selected_or_first_available_variant.price | money }}
       </div>
+      {%- if product.description != blank -%}
+        <p class="amazon-product-short-desc">
+          {{ product.description | strip_html | truncate: 140 }}
+        </p>
+      {%- endif -%}
       {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
         <div class="amazon-product-compare">
           <span class="line-through text-gray-500">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
@@ -128,7 +133,7 @@
           </div>
           <button type="submit" name="add" class="product-form__submit flex-1 min-w-[200px] py-3 px-6 rounded font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} data-add-to-cart>
             {% if product.selected_or_first_available_variant.available %}
-              {{ 'products.product.add_to_cart' | t }}
+              {{ 'products.product.add_to_cart' | t | default: 'Add to bag' }}
             {% else %}
               {{ 'products.product.sold_out' | t }}
             {% endif %}
@@ -143,63 +148,59 @@
           <span class="trust-pill">PayPal</span>
           <span class="trust-pill">Stripe</span>
         </div>
+        <ul class="amazon-product-trust-list" role="list">
+          <li>Ships in 2-5 business days</li>
+          <li>Easy 14-day returns</li>
+          <li>Encrypted secure checkout</li>
+        </ul>
       </form>
-
-      {% if product.description != blank %}
-        <div class="amazon-product-description">
-          {{ product.description }}
-        </div>
-      {% endif %}
-
-      <div class="amazon-product-extra-info">
-        <div class="amazon-product-extra-item">
-          <h2 class="amazon-product-extra-heading">Materials</h2>
-          <p class="amazon-product-extra-text">
-            {% if product.metafields.custom.materials != blank %}
-              {{ product.metafields.custom.materials }}
-            {% else %}
-              Premium cotton blend designed for softness, durability, and everyday comfort.
-            {% endif %}
-          </p>
-        </div>
-        <div class="amazon-product-extra-item">
-          <h2 class="amazon-product-extra-heading">Size & fit</h2>
-          <p class="amazon-product-extra-text">
-            {% if product.metafields.custom.size_guide != blank %}
-              {{ product.metafields.custom.size_guide }}
-            {% else %}
-              Regular fit. If you prefer an oversized look, we recommend sizing up. Please refer to your usual hoodie or t‑shirt size.
-            {% endif %}
-          </p>
-        </div>
-        <div class="amazon-product-extra-item">
-          <h2 class="amazon-product-extra-heading">Care instructions</h2>
-          <p class="amazon-product-extra-text">
-            {% if product.metafields.custom.care_instructions != blank %}
-              {{ product.metafields.custom.care_instructions }}
-            {% else %}
-              Machine wash cold with similar colours. Do not bleach. Tumble dry low or hang to dry. Cool iron on reverse if needed. Do not iron print.
-            {% endif %}
-          </p>
-        </div>
-        <div class="amazon-product-extra-item">
-          <h2 class="amazon-product-extra-heading">Shipping & delivery</h2>
-          <p class="amazon-product-extra-text">
-            Processing time: 1–3 business days. Shipping time: 7–12 business days via courier delivery. Tracking information will be emailed once your order has shipped.
-          </p>
-        </div>
-        <div class="amazon-product-extra-item amazon-product-extra-trust">
-          <h2 class="amazon-product-extra-heading">Secure checkout</h2>
-          <p class="amazon-product-extra-text">
-            All payments are processed securely via trusted providers such as PayFast, PayPal, and Stripe. Your card details are encrypted and never stored on our servers.
-          </p>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 
 {% render 'product-recommendations', product: product, heading: 'You may also like', intent: 'related' %}
+{% render 'product-recommendations', product: product, heading: 'Complete the look', intent: 'complementary' %}
+
+<section class="amazon-product-info-accordion section-spacing">
+  <div class="container">
+    <details class="amazon-acc-item" open>
+      <summary>Product details</summary>
+      <div class="amazon-acc-body rte">
+        {{ product.description }}
+      </div>
+    </details>
+    <details class="amazon-acc-item">
+      <summary>Materials</summary>
+      <div class="amazon-acc-body">
+        {% if product.metafields.custom.materials != blank %}
+          {{ product.metafields.custom.materials }}
+        {% else %}
+          Premium cotton blend designed for softness, durability, and everyday comfort.
+        {% endif %}
+      </div>
+    </details>
+    <details class="amazon-acc-item">
+      <summary>Fit info</summary>
+      <div class="amazon-acc-body">
+        {% if product.metafields.custom.size_guide != blank %}
+          {{ product.metafields.custom.size_guide }}
+        {% else %}
+          Regular fit. If you prefer an oversized look, we recommend sizing up.
+        {% endif %}
+      </div>
+    </details>
+    <details class="amazon-acc-item">
+      <summary>Care instructions</summary>
+      <div class="amazon-acc-body">
+        {% if product.metafields.custom.care_instructions != blank %}
+          {{ product.metafields.custom.care_instructions }}
+        {% else %}
+          Machine wash cold with similar colours. Do not bleach. Tumble dry low or hang to dry.
+        {% endif %}
+      </div>
+    </details>
+  </div>
+</section>
 
 {% if section.settings.show_size_guide %}
   <div class="product-modal" id="SizeGuideModal" role="dialog" aria-modal="true" aria-labelledby="SizeGuideModalTitle" hidden>
@@ -375,14 +376,35 @@
     if (stickyAtcPrice && variantPrices[variant.id]) stickyAtcPrice.textContent = variantPrices[variant.id];
     if (addToCartBtn) {
       addToCartBtn.disabled = !variant.available;
-      addToCartBtn.textContent = variant.available ? (window.variantStrings && window.variantStrings.addToCart ? window.variantStrings.addToCart : 'Add to cart') : (window.variantStrings && window.variantStrings.soldOut ? window.variantStrings.soldOut : 'Sold out');
+      addToCartBtn.textContent = variant.available ? (window.variantStrings && window.variantStrings.addToCart ? window.variantStrings.addToCart : 'Add to bag') : (window.variantStrings && window.variantStrings.soldOut ? window.variantStrings.soldOut : 'Sold out');
     }
     if (stickyAtcBtn) {
       stickyAtcBtn.disabled = !variant.available;
-      stickyAtcBtn.textContent = variant.available ? 'Add to cart' : 'Sold out';
+      stickyAtcBtn.textContent = variant.available ? 'Add to bag' : 'Sold out';
     }
     updateLowStock(variant);
     setActiveOptionStyles();
+    updateOptionAvailability();
+  }
+
+  function updateOptionAvailability() {
+    var selected = getSelectedOptionsArray();
+    optionRadios.forEach(function(radio) {
+      var optionIndex = parseInt(radio.getAttribute('data-option-index'), 10);
+      var value = radio.value;
+      var isAvailable = variantData.some(function(v) {
+        if (!v.available) return false;
+        if (!v.options || v.options[optionIndex] !== value) return false;
+        for (var i = 0; i < selected.length; i++) {
+          if (i === optionIndex || !selected[i]) continue;
+          if (v.options[i] !== selected[i]) return false;
+        }
+        return true;
+      });
+      radio.disabled = !isAvailable;
+      var span = radio.closest('.option-value-label') && radio.closest('.option-value-label').querySelector('.option-value-span');
+      if (span) span.classList.toggle('option-value-span--disabled', !isAvailable);
+    });
   }
   setActiveOptionStyles();
   form.addEventListener('submit', function(e) {
@@ -459,9 +481,11 @@
       var src = this.getAttribute('data-src');
       var zSrc = this.getAttribute('data-zoom-src');
       if (mainImg && src) {
+        mainImg.style.opacity = '0.35';
         mainImg.src = src;
         if (zSrc) mainImg.setAttribute('data-zoom-src', zSrc);
         mainImg.alt = this.querySelector('img') ? this.querySelector('img').getAttribute('alt') || '' : '';
+        setTimeout(function() { mainImg.style.opacity = '1'; }, 90);
       }
       thumbs.forEach(function(t) { t.classList.remove('thumbnail-active'); });
       this.classList.add('thumbnail-active');
@@ -538,10 +562,29 @@
 
   var initialVariant = findVariant();
   if (initialVariant) updateForm(initialVariant);
+  updateOptionAvailability();
 })();
 </script>
 
 <style>
+  .amazon-product-gallery {
+    position: relative;
+    overflow: hidden;
+  }
+  .amazon-product-main-img {
+    transition: transform 0.35s ease, opacity 0.2s ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .amazon-product-gallery:hover .amazon-product-main-img {
+      transform: scale(1.05);
+    }
+  }
+  .amazon-product-short-desc {
+    margin: 0.55rem 0 1rem;
+    color: #505050;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
   .amazon-product-payment-trust {
     display: flex;
     flex-wrap: wrap;
@@ -679,8 +722,64 @@
     border-color: #111 !important;
     box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.18);
   }
+  .option-value-span--disabled {
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    border-color: #e5e7eb !important;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
   .option-value-label:hover .option-value-span:not(.option-value-span--selected) {
     border-color: #9ca3af;
+  }
+  .amazon-product-trust-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+    color: #333;
+    font-size: 0.88rem;
+  }
+  .amazon-product-trust-list li::before {
+    content: "✓";
+    margin-right: 0.5rem;
+    color: #111;
+    font-weight: 700;
+  }
+  .amazon-product-info-accordion .container {
+    max-width: 960px;
+  }
+  .amazon-acc-item {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0.25rem 0;
+  }
+  .amazon-acc-item:last-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  .amazon-acc-item summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 0.9rem 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .amazon-acc-item summary::-webkit-details-marker { display: none; }
+  .amazon-acc-item summary::after {
+    content: "+";
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .amazon-acc-item[open] summary::after { content: "−"; }
+  .amazon-acc-body {
+    padding: 0 0 1rem;
+    color: #444;
+    line-height: 1.7;
+    font-size: 0.95rem;
   }
   .product-modal[hidden],
   .product-zoom-lightbox[hidden] {

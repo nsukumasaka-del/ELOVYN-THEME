@@ -4,7 +4,9 @@
     <div class="container">
       <h2 class="elite-product-recommendations__title">{{ heading | default: 'You may also like' }}</h2>
       <div class="elite-product-recommendations__grid">
-        {%- for p in recommendations.products limit: 4 -%}
+        {%- assign shown_count = 0 -%}
+        {%- for p in recommendations.products -%}
+          {%- if p.available == false -%}{%- continue -%}{%- endif -%}
           <article class="elite-product-recommendations__card">
             <a href="{{ p.url }}" class="elite-product-recommendations__image">
               {%- if p.featured_image != blank -%}
@@ -14,6 +16,8 @@
             <a href="{{ p.url }}" class="elite-product-recommendations__name">{{ p.title }}</a>
             <span class="elite-product-recommendations__price">{{ p.price | money }}</span>
           </article>
+          {%- assign shown_count = shown_count | plus: 1 -%}
+          {%- if shown_count >= 4 -%}{%- break -%}{%- endif -%}
         {%- endfor -%}
       </div>
     </div>
