@@ -3,6 +3,8 @@
   Loaded via {% sections 'header-group' %} in layout/theme.liquid (Online Store 2.0). Do not add {% section 'site-header' %} elsewhere.
 {% endcomment %}
 {%- assign logo_w = section.settings.logo_width | default: 180 -%}
+{%- assign logo_scale = section.settings.logo_scale | default: 100 | times: 1.0 | divided_by: 100.0 -%}
+{%- assign logo_render_w = logo_w | times: logo_scale | round -%}
 <style>
   /* Single source for header row + notification bar (sibling sections read from wrapper) */
   #layout-header-wrapper {
@@ -530,27 +532,27 @@
               src="{{ section.settings.logo_image | image_url: width: 600 }}"
               alt="{{ logo_alt | escape }}"
               class="store-header__logo-img elovyn-logo-img"
-              width="{{ logo_w }}"
+              width="{{ logo_render_w }}"
               loading="eager"
-              style="max-width: {{ logo_w }}px;"
+              style="max-width: {{ logo_render_w }}px;"
             >
           {%- elsif section.settings.logo != blank -%}
             <img
               src="{{ section.settings.logo | image_url: width: 600 }}"
               alt="{{ logo_alt | escape }}"
               class="store-header__logo-img elovyn-logo-img"
-              width="{{ logo_w }}"
+              width="{{ logo_render_w }}"
               loading="eager"
-              style="max-width: {{ logo_w }}px;"
+              style="max-width: {{ logo_render_w }}px;"
             >
           {%- elsif settings.header_logo != blank -%}
             <img
               src="{{ settings.header_logo | image_url: width: 600 }}"
               alt="{{ logo_alt | escape }}"
               class="store-header__logo-img elovyn-logo-img"
-              width="{{ logo_w }}"
+              width="{{ logo_render_w }}"
               loading="eager"
-              style="max-width: {{ logo_w }}px;"
+              style="max-width: {{ logo_render_w }}px;"
             >
           {%- else -%}
             <span class="store-header__wordmark">{{ shop.name }}</span>
@@ -755,6 +757,15 @@
       "max": 700,
       "step": 4,
       "default": 180
+    },
+    {
+      "type": "range",
+      "id": "logo_scale",
+      "label": "Logo size multiplier (%)",
+      "min": 50,
+      "max": 250,
+      "step": 5,
+      "default": 100
     },
     {
       "type": "text",
