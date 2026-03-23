@@ -80,7 +80,7 @@
         "nav_collections"
       ],
       "settings": {
-        "logo_width": 320,
+        "logo_width": 152,
         "logo_alt": "Store",
         "logo_link": "/",
         "enable_sticky_header": true,
