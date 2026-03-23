@@ -133,6 +133,9 @@
               {{ 'products.product.sold_out' | t }}
             {% endif %}
           </button>
+          <button type="button" class="amazon-product-wishlist-btn" data-wishlist-toggle data-product-handle="{{ product.handle }}">
+            Add to wishlist
+          </button>
         </div>
         <div class="amazon-product-payment-trust mb-6" aria-label="Secure payment methods">
           <span class="trust-pill">Secure checkout</span>
@@ -196,6 +199,8 @@
   </div>
 </div>
 
+{% render 'product-recommendations', product: product, heading: 'You may also like', intent: 'related' %}
+
 {% if section.settings.show_size_guide %}
   <div class="product-modal" id="SizeGuideModal" role="dialog" aria-modal="true" aria-labelledby="SizeGuideModalTitle" hidden>
     <div class="product-modal__backdrop" data-modal-close tabindex="-1"></div>
@@ -245,6 +250,14 @@
 
 <script>
 (function() {
+  var viewedKey = 'elovyn_recently_viewed';
+  try {
+    var viewed = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+    viewed = viewed.filter(function(h) { return h && h !== {{ product.handle | json }}; });
+    viewed.unshift({{ product.handle | json }});
+    localStorage.setItem(viewedKey, JSON.stringify(viewed.slice(0, 16)));
+  } catch (e) {}
+
   var form = document.getElementById('product-form');
   if (!form) return;
   var cartPopupTimeout = null;
@@ -310,6 +323,33 @@
   var showLowStockSetting = {{ section.settings.show_low_stock | json }};
   var lowStockThreshold = {{ section.settings.low_stock_threshold | default: 5 }};
   var lowStockTemplate = {{ section.settings.low_stock_message | default: 'Only [qty] left — order soon.' | json }};
+  var wishlistBtn = document.querySelector('[data-wishlist-toggle]');
+  var wishlistKey = 'elovyn_wishlist_handles';
+
+  function syncWishlist() {
+    if (!wishlistBtn) return;
+    var handle = wishlistBtn.getAttribute('data-product-handle');
+    try {
+      var items = JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+      var has = items.indexOf(handle) > -1;
+      wishlistBtn.textContent = has ? 'Wishlisted' : 'Add to wishlist';
+      wishlistBtn.classList.toggle('amazon-product-wishlist-btn--active', has);
+    } catch (e) {}
+  }
+  if (wishlistBtn) {
+    wishlistBtn.addEventListener('click', function() {
+      var handle = wishlistBtn.getAttribute('data-product-handle');
+      try {
+        var items = JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+        var idx = items.indexOf(handle);
+        if (idx > -1) items.splice(idx, 1);
+        else items.push(handle);
+        localStorage.setItem(wishlistKey, JSON.stringify(items));
+      } catch (e) {}
+      syncWishlist();
+    });
+    syncWishlist();
+  }
 
   function updateLowStock(variant) {
     var lowEl = document.getElementById('ProductLowStock');
@@ -518,6 +558,24 @@
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.02em;
+  }
+  .amazon-product-wishlist-btn {
+    min-height: 44px;
+    padding: 0.72rem 1rem;
+    border: 1px solid #111;
+    background: #fff;
+    color: #111;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  .amazon-product-wishlist-btn:hover {
+    background: #f5f5f5;
+  }
+  .amazon-product-wishlist-btn--active {
+    background: #111;
+    color: #fff;
   }
   .mobile-sticky-atc {
     position: fixed;

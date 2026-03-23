@@ -108,12 +108,20 @@
         "show_view_all": true,
         "view_all_text": "View collection"
       }
+    },
+    "recently_viewed_products": {
+      "type": "recently-viewed-products",
+      "settings": {
+        "heading": "Recently viewed",
+        "products_to_show": 4
+      }
     }
   },
   "order": [
     "main_product",
     "product_reviews",
     "product_faq",
-    "product_upsells"
+    "product_upsells",
+    "recently_viewed_products"
   ]
 }

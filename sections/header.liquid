@@ -6,7 +6,7 @@
   /* Header: visible on both desktop and mobile/cellphone */
   #elovyn-header-wrap {
     display: block !important;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -119,12 +119,80 @@
   #elovyn-header-wrap .elovyn-nav a:hover {
     color: #fff;
   }
+  #elovyn-header-wrap .nav-item--dropdown {
+    position: relative;
+  }
+  #elovyn-header-wrap .nav-parent {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  #elovyn-header-wrap .nav-parent::after {
+    content: "";
+    display: inline-block;
+    margin-left: 0.35rem;
+    border: 4px solid transparent;
+    border-top-color: rgba(255, 255, 255, 0.8);
+  }
+  #elovyn-header-wrap .mega-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem 0.75rem;
+    padding: 0.9rem;
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 50;
+  }
+  #elovyn-header-wrap .nav-item--dropdown:hover .mega-menu,
+  #elovyn-header-wrap .nav-item--dropdown:focus-within .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  #elovyn-header-wrap .mega-menu a {
+    font-size: 0.78rem !important;
+    padding: 0.2rem 0 !important;
+  }
   /* Right side: icons + CTA + hamburger - visible on all screens */
   #elovyn-header-wrap .elovyn-header-right {
     display: flex;
     align-items: center;
     gap: 0.25rem;
     flex-shrink: 0;
+  }
+  #elovyn-header-wrap .elovyn-search-form {
+    display: none;
+    align-items: center;
+    min-height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    padding: 0 0.6rem;
+    margin-right: 0.25rem;
+  }
+  #elovyn-header-wrap .elovyn-search-form input {
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    width: 150px;
+    font-size: 0.78rem;
+  }
+  #elovyn-header-wrap .elovyn-search-form button {
+    min-width: 30px;
+    min-height: 30px;
+    padding: 0;
+  }
+  @media (min-width: 768px) {
+    #elovyn-header-wrap .elovyn-search-form { display: inline-flex; }
   }
   @media (min-width: 768px) {
     #elovyn-header-wrap .elovyn-header-right { gap: 0.5rem; }
@@ -325,6 +393,16 @@
               {%- assign link_url = block.settings.url -%}
               {%- if link_url == blank -%}{%- assign link_url = '#' -%}{%- endif -%}
               <a href="{{ link_url }}" {{ block.shopify_attributes }}>{{ block.settings.label | default: 'Link' }}</a>
+            {%- elsif block.type == 'nav_dropdown' -%}
+              <div class="nav-item--dropdown" {{ block.shopify_attributes }}>
+                <span class="nav-parent">{{ block.settings.title | default: 'Collections' }}</span>
+                <div class="mega-menu" role="menu">
+                  {%- if block.settings.link_1_text != blank and block.settings.link_1_url != blank -%}<a href="{{ block.settings.link_1_url }}">{{ block.settings.link_1_text }}</a>{%- endif -%}
+                  {%- if block.settings.link_2_text != blank and block.settings.link_2_url != blank -%}<a href="{{ block.settings.link_2_url }}">{{ block.settings.link_2_text }}</a>{%- endif -%}
+                  {%- if block.settings.link_3_text != blank and block.settings.link_3_url != blank -%}<a href="{{ block.settings.link_3_url }}">{{ block.settings.link_3_text }}</a>{%- endif -%}
+                  {%- if block.settings.link_4_text != blank and block.settings.link_4_url != blank -%}<a href="{{ block.settings.link_4_url }}">{{ block.settings.link_4_text }}</a>{%- endif -%}
+                </div>
+              </div>
             {%- endif -%}
           {%- endfor -%}
         {%- else -%}
@@ -337,6 +415,12 @@
 
       {%- comment -%} Right: User icon, ShoppingBag icon, CTA, Menu/X (Lucide icons from original code) {%- endcomment -%}
       <div class="elovyn-header-right">
+        <form class="elovyn-search-form" action="{{ routes.search_url }}" method="get" role="search">
+          <input type="search" name="q" placeholder="{{ 'general.search.placeholder' | t | default: 'Search' }}" aria-label="{{ 'general.search.placeholder' | t | default: 'Search' }}">
+          <button type="submit" aria-label="{{ 'general.search.submit' | t | default: 'Search' }}">
+            {% render 'icon-search', width: 16, height: 16 %}
+          </button>
+        </form>
         <a href="{{ routes.account_login_url }}" aria-label="Account">
           {% render 'icon-user', width: 20, height: 20 %}
         </a>
@@ -362,6 +446,11 @@
             {%- assign link_url = block.settings.url -%}
             {%- if link_url == blank -%}{%- assign link_url = '#' -%}{%- endif -%}
             <a href="{{ link_url }}" class="elovyn-mobile-link">{{ block.settings.label | default: 'Link' }}</a>
+          {%- elsif block.type == 'nav_dropdown' -%}
+            {%- if block.settings.link_1_text != blank and block.settings.link_1_url != blank -%}<a href="{{ block.settings.link_1_url }}" class="elovyn-mobile-link">{{ block.settings.link_1_text }}</a>{%- endif -%}
+            {%- if block.settings.link_2_text != blank and block.settings.link_2_url != blank -%}<a href="{{ block.settings.link_2_url }}" class="elovyn-mobile-link">{{ block.settings.link_2_text }}</a>{%- endif -%}
+            {%- if block.settings.link_3_text != blank and block.settings.link_3_url != blank -%}<a href="{{ block.settings.link_3_url }}" class="elovyn-mobile-link">{{ block.settings.link_3_text }}</a>{%- endif -%}
+            {%- if block.settings.link_4_text != blank and block.settings.link_4_url != blank -%}<a href="{{ block.settings.link_4_url }}" class="elovyn-mobile-link">{{ block.settings.link_4_text }}</a>{%- endif -%}
           {%- endif -%}
         {%- endfor -%}
       {%- else -%}
@@ -477,6 +566,21 @@
           "label": "Link URL",
           "default": "/"
         }
+      ]
+    },
+    {
+      "type": "nav_dropdown",
+      "name": "Navigation dropdown",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Dropdown label", "default": "Collections" },
+        { "type": "text", "id": "link_1_text", "label": "Link 1 text", "default": "Hoodies" },
+        { "type": "text", "id": "link_1_url", "label": "Link 1 URL", "default": "/collections/hoodies" },
+        { "type": "text", "id": "link_2_text", "label": "Link 2 text", "default": "Sweatshirts" },
+        { "type": "text", "id": "link_2_url", "label": "Link 2 URL", "default": "/collections/sweatshirts" },
+        { "type": "text", "id": "link_3_text", "label": "Link 3 text", "default": "Graphic tees" },
+        { "type": "text", "id": "link_3_url", "label": "Link 3 URL", "default": "/collections/graphic-tees" },
+        { "type": "text", "id": "link_4_text", "label": "Link 4 text", "default": "Shop all" },
+        { "type": "text", "id": "link_4_url", "label": "Link 4 URL", "default": "/collections/all" }
       ]
     }
   ],
