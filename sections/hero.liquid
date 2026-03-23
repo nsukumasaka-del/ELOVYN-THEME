@@ -2,6 +2,7 @@
   Full-width hero — minimal, bold sans, strong overlay (Gymshark-style retail).
 {% endcomment %}
 {%- assign hero_overlay = section.settings.overlay_darkness | default: 45 | times: 1.0 | divided_by: 100.0 -%}
+{%- assign hero_description_color = section.settings.description_text_color | default: '#ffffff' -%}
 
 <style>
   .hero-cta-row {
@@ -181,7 +182,7 @@
         {%- endif -%}
       </h1>
       {%- if section.settings.description != blank -%}
-        <p class="text-base md:text-lg text-white/85 mb-8 max-w-md leading-relaxed font-medium">
+        <p class="text-base md:text-lg mb-8 max-w-md leading-relaxed font-medium" style="color: {{ hero_description_color }};">
           {{ section.settings.description }}
         </p>
       {%- endif -%}
@@ -355,6 +356,12 @@
       "id": "description",
       "label": "Description",
       "default": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees."
+    },
+    {
+      "type": "color",
+      "id": "description_text_color",
+      "label": "Description text color",
+      "default": "#ffffff"
     },
     {
       "type": "text",
