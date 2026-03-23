@@ -3,6 +3,7 @@
 {% endcomment %}
 {%- assign hero_overlay = section.settings.overlay_darkness | default: 45 | times: 1.0 | divided_by: 100.0 -%}
 {%- assign hero_description_color = section.settings.description_text_color | default: '#ffffff' -%}
+{%- assign hero_heading_color = section.settings.heading_text_color | default: '#ffffff' -%}
 
 <style>
   .hero-cta-row {
@@ -173,7 +174,7 @@
   {%- comment -%} Content {%- endcomment -%}
   <div class="relative z-10 h-full flex flex-col justify-center container mx-auto px-6">
     <div class="max-w-3xl">
-      <h1 class="hero-heading text-4xl md:text-6xl lg:text-8xl text-white mb-4 md:mb-6 text-shadow">
+      <h1 class="hero-heading text-4xl md:text-6xl lg:text-8xl mb-4 md:mb-6 text-shadow" style="color: {{ hero_heading_color }};">
         {%- if section.settings.combine_headings -%}
           {{ section.settings.heading | default: 'Train.' }} {{ section.settings.subheading | default: 'Live.' }}
         {%- else -%}
@@ -356,6 +357,12 @@
       "id": "description",
       "label": "Description",
       "default": "Premium comfort and style. Shop our curated collection of hoodies, sweatshirts, and custom graphic tees."
+    },
+    {
+      "type": "color",
+      "id": "heading_text_color",
+      "label": "Heading text color",
+      "default": "#ffffff"
     },
     {
       "type": "color",
