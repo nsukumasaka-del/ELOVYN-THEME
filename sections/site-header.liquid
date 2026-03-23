@@ -61,12 +61,8 @@
     }
   }
   #elovyn-header-wrap.store-header--shrink.is-scrolled .store-header__logo-img {
-    max-height: 1.85rem !important;
-  }
-  @media (min-width: 768px) {
-    #elovyn-header-wrap.store-header--shrink.is-scrolled .store-header__logo-img {
-      max-height: 2.35rem !important;
-    }
+    transform: scale(0.82);
+    transform-origin: center center;
   }
   .store-header__cell--left {
     display: flex;
@@ -177,18 +173,18 @@
     display: block;
     height: auto;
     width: auto;
-    max-height: 2.5rem;
+    max-height: none;
     object-fit: contain;
-    transition: max-height 0.3s ease;
+    transition: transform 0.3s ease;
   }
   @media (min-width: 768px) {
     .store-header__logo-img {
-      max-height: 3.75rem;
+      max-height: none;
     }
   }
   @media (min-width: 1200px) {
     .store-header__logo-img {
-      max-height: 4.5rem;
+      max-height: none;
     }
   }
   .store-header__icon-btn,
@@ -756,7 +752,7 @@
       "id": "logo_width",
       "label": "Logo max width (px)",
       "min": 80,
-      "max": 320,
+      "max": 700,
       "step": 4,
       "default": 180
     },
