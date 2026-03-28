@@ -25,6 +25,8 @@
         "heading": "Built different.",
         "subheading": "Worn daily.",
         "description": "Premium hoodies, sweatshirts, and graphic tees — minimal design, maximum comfort.",
+        "heading_text_color": "#ffffff",
+        "description_text_color": "#ffffff",
         "button_text": "Shop now",
         "button_link": "/collections/all",
         "secondary_button_text": "New releases",
@@ -79,9 +81,9 @@
           "settings": {
             "image": "shopify://shop_images/ryan-grice-VKDzcs8kD8E-unsplash.jpg",
             "kicker": "Men",
-            "heading": "Train essentials",
+            "heading": "APPARREL FOR MEN",
             "button_text": "Shop now",
-            "link": "/collections/all"
+            "link": "shopify://collections/men"
           }
         },
         "cat_w": {
