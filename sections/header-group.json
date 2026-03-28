@@ -51,7 +51,7 @@
           "type": "nav_link",
           "settings": {
             "text": "Women",
-            "url": "/collections/all"
+            "url": "shopify://collections/women"
           }
         },
         "nav_collections": {
