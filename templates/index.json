@@ -93,7 +93,7 @@
             "kicker": "Women",
             "heading": "Everyday layers",
             "button_text": "Shop now",
-            "link": "/collections/all"
+            "link": "shopify://collections/women"
           }
         }
       },
