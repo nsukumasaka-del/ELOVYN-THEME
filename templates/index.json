@@ -139,7 +139,7 @@
         "heading": "Graphic tees",
         "text": "Bold prints. Soft hand-feel.",
         "button_text": "Shop tees",
-        "button_link": "/collections/graphic-tees"
+        "button_link": "shopify://collections/frontpage"
       }
     },
     "grid_hoodies": {
@@ -199,6 +199,7 @@
         "st1": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/A290D71EF30E7DE97CE7111F93EF41AF.jpg",
             "product": "",
             "link": "",
             "caption": "Layer up"
@@ -207,6 +208,7 @@
         "st2": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/90E1113E500248F742FB22FC110F7877.jpg",
             "product": "",
             "link": "",
             "caption": "Core fit"
@@ -215,6 +217,7 @@
         "st3": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/8976D4F4E6654B7F76A8DC9E91C2A1B8.jpg",
             "product": "",
             "link": "",
             "caption": "Street"
@@ -223,6 +226,7 @@
         "st4": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/7B837DCA7EF03C7BCCEE6C8A5E211F57.jpg",
             "product": "",
             "link": "",
             "caption": "Rest day"
@@ -231,6 +235,7 @@
         "st5": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/hoodie-front-grey.jpg",
             "product": "",
             "link": "",
             "caption": "Training"
@@ -239,6 +244,7 @@
         "st6": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/hoodie-front-black.jpg",
             "product": "",
             "link": "",
             "caption": "Recovery"
