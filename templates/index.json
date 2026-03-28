@@ -321,6 +321,105 @@
       ],
       "settings": {}
     },
+    "collection_grid_shop_WdircH": {
+      "type": "collection-grid-shop",
+      "blocks": {
+        "product_link_KqWxni": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_WPdQrD": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_iWb7qw": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_XFHAUk": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_DQC74D": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_PtqAai": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_XMUgjF": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        },
+        "product_link_rUG4Ei": {
+          "type": "product_link",
+          "settings": {
+            "product": "",
+            "url": "",
+            "button_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_link_KqWxni",
+        "product_link_WPdQrD",
+        "product_link_iWb7qw",
+        "product_link_XFHAUk",
+        "product_link_DQC74D",
+        "product_link_PtqAai",
+        "product_link_XMUgjF",
+        "product_link_rUG4Ei"
+      ],
+      "disabled": true,
+      "name": "Sponsored picks",
+      "settings": {
+        "section_id": "shop",
+        "collection": "",
+        "products_to_show": 8,
+        "heading": "Sponsored picks",
+        "description": "Handpicked favorites. Click through for the best deals.",
+        "button_text": "View on Amazon",
+        "athletic_fit_tee_amazon_url": "",
+        "coofandy_button_amazon_url": "",
+        "extra_link_1_contains": "",
+        "extra_link_1_url": "",
+        "extra_link_2_contains": "",
+        "extra_link_2_url": "",
+        "extra_link_3_contains": "",
+        "extra_link_3_url": "",
+        "show_view_all": true,
+        "view_all_text": "View all"
+      }
+    },
     "testimonials_home": {
       "type": "testimonials",
       "blocks": {
@@ -427,6 +526,7 @@
     "grid_graphic_tees",
     "shop_the_look_home",
     "trust_marquee",
+    "collection_grid_shop_WdircH",
     "testimonials_home",
     "faq_home",
     "cta_home",
