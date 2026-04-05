@@ -61,7 +61,7 @@
           <div class="footer-modern__newsletter-text">
             <span class="footer-modern__newsletter-heading">{{ section.settings.newsletter_heading | default: 'Stay in the loop' }}</span>
             <span class="footer-modern__newsletter-sub">{{ section.settings.newsletter_subtext | default: 'Get updates and offers.' }}</span>
-          </div>
+        </div>
           {%- form 'contact', id: 'footer-newsletter-form', class: 'footer-modern__newsletter-form' -%}
             <input type="hidden" name="contact[tags]" value="newsletter">
             {%- if form.errors -%}
@@ -76,8 +76,8 @@
             <p class="footer-modern__newsletter-success">{{ section.settings.newsletter_success | default: "Thanks for signing up." }}</p>
           {%- endif -%}
         </div>
-      </div>
-    {%- endif -%}
+        </div>
+      {%- endif -%}
 
     {%- comment -%} Disclosure (e.g. Amazon) {%- endcomment -%}
     {%- if section.settings.show_disclosure and section.settings.disclosure_text != blank -%}

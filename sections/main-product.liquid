@@ -1,5 +1,6 @@
 {% comment %}
-  Product page – Amazon-style clean white layout: gallery left, details right.
+  Product page – CRO-focused layout: gallery left, sticky buy column right.
+  Changes: configurable trust lines, urgency strip, optional star row, review-app mount point, extra accordions.
 {% endcomment %}
 
 <div class="amazon-product-wrapper">
@@ -53,30 +54,13 @@
       {% endif %}
       <h1 class="amazon-product-title">{{ product.title }}</h1>
 
-      <div class="amazon-product-rating" aria-hidden="true">
-        <span class="amazon-product-stars">★★★★★</span>
-        <span class="amazon-product-rating-label">Rating</span>
-      </div>
-
-      <div class="amazon-product-price" data-product-price>
-        {{ product.selected_or_first_available_variant.price | money }}
-      </div>
-      {%- if product.description != blank -%}
-        <p class="amazon-product-short-desc">
-          {{ product.description | strip_html | truncate: 140 }}
-        </p>
-      {%- endif -%}
-      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-        <div class="amazon-product-compare">
-          <span class="line-through text-gray-500">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
-          <span class="amazon-product-save">Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}</span>
+      {%- comment -%} CRO: optional decorative stars — off by default to reduce clutter / fake social proof {%- endcomment -%}
+      {% if section.settings.show_star_rating %}
+        <div class="amazon-product-rating" aria-hidden="true">
+          <span class="amazon-product-stars">★★★★★</span>
+          <span class="amazon-product-rating-label">Rating</span>
         </div>
       {% endif %}
-
-      {%- assign first_v = product.selected_or_first_available_variant -%}
-      <p class="amazon-product-low-stock" id="ProductLowStock" {% unless section.settings.show_low_stock and first_v.inventory_management == 'shopify' and first_v.inventory_quantity > 0 and first_v.inventory_quantity <= section.settings.low_stock_threshold %}hidden{% endunless %}>
-        {{ section.settings.low_stock_message | default: 'Limited stock — order soon.' | replace: '[qty]', first_v.inventory_quantity }}
-      </p>
 
       {%- assign has_bullets = false -%}
       {%- for block in section.blocks -%}
@@ -86,7 +70,7 @@
         {%- endif -%}
       {%- endfor -%}
       {% if has_bullets %}
-        <ul class="amazon-product-bullets" role="list">
+        <ul class="amazon-product-bullets amazon-product-bullets--above-fold" role="list">
           {%- for block in section.blocks -%}
             {%- if block.type == 'feature_bullet' and block.settings.text != blank -%}
               <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
@@ -94,6 +78,32 @@
           {%- endfor -%}
         </ul>
       {% endif %}
+
+      <div class="amazon-product-price" data-product-price>
+        {{ product.selected_or_first_available_variant.price | money }}
+      </div>
+      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+        <div class="amazon-product-compare">
+          <span class="line-through text-gray-500">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+          <span class="amazon-product-save">Save {{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}</span>
+        </div>
+      {% endif %}
+
+      {%- comment -%} CRO: always-on urgency line (editable); complements inventory-based low-stock below {%- endcomment -%}
+      {% if section.settings.show_urgency_message and section.settings.urgency_message != blank %}
+        <p class="amazon-product-urgency">{{ section.settings.urgency_message }}</p>
+      {% endif %}
+
+      {%- if product.description != blank -%}
+        <p class="amazon-product-short-desc">
+          {{ product.description | strip_html | truncate: 140 }}
+        </p>
+      {%- endif -%}
+
+      {%- assign first_v = product.selected_or_first_available_variant -%}
+      <p class="amazon-product-low-stock" id="ProductLowStock" {% unless section.settings.show_low_stock and first_v.inventory_management == 'shopify' and first_v.inventory_quantity > 0 and first_v.inventory_quantity <= section.settings.low_stock_threshold %}hidden{% endunless %}>
+        {{ section.settings.low_stock_message | default: 'Limited stock — order soon.' | replace: '[qty]', first_v.inventory_quantity }}
+      </p>
 
       <form action="{{ routes.cart_add_url }}" method="post" id="product-form" class="product-form amazon-product-form" data-option-names='{{ product.options_with_values | map: "name" | json }}'>
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
@@ -148,11 +158,21 @@
           <span class="trust-pill">PayPal</span>
           <span class="trust-pill">Stripe</span>
         </div>
+        {%- comment -%} CRO: trust + guarantee — editable in Theme Editor → Product section {%- endcomment -%}
         <ul class="amazon-product-trust-list" role="list">
-          <li>Ships in 2-5 business days</li>
-          <li>Easy 14-day returns</li>
-          <li>Encrypted secure checkout</li>
+          {%- if section.settings.trust_line_1 != blank or section.settings.trust_line_2 != blank or section.settings.trust_line_3 != blank -%}
+            {% if section.settings.trust_line_1 != blank %}<li>{{ section.settings.trust_line_1 }}</li>{% endif %}
+            {% if section.settings.trust_line_2 != blank %}<li>{{ section.settings.trust_line_2 }}</li>{% endif %}
+            {% if section.settings.trust_line_3 != blank %}<li>{{ section.settings.trust_line_3 }}</li>{% endif %}
+          {%- else -%}
+            <li>Ships in 2–5 business days</li>
+            <li>Easy 14-day returns</li>
+            <li>Encrypted secure checkout</li>
+          {%- endif -%}
         </ul>
+        {% if section.settings.guarantee_text != blank %}
+          <p class="amazon-product-guarantee">{{ section.settings.guarantee_text }}</p>
+        {% endif %}
       </form>
     </div>
   </div>
@@ -199,6 +219,33 @@
         {% endif %}
       </div>
     </details>
+    {%- comment -%} CRO: extra accordions — shipping / returns / FAQ copy from section settings {%- endcomment -%}
+    {% if section.settings.shipping_accordion_body != blank %}
+      <details class="amazon-acc-item">
+        <summary>{{ section.settings.shipping_accordion_title | default: 'Shipping' }}</summary>
+        <div class="amazon-acc-body rte">{{ section.settings.shipping_accordion_body }}</div>
+      </details>
+    {% endif %}
+    {% if section.settings.returns_accordion_body != blank %}
+      <details class="amazon-acc-item">
+        <summary>{{ section.settings.returns_accordion_title | default: 'Returns' }}</summary>
+        <div class="amazon-acc-body rte">{{ section.settings.returns_accordion_body }}</div>
+      </details>
+    {% endif %}
+    {% if section.settings.faq_accordion_body != blank %}
+      <details class="amazon-acc-item">
+        <summary>{{ section.settings.faq_accordion_title | default: 'FAQs' }}</summary>
+        <div class="amazon-acc-body rte">{{ section.settings.faq_accordion_body }}</div>
+      </details>
+    {% endif %}
+  </div>
+</section>
+
+{%- comment -%} CRO: mount point for Shopify Product Reviews, Judge.me, Loox, etc. {%- endcomment -%}
+<section class="amazon-product-reviews-slot section-spacing" aria-label="{{ section.settings.reviews_heading | default: 'Reviews' }}">
+  <div class="container">
+    <h2 class="amazon-product-reviews-slot__heading">{{ section.settings.reviews_heading | default: 'Customer reviews' }}</h2>
+    <div id="shopify-product-reviews" class="amazon-product-reviews-slot__mount" data-product-reviews-placeholder data-product-id="{{ product.id }}"></div>
   </div>
 </section>
 
@@ -585,6 +632,52 @@
     font-size: 0.95rem;
     line-height: 1.6;
   }
+  /* CRO: urgency strip + guarantee */
+  .amazon-product-urgency {
+    margin: 0 0 0.65rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #111;
+  }
+  .amazon-product-guarantee {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    color: #444;
+    line-height: 1.5;
+    padding: 0.65rem 0.75rem;
+    background: #f5f5f5;
+    border-left: 3px solid #111;
+  }
+  .amazon-product-bullets--above-fold {
+    margin: 0 0 0.85rem 1rem;
+  }
+  /* CRO: full-width primary CTA on small screens */
+  @media (max-width: 639px) {
+    .amazon-product-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .amazon-product-actions .product-form__submit {
+      width: 100%;
+      min-width: 0;
+      order: -1;
+    }
+    .amazon-product-actions .amazon-product-wishlist-btn {
+      width: 100%;
+    }
+  }
+  .amazon-product-reviews-slot__heading {
+    margin: 0 0 1rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .amazon-product-reviews-slot__mount:empty {
+    min-height: 0;
+  }
   .amazon-product-payment-trust {
     display: flex;
     flex-wrap: wrap;
@@ -892,6 +985,103 @@
 {
   "name": "Product",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_star_rating",
+      "label": "Show star rating row (decorative)",
+      "default": false,
+      "info": "Turn on only if you use a real reviews app that replaces this area, or for placeholder styling."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_urgency_message",
+      "label": "Show urgency message",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "urgency_message",
+      "label": "Urgency message",
+      "default": "Limited stock available — order while your size is in stock."
+    },
+    {
+      "type": "header",
+      "content": "Trust below Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "trust_line_1",
+      "label": "Trust line 1",
+      "default": "Ships in 2–5 business days"
+    },
+    {
+      "type": "text",
+      "id": "trust_line_2",
+      "label": "Trust line 2",
+      "default": "Easy 14-day returns"
+    },
+    {
+      "type": "text",
+      "id": "trust_line_3",
+      "label": "Trust line 3",
+      "default": "Encrypted secure checkout"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "Shop with confidence — we stand behind every order."
+    },
+    {
+      "type": "header",
+      "content": "Extra accordions"
+    },
+    {
+      "type": "text",
+      "id": "shipping_accordion_title",
+      "label": "Shipping accordion title",
+      "default": "Shipping"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_accordion_body",
+      "label": "Shipping accordion content",
+      "default": "<p>Processing time is 1–3 business days. Delivery usually takes 7–12 business days. Tracking is emailed when your order ships.</p>"
+    },
+    {
+      "type": "text",
+      "id": "returns_accordion_title",
+      "label": "Returns accordion title",
+      "default": "Returns"
+    },
+    {
+      "type": "richtext",
+      "id": "returns_accordion_body",
+      "label": "Returns accordion content",
+      "default": "<p>Request a return within 14 days of delivery. Items must be unused with original packaging where applicable.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_accordion_title",
+      "label": "FAQ accordion title",
+      "default": "FAQs"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_accordion_body",
+      "label": "FAQ accordion content",
+      "default": "<p><strong>Need help?</strong> Contact us from the footer — we reply as fast as we can.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Reviews block"
+    },
+    {
+      "type": "text",
+      "id": "reviews_heading",
+      "label": "Reviews section heading",
+      "default": "Customer reviews"
+    },
     {
       "type": "checkbox",
       "id": "enable_sticky_atc",

@@ -73,6 +73,66 @@
       ],
       "settings": {}
     },
+    "home_benefits": {
+      "type": "home-benefits",
+      "blocks": {
+        "hb1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "🚚",
+            "title": "Fast dispatch",
+            "text": "Orders ship within 1–3 business days."
+          }
+        },
+        "hb2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "↩",
+            "title": "Easy returns",
+            "text": "Hassle-free returns within 14 days."
+          }
+        },
+        "hb3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "🔒",
+            "title": "Secure checkout",
+            "text": "Encrypted payments you can trust."
+          }
+        },
+        "hb4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "★",
+            "title": "Quality first",
+            "text": "Curated pieces built for everyday wear."
+          }
+        }
+      },
+      "block_order": ["hb1", "hb2", "hb3", "hb4"],
+      "settings": {
+        "heading": "Why shop with us",
+        "subheading": "Fast shipping, easy returns, and secure checkout on every order.",
+        "background_color": "#f5f5f5"
+      }
+    },
+    "best_sellers_home": {
+      "type": "product-grid-flex",
+      "settings": {
+        "heading": "Best sellers",
+        "subheading": "Customer favorites — shop our most-loved pieces.",
+        "collection": "all",
+        "products_to_show": 8,
+        "layout": "grid",
+        "enable_quick_add": true,
+        "quick_add_label": "Quick add",
+        "quick_add_done_label": "Added",
+        "choose_options_label": "Choose options",
+        "button_text": "View product",
+        "show_view_all": true,
+        "view_all_text": "Shop all"
+      }
+    },
     "category_split_home": {
       "type": "category-split",
       "blocks": {
@@ -108,7 +168,7 @@
     "featured_new_releases": {
       "type": "product-grid-flex",
       "settings": {
-        "heading": "New releases",
+        "heading": "New arrivals",
         "subheading": "Latest drops — grab yours before they’re gone.",
         "collection": "new-arrivals",
         "products_to_show": 8,
@@ -358,7 +418,7 @@
         },
         "product_link_DQC74D": {
           "type": "product_link",
-          "settings": {
+      "settings": {
             "product": "",
             "url": "",
             "button_text": ""
@@ -366,7 +426,7 @@
         },
         "product_link_PtqAai": {
           "type": "product_link",
-          "settings": {
+      "settings": {
             "product": "",
             "url": "",
             "button_text": ""
@@ -374,7 +434,7 @@
         },
         "product_link_XMUgjF": {
           "type": "product_link",
-          "settings": {
+      "settings": {
             "product": "",
             "url": "",
             "button_text": ""
@@ -512,11 +572,24 @@
         "button_text": "SUBSCRIBE",
         "privacy_text": "We respect your privacy. Unsubscribe anytime."
       }
+    },
+    "trust_badges_home": {
+      "type": "trust-badges",
+      "blocks": {
+        "tb1": { "type": "badge", "settings": { "icon": "🔒", "text": "Secure checkout" } },
+        "tb2": { "type": "badge", "settings": { "icon": "↩", "text": "14-day returns" } },
+        "tb3": { "type": "badge", "settings": { "icon": "✓", "text": "Quality guaranteed" } },
+        "tb4": { "type": "badge", "settings": { "icon": "🚚", "text": "Tracked shipping" } }
+      },
+      "block_order": ["tb1", "tb2", "tb3", "tb4"],
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "trust_bar",
+    "home_benefits",
+    "best_sellers_home",
     "category_split_home",
     "featured_new_releases",
     "image_banner_flex",
@@ -527,6 +600,7 @@
     "shop_the_look_home",
     "trust_marquee",
     "collection_grid_shop_WdircH",
+    "trust_badges_home",
     "testimonials_home",
     "faq_home",
     "cta_home",

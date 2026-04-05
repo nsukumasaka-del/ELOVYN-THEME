@@ -189,8 +189,8 @@
       max-height: none;
     }
   }
-  .store-header__icon-btn,
-  .store-header__cell--right > a {
+  /* CRO: icon buttons only — text contact link uses separate class below */
+  .store-header__icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -205,14 +205,42 @@
     text-decoration: none;
     transition: opacity 0.2s ease, background 0.2s ease;
   }
-  .store-header__icon-btn:hover,
-  .store-header__cell--right > a:hover {
+  .store-header__icon-btn:hover {
     opacity: 0.55;
   }
-  .store-header__icon-btn:focus-visible,
-  .store-header__cell--right > a:focus-visible {
+  .store-header__icon-btn:focus-visible {
     outline: 2px solid var(--store-header-fg);
     outline-offset: 2px;
+  }
+  /* CRO: visible “Contact” in header (desktop + wide tablet) */
+  .store-header__contact-link {
+    display: none;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.35rem;
+    margin-right: 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--store-header-fg);
+    white-space: nowrap;
+    border-radius: 6px;
+  }
+  .store-header__contact-link:hover {
+    opacity: 0.55;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .store-header__contact-link:focus-visible {
+    outline: 2px solid var(--store-header-fg);
+    outline-offset: 2px;
+  }
+  @media (min-width: 768px) {
+    .store-header__contact-link {
+      display: inline-flex;
+    }
   }
   .store-header__cart-wrap {
     position: relative;
@@ -561,6 +589,12 @@
       </div>
 
       <div class="store-header__cell store-header__cell--right header-icons elovyn-header-right">
+        {%- comment -%} CRO: optional contact link — set URL in Theme Editor → Site header {%- endcomment -%}
+        {%- if section.settings.show_header_contact and section.settings.header_contact_url != blank -%}
+          <a href="{{ section.settings.header_contact_url }}" class="store-header__contact-link">
+            {{- section.settings.header_contact_label | default: 'Contact' -}}
+          </a>
+        {%- endif -%}
         <button
           type="button"
           class="store-header__icon-btn header-search-toggle"
@@ -631,6 +665,12 @@
             </div>
           {%- endif -%}
         {%- endfor -%}
+        {%- comment -%} CRO: contact on mobile menu (thumb-friendly) {%- endcomment -%}
+        {%- if section.settings.show_header_contact and section.settings.header_contact_url != blank -%}
+          <a href="{{ section.settings.header_contact_url }}" class="store-mobile-link store-mobile-link--contact elovyn-mobile-link">
+            {{- section.settings.header_contact_label | default: 'Contact' -}}
+          </a>
+        {%- endif -%}
       </nav>
     </div>
   </div>
@@ -778,6 +818,33 @@
       "id": "logo_link",
       "label": "Logo link",
       "default": "/"
+    },
+    {
+      "type": "header",
+      "content": "Contact link"
+    },
+    {
+      "type": "paragraph",
+      "content": "CRO: Shows a Contact link next to search/account (desktop) and in the mobile drawer."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_contact",
+      "label": "Show contact link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "header_contact_label",
+      "label": "Contact link label",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "header_contact_url",
+      "label": "Contact link URL",
+      "default": "/pages/contact",
+      "info": "Use your Contact page path or mailto:you@store.com"
     },
     {
       "type": "header",

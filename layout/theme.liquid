@@ -147,5 +147,11 @@
         unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
       }
     </script>
+
+    {% comment %}
+      CRO: Documented DOM hook for email capture / popup apps (Klaviyo, Omnisend, etc.).
+      Many apps use Shopify app embeds instead; this slot is optional for custom scripts or app blocks.
+    {% endcomment %}
+    <div id="theme-email-popup-slot" class="visually-hidden" aria-hidden="true" data-email-popup-slot></div>
   </body>
 </html>
