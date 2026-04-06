@@ -80,9 +80,13 @@
         "nav_collections"
       ],
       "settings": {
-        "logo_width": 152,
+        "logo_width": 120,
+        "logo_scale": 100,
         "logo_alt": "Store",
         "logo_link": "/",
+        "show_header_contact": true,
+        "header_contact_label": "Contact",
+        "header_contact_url": "/pages/contact",
         "enable_sticky_header": true,
         "shrink_on_scroll": true
       }
