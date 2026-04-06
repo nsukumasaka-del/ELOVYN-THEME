@@ -81,7 +81,7 @@
       ],
       "settings": {
         "logo_width": 120,
-        "logo_scale": 100,
+        "logo_scale": 75,
         "logo_alt": "Store",
         "logo_link": "/",
         "show_header_contact": true,
