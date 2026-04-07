@@ -33,6 +33,20 @@
 
     {% render 'meta-tags' %}
 
+    {%- comment -%} Social preview fallback tags for product sharing {%- endcomment -%}
+    <meta property="og:site_name" content="{{ shop.name }}">
+    {% if template contains 'product' and product %}
+      <meta property="og:type" content="product">
+      <meta property="og:url" content="{{ shop.url }}{{ product.url }}">
+      {% if product.featured_image %}
+        <meta property="og:image" content="{{ product.featured_image | image_url: width: 800 }}">
+      {% endif %}
+      <meta property="og:title" content="{{ product.title | escape }}">
+      <meta property="og:description" content="{{ product.description | strip_html | truncate: 150 | escape }}">
+      <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+      <meta property="product:price:currency" content="{{ shop.currency }}">
+    {% endif %}
+
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
     {{ content_for_header }}
 
