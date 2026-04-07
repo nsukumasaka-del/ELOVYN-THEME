@@ -33,18 +33,35 @@
 
     {% render 'meta-tags' %}
 
-    {%- comment -%} Social preview fallback tags for product sharing {%- endcomment -%}
-    <meta property="og:site_name" content="{{ shop.name }}">
+    {% comment %}
+      Universal Social Media Meta Tags for Shopify Products
+      Makes product links generate proper previews on Facebook, WhatsApp, TikTok, Twitter, LinkedIn
+    {% endcomment %}
+    <meta property="og:site_name" content="{{ shop.name }}" />
     {% if template contains 'product' and product %}
-      <meta property="og:type" content="product">
-      <meta property="og:url" content="{{ shop.url }}{{ product.url }}">
+      <!-- Open Graph / Facebook / WhatsApp / Instagram -->
+      <meta property="og:title" content="{{ product.title | escape }}" />
+      <meta property="og:description" content="{{ product.description | strip_html | truncate: 150 | escape }}" />
       {% if product.featured_image %}
-        <meta property="og:image" content="{{ product.featured_image | image_url: width: 800 }}">
+        <meta property="og:image" content="{{ product.featured_image | image_url: width: 800 }}" />
       {% endif %}
-      <meta property="og:title" content="{{ product.title | escape }}">
-      <meta property="og:description" content="{{ product.description | strip_html | truncate: 150 | escape }}">
-      <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
-      <meta property="product:price:currency" content="{{ shop.currency }}">
+      <meta property="og:url" content="{{ shop.url }}{{ product.url }}" />
+      <meta property="og:type" content="product" />
+
+      <!-- Product price -->
+      <meta property="product:price:amount" content="{{ product.price | money_without_currency }}" />
+      <meta property="product:price:currency" content="{{ shop.currency }}" />
+
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="{{ product.title | escape }}" />
+      <meta name="twitter:description" content="{{ product.description | strip_html | truncate: 150 | escape }}" />
+      {% if product.featured_image %}
+        <meta name="twitter:image" content="{{ product.featured_image | image_url: width: 800 }}" />
+      {% endif %}
+
+      <!-- TikTok / General -->
+      <meta name="tiktok:card" content="summary_large_image" />
     {% endif %}
 
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
