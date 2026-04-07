@@ -33,89 +33,6 @@
         "secondary_button_link": "/collections/all"
       }
     },
-    "trust_bar": {
-      "type": "trust-bar",
-      "blocks": {
-        "t1": {
-          "type": "item",
-          "settings": {
-            "icon": "🚚",
-            "text": "Free Shipping Over R500"
-          }
-        },
-        "t2": {
-          "type": "item",
-          "settings": {
-            "icon": "🔒",
-            "text": "Secure Checkout"
-          }
-        },
-        "t3": {
-          "type": "item",
-          "settings": {
-            "icon": "↩",
-            "text": "Easy 14-Day Returns"
-          }
-        },
-        "t4": {
-          "type": "item",
-          "settings": {
-            "icon": "★",
-            "text": "Top Rated by Customers"
-          }
-        }
-      },
-      "block_order": [
-        "t1",
-        "t2",
-        "t3",
-        "t4"
-      ],
-      "settings": {}
-    },
-    "home_benefits": {
-      "type": "home-benefits",
-      "blocks": {
-        "hb1": {
-          "type": "benefit",
-          "settings": {
-            "icon": "🚚",
-            "title": "Fast dispatch",
-            "text": "Orders ship within 1–3 business days."
-          }
-        },
-        "hb2": {
-          "type": "benefit",
-          "settings": {
-            "icon": "↩",
-            "title": "Easy returns",
-            "text": "Hassle-free returns within 14 days."
-          }
-        },
-        "hb3": {
-          "type": "benefit",
-          "settings": {
-            "icon": "🔒",
-            "title": "Secure checkout",
-            "text": "Encrypted payments you can trust."
-          }
-        },
-        "hb4": {
-          "type": "benefit",
-          "settings": {
-            "icon": "★",
-            "title": "Quality first",
-            "text": "Curated pieces built for everyday wear."
-          }
-        }
-      },
-      "block_order": ["hb1", "hb2", "hb3", "hb4"],
-      "settings": {
-        "heading": "Why shop with us",
-        "subheading": "Fast shipping, easy returns, and secure checkout on every order.",
-        "background_color": "#f5f5f5"
-      }
-    },
     "best_sellers_home": {
       "type": "product-grid-flex",
       "settings": {
@@ -601,16 +518,22 @@
         "subheading": "Fast shipping, easy returns, and secure checkout on every order."
       }
     },
-    "trust_badges_home": {
-      "type": "trust-badges",
+    "trust_minimal_main": {
+      "type": "trust-minimal",
       "blocks": {
-        "tb1": { "type": "badge", "settings": { "icon": "🔒", "text": "Secure checkout" } },
-        "tb2": { "type": "badge", "settings": { "icon": "↩", "text": "14-day returns" } },
-        "tb3": { "type": "badge", "settings": { "icon": "✓", "text": "Quality guaranteed" } },
-        "tb4": { "type": "badge", "settings": { "icon": "🚚", "text": "Tracked shipping" } }
+        "tm1": { "type": "column", "settings": { "title": "Fast dispatch", "description": "Orders ship within 1–3 business days." } },
+        "tm2": { "type": "column", "settings": { "title": "Easy returns", "description": "Hassle-free returns within 14 days." } },
+        "tm3": { "type": "column", "settings": { "title": "Secure checkout", "description": "Encrypted payments you can trust." } },
+        "tm4": { "type": "column", "settings": { "title": "Quality first", "description": "Curated pieces built for everyday wear." } }
       },
-      "block_order": ["tb1", "tb2", "tb3", "tb4"],
-      "settings": {}
+      "block_order": ["tm1", "tm2", "tm3", "tm4"],
+      "settings": {
+        "show_top_bar": false,
+        "top_bar_text": "Free shipping over R500 • Easy 14-day returns • Secure checkout",
+        "show_main": true,
+        "heading": "Why shop with us",
+        "subheading": "Fast shipping, easy returns, and secure checkout on every order."
+      }
     }
   },
   "order": [
