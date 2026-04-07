@@ -47,6 +47,8 @@
       {% endif %}
       <meta property="og:url" content="{{ shop.url }}{{ product.url }}" />
       <meta property="og:type" content="product" />
+      <meta property="og:site_name" content="{{ shop.name | escape }}" />
+      <meta property="fb:app_id" content="YOUR_FACEBOOK_APP_ID" />
 
       <!-- Product price -->
       <meta property="product:price:amount" content="{{ product.price | money_without_currency }}" />
